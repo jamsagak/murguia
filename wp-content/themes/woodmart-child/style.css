@@ -64,6 +64,19 @@
   text-transform: uppercase;
 }
 
+/* SVG icons embebidos en botones/links del theme. Fuerza visibilidad
+   (stroke currentColor + fill none + display block) para que no se
+   vean como cuadros vacíos si algún CSS global los oculta. */
+[class*="murg-"] > svg,
+[class*="murg-"] button > svg,
+[class*="murg-"] a > svg {
+  display: inline-block;
+  vertical-align: middle;
+  stroke: currentColor;
+  fill: none;
+  flex-shrink: 0;
+}
+
 /* ============================================================
    NAV
    ============================================================ */
@@ -1837,6 +1850,15 @@
   align-items: center;
   justify-content: center;
   transition: background 0.2s, color 0.2s, border-color 0.2s;
+  padding: 0;
+}
+.murg-related__arrow svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  fill: none;
+  flex-shrink: 0;
 }
 .murg-related__arrow:hover:not(:disabled) {
   background: var(--murg-ink);
