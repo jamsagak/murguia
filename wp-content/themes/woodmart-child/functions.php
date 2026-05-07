@@ -1274,41 +1274,61 @@ function murguia_filter_body_class( $classes ) {
 add_filter( 'body_class', 'murguia_filter_body_class', 9999 );
 
 /**
- * Remover hooks de wp_body_open de WoodMart en nuestras páginas custom
- * (skip-links, toolbar bottom, etc). Mantenemos wp_body_open() en los
- * templates para compatibilidad con otros plugins (admin bar, etc).
+ * Remover hooks de wp_body_open y wp_footer de WoodMart en nuestras
+ * páginas custom (skip-links, sticky toolbar móvil con Shop/Cart/Account,
+ * toolbar bottom, etc). Mantenemos wp_body_open() y wp_footer() en los
+ * templates para compatibilidad con otros plugins (admin bar, WC scripts).
  */
-function murguia_clean_body_open_hooks() {
+function murguia_clean_wp_hooks() {
 	if ( ! murguia_is_custom_template() ) {
 		return;
 	}
-	// WoodMart imprime .wd-skip-links vía get_template_part en su header.
-	// El HTML aparece porque WoodMart tiene hooks en wp_body_open → los removemos.
+
+	// Toolbar sticky inferior móvil (wd-toolbar con Shop/Cart/My account)
+	remove_action( 'wp_footer', 'woodmart_sticky_toolbar_template' );
+
+	// Acciones propias del header de WoodMart
 	remove_all_actions( 'woodmart_before_header_action' );
 	remove_all_actions( 'woodmart_after_header_action' );
-	// Cualquier callback anónimo enganchado directamente a wp_body_open por WoodMart:
-	// no podemos targetearlo por nombre, pero quitamos todos los handlers que no
-	// sean de WP core (priority 10 = wp_admin_bar_render).
+
+	// Barrido de callbacks de WoodMart/XTS enganchados a wp_body_open y wp_footer.
+	// Preservamos los de WP core y WooCommerce para que AJAX de carrito, admin
+	// bar y demás plugins sigan funcionando.
 	global $wp_filter;
-	if ( isset( $wp_filter['wp_body_open'] ) ) {
-		foreach ( $wp_filter['wp_body_open']->callbacks as $priority => $callbacks ) {
+	$hooks_to_clean = [ 'wp_body_open', 'wp_footer' ];
+
+	foreach ( $hooks_to_clean as $hook_name ) {
+		if ( ! isset( $wp_filter[ $hook_name ] ) ) {
+			continue;
+		}
+		foreach ( $wp_filter[ $hook_name ]->callbacks as $priority => $callbacks ) {
 			foreach ( $callbacks as $id => $cb ) {
-				// Conservar admin bar y cualquier callback de core.
-				if ( false !== strpos( $id, 'wp_admin_bar_render' ) ) {
+				// Conservar core de WP (admin bar, scripts, pingbacks, etc.)
+				if ( false !== strpos( $id, 'wp_admin_bar_render' )
+				  || false !== strpos( $id, 'wp_print_footer_scripts' )
+				  || false !== strpos( $id, '_wp_footer_scripts' )
+				  || false !== strpos( $id, 'wp_maybe_inline_styles' )
+				  || false !== strpos( $id, 'wp_auth_check_html' ) ) {
 					continue;
 				}
-				// Identificar callbacks de WoodMart por su función/clase.
+
 				$target = $cb['function'];
+
+				// Callback tipo [objeto, método]
 				if ( is_array( $target ) && is_object( $target[0] ) ) {
 					$class = get_class( $target[0] );
 					if ( false !== stripos( $class, 'woodmart' ) || false !== stripos( $class, 'XTS' ) ) {
-						remove_action( 'wp_body_open', $target, $priority );
+						remove_action( $hook_name, $target, $priority );
 					}
-				} elseif ( is_string( $target ) && ( 0 === stripos( $target, 'woodmart_' ) || 0 === stripos( $target, 'xts_' ) ) ) {
-					remove_action( 'wp_body_open', $target, $priority );
+				// Callback tipo "nombre_funcion"
+				} elseif ( is_string( $target )
+					&& ( 0 === stripos( $target, 'woodmart_' )
+					  || 0 === stripos( $target, 'xts_' )
+					  || 0 === stripos( $target, 'wd_' ) ) ) {
+					remove_action( $hook_name, $target, $priority );
 				}
 			}
 		}
 	}
 }
-add_action( 'wp', 'murguia_clean_body_open_hooks', 99 );
+add_action( 'wp', 'murguia_clean_wp_hooks', 99 );
