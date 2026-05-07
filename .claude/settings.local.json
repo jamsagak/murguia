@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__26e4f718-fd5c-40af-a26d-11f94d14dbea__resolve-shortlink",
+      "WebFetch(domain:api.anthropic.com)",
+      "mcp__Claude_in_Chrome__tabs_context_mcp",
+      "mcp__26e4f718-fd5c-40af-a26d-11f94d14dbea__search-designs",
+      "Bash(cd \"C:\\\\Users\\\\PC HOME\\\\Downloads\\\\nurgua\" && ls)",
+      "Bash(Expand-Archive -Path \"C:\\\\Users\\\\PC HOME\\\\Downloads\\\\nurgua\\\\murgia 2-handoff.zip\" -DestinationPath \"C:\\\\Users\\\\PC HOME\\\\Downloads\\\\nurgua\\\\murgia-handoff\" -Force)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\PC HOME\\\\Downloads\\\\nurgua\\\\murgia-handoff\" -Recurse | ForEach-Object { $_.FullName })",
+      "PowerShell(New-Item -ItemType Directory -Path \"C:\\\\Users\\\\PC HOME\\\\Local Sites\\\\murgia\\\\app\\\\public\\\\wp-content\\\\themes\\\\woodmart-child\\\\assets\\\\js\" -Force)"
+    ]
+  }
+}
