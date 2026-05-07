@@ -1127,6 +1127,16 @@ function murguia_dequeue_unused_assets() {
 		'wd-header-cart',
 		'wd-header-my-account',
 
+		// Integración con Elementor (no usamos Elementor en templates custom)
+		'wd-helpers-wpb-elem',
+		'wd-elementor-base',
+
+		// WordPress blocks (Gutenberg) — no hay bloques en nuestros templates PHP
+		'wd-wp-blocks',
+
+		// Star ratings — nuestros templates no muestran valoraciones
+		'wd-mod-star-rating',
+
 		// Fuentes de WoodMart (Lora, Marcellus SC) — usamos Cormorant+Inter
 		'xts-google-fonts',
 
@@ -1146,6 +1156,7 @@ function murguia_dequeue_unused_assets() {
 		'elementor-wp-admin-bar',
 		'elementor-post-8',
 		'elementor-post-2830',
+		'base-desktop', // Elementor kit base (wp-content/uploads/elementor/css/base-desktop.css)
 	];
 
 	foreach ( $styles_to_drop as $handle ) {
