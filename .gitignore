@@ -1,0 +1,54 @@
+# ============================================================
+# WordPress — Joyería Murguía
+# ============================================================
+
+# Credenciales y configuración local
+wp-config.php
+local-xdebuginfo.php
+.env
+*.log
+
+# WordPress core (se instala via composer/zip, no se versiona)
+/wp-admin/
+/wp-includes/
+/wp-*.php
+/index.php
+/xmlrpc.php
+/license.txt
+/readme.html
+/wp-config-sample.php
+
+# wp-content: excluir todo por defecto, incluir solo lo propio
+/wp-content/uploads/
+/wp-content/upgrade/
+/wp-content/backup*/
+/wp-content/cache/
+/wp-content/updraft/
+/wp-content/advanced-cache.php
+/wp-content/object-cache.php
+/wp-content/db.php
+
+# Plugins de terceros (se instalan via composer/wp-cli)
+/wp-content/plugins/elementor/
+/wp-content/plugins/secure-custom-fields/
+/wp-content/plugins/updraftplus/
+/wp-content/plugins/woocommerce/
+/wp-content/plugins/woodmart-core/
+
+# Tema padre (se instala por separado)
+/wp-content/themes/woodmart/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Node (si se usa en el futuro)
+node_modules/
+npm-debug.log
