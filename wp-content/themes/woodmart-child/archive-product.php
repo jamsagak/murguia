@@ -1,0 +1,429 @@
+<?php
+/**
+ * Joyería Murguía — Tienda / Catálogo
+ * archive-product.php — Layout con sidebar de filtros
+ */
+defined( 'ABSPATH' ) || exit;
+
+$per_page = max( 4, (int) murguia_ajuste( 'sh_por_pagina', 12, 'tienda' ) );
+$shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/tienda/' );
+
+// --- Leer filtros desde GET ---
+$paged        = max( 1, (int) ( get_query_var( 'paged' ) ?: get_query_var( 'page' ) ?: 1 ) );
+$f_cat        = isset( $_GET['cat'] )      ? sanitize_key( $_GET['cat'] )      : '';
+$f_piedra     = isset( $_GET['piedra'] )   ? sanitize_key( $_GET['piedra'] )   : '';
+$f_color      = isset( $_GET['color'] )    ? sanitize_key( $_GET['color'] )    : '';
+$f_min        = isset( $_GET['min'] )      ? (float) $_GET['min']              : '';
+$f_max        = isset( $_GET['max'] )      ? (float) $_GET['max']              : '';
+$f_orderby    = isset( $_GET['orderby'] )  ? sanitize_key( $_GET['orderby'] )  : 'date';
+
+// --- Build WC query ---
+$query_args = [
+	'status'     => 'publish',
+	'limit'      => -1,
+	'return'     => 'ids',
+	'visibility' => 'visible',
+	'orderby'    => 'date',
+	'order'      => 'DESC',
+];
+if ( $f_cat ) {
+	$query_args['category'] = [ $f_cat ];
+}
+
+$tax_query = [];
+if ( $f_piedra ) {
+	$tax_query[] = [
+		'taxonomy' => 'pa_piedra',
+		'field'    => 'slug',
+		'terms'    => $f_piedra,
+	];
+}
+if ( $f_color ) {
+	$tax_query[] = [
+		'taxonomy' => 'pa_color-de-oro',
+		'field'    => 'slug',
+		'terms'    => $f_color,
+	];
+}
+if ( ! empty( $tax_query ) ) {
+	$query_args['tax_query'] = $tax_query;
+}
+
+switch ( $f_orderby ) {
+	case 'price-asc':
+		$query_args['orderby'] = 'price';
+		$query_args['order']   = 'ASC';
+		break;
+	case 'price-desc':
+		$query_args['orderby'] = 'price';
+		$query_args['order']   = 'DESC';
+		break;
+	case 'popularity':
+		$query_args['orderby'] = 'popularity';
+		break;
+}
+
+$all_ids = wc_get_products( $query_args );
+
+// Price filter (post-query for WC compatibility)
+if ( $f_min !== '' || $f_max !== '' ) {
+	$all_ids = array_filter( $all_ids, function ( $id ) use ( $f_min, $f_max ) {
+		$price = (float) get_post_meta( $id, '_price', true );
+		if ( $f_min !== '' && $price < $f_min ) return false;
+		if ( $f_max !== '' && $price > $f_max ) return false;
+		return true;
+	} );
+	$all_ids = array_values( $all_ids );
+}
+
+$total       = count( $all_ids );
+$total_pages = max( 1, (int) ceil( $total / $per_page ) );
+$page_ids    = array_slice( $all_ids, ( $paged - 1 ) * $per_page, $per_page );
+$products    = array_filter( array_map( 'wc_get_product', $page_ids ) );
+
+// --- Sidebar data ---
+$categories = get_terms( [
+	'taxonomy'   => 'product_cat',
+	'hide_empty' => true,
+	'orderby'    => 'count',
+	'order'      => 'DESC',
+	'exclude'    => [ (int) get_option( 'default_product_cat' ) ],
+] );
+$categories = is_wp_error( $categories ) ? [] : $categories;
+
+// Solo categorías principales de joyería (excluir marcas, ruido de importación, etc.)
+$main_cat_slugs = [
+	'anillos', 'anillos-de-compromiso', 'aretes', 'collares', 'collares-y-dijes',
+	'pulseras', 'dijes', 'relojes', 'alta-joyeria', 'permanent-jewelry',
+	'hogar', 'bebes', 'bautizo-y-confirmacion',
+];
+$categories = array_filter( $categories, function( $c ) use ( $main_cat_slugs ) {
+	return in_array( $c->slug, $main_cat_slugs, true );
+} );
+
+$piedras = get_terms( [ 'taxonomy' => 'pa_piedra', 'hide_empty' => true, 'orderby' => 'count', 'order' => 'DESC' ] );
+$piedras = is_wp_error( $piedras ) ? [] : $piedras;
+
+$colores_oro = get_terms( [ 'taxonomy' => 'pa_color-de-oro', 'hide_empty' => true, 'orderby' => 'count', 'order' => 'DESC' ] );
+$colores_oro = is_wp_error( $colores_oro ) ? [] : $colores_oro;
+
+// Price range for slider
+$price_min = 0;
+$price_max = 45000;
+
+// ACF
+$sh_eyebrow   = murguia_ajuste( 'sh_eyebrow',   'Toda la Tienda', 'tienda' );
+$sh_titulo    = murguia_ajuste( 'sh_titulo',     'Nuestra <em>Colección</em>', 'tienda' );
+$sh_subtitulo = murguia_ajuste( 'sh_subtitulo',  '', 'tienda' );
+
+// Active filters for display
+$active_filters = [];
+if ( $f_cat ) {
+	$term = get_term_by( 'slug', $f_cat, 'product_cat' );
+	if ( $term ) $active_filters[] = [ 'label' => $term->name, 'param' => 'cat' ];
+}
+if ( $f_piedra ) {
+	$term = get_term_by( 'slug', $f_piedra, 'pa_piedra' );
+	if ( $term ) $active_filters[] = [ 'label' => $term->name, 'param' => 'piedra' ];
+}
+if ( $f_color ) {
+	$term = get_term_by( 'slug', $f_color, 'pa_color-de-oro' );
+	if ( $term ) $active_filters[] = [ 'label' => $term->name, 'param' => 'color' ];
+}
+if ( $f_min !== '' || $f_max !== '' ) {
+	$price_label = 'S/ ' . ( $f_min !== '' ? number_format( $f_min, 0 ) : '0' ) . ' – S/ ' . ( $f_max !== '' ? number_format( $f_max, 0 ) : number_format( $price_max, 0 ) );
+	$active_filters[] = [ 'label' => $price_label, 'param' => 'price' ];
+}
+
+// Build current filter URL
+function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
+	global $shop_url;
+	$current = $_GET;
+	foreach ( $params_to_remove as $p ) {
+		unset( $current[ $p ] );
+	}
+	unset( $current['paged'] );
+	$current = array_merge( $current, $params_to_set );
+	$current = array_filter( $current, function( $v ) { return $v !== '' && $v !== null; } );
+	return empty( $current ) ? $shop_url : add_query_arg( $current, $shop_url );
+}
+?>
+<!DOCTYPE html>
+<html <?php language_attributes(); ?>>
+<head>
+<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<?php wp_head(); ?>
+</head>
+<body <?php body_class( 'murg-shop woocommerce' ); ?>>
+<?php wp_body_open(); ?>
+
+<?php get_template_part( 'template-parts/murg-nav' ); ?>
+
+<!-- ============================================================
+     SHOP LAYOUT
+     ============================================================ -->
+<div class="murg-shop-wrap">
+<div class="murg-shop-layout">
+
+	<!-- SIDEBAR -->
+	<aside class="murg-sidebar" id="murg-sidebar">
+		<div class="murg-sidebar__header">
+			<h2 class="murg-sidebar__title">Filtros</h2>
+			<button class="murg-sidebar__close" id="murg-sidebar-close" aria-label="Cerrar filtros">&times;</button>
+		</div>
+
+		<div class="murg-sidebar__count">
+			<?php echo (int) $total; ?> Resultado<?php echo $total !== 1 ? 's' : ''; ?>
+		</div>
+
+		<?php if ( ! empty( $active_filters ) ) : ?>
+		<div class="murg-active-filters">
+			<?php foreach ( $active_filters as $af ) : ?>
+			<a href="<?php echo esc_url( murg_filter_url( [], [ $af['param'], $af['param'] === 'price' ? 'min' : '', $af['param'] === 'price' ? 'max' : '' ] ) ); ?>"
+			   class="murg-active-filter">
+				<?php echo esc_html( $af['label'] ); ?> <span>&times;</span>
+			</a>
+			<?php endforeach; ?>
+			<?php if ( count( $active_filters ) > 1 ) : ?>
+			<a href="<?php echo esc_url( $shop_url ); ?>" class="murg-active-filter murg-active-filter--clear">
+				Limpiar todo
+			</a>
+			<?php endif; ?>
+		</div>
+		<?php endif; ?>
+
+		<!-- Categoría -->
+		<?php if ( ! empty( $categories ) ) : ?>
+		<details class="murg-filter-group" open>
+			<summary class="murg-filter-group__title">Categoría</summary>
+			<div class="murg-filter-group__body">
+				<?php foreach ( $categories as $cat ) : ?>
+				<label class="murg-filter-check">
+					<input type="checkbox"
+					       name="cat"
+					       value="<?php echo esc_attr( $cat->slug ); ?>"
+					       <?php checked( $f_cat, $cat->slug ); ?>
+					       onchange="murgApplyFilter('cat', this.checked ? this.value : '')">
+					<span class="murg-filter-check__box"></span>
+					<span class="murg-filter-check__label"><?php echo esc_html( $cat->name ); ?></span>
+					<span class="murg-filter-check__count"><?php echo (int) $cat->count; ?></span>
+				</label>
+				<?php endforeach; ?>
+			</div>
+		</details>
+		<?php endif; ?>
+
+		<!-- Precio -->
+		<div class="murg-filter-group murg-filter-group--static">
+			<h3 class="murg-filter-group__title">Precio</h3>
+			<div class="murg-filter-group__body">
+				<div class="murg-price-slider" id="murg-price-slider">
+					<div class="murg-price-slider__track">
+						<div class="murg-price-slider__range" id="murg-price-range"></div>
+						<input type="range" class="murg-price-slider__input" id="murg-price-min"
+						       min="<?php echo (int) $price_min; ?>" max="<?php echo (int) $price_max; ?>"
+						       step="50"
+						       value="<?php echo $f_min !== '' ? (int) $f_min : (int) $price_min; ?>">
+						<input type="range" class="murg-price-slider__input" id="murg-price-max"
+						       min="<?php echo (int) $price_min; ?>" max="<?php echo (int) $price_max; ?>"
+						       step="50"
+						       value="<?php echo $f_max !== '' ? (int) $f_max : (int) $price_max; ?>">
+					</div>
+					<div class="murg-price-slider__values">
+						<span id="murg-price-min-val">S/ <?php echo $f_min !== '' ? number_format( $f_min, 0 ) : number_format( $price_min, 0 ); ?></span>
+						<span id="murg-price-max-val">S/ <?php echo $f_max !== '' ? number_format( $f_max, 0 ) : number_format( $price_max, 0 ); ?></span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Piedra -->
+		<?php if ( ! empty( $piedras ) ) : ?>
+		<details class="murg-filter-group" <?php echo $f_piedra ? 'open' : ''; ?>>
+			<summary class="murg-filter-group__title">Piedra</summary>
+			<div class="murg-filter-group__body murg-filter-group__body--scroll">
+				<?php foreach ( $piedras as $piedra ) : ?>
+				<label class="murg-filter-check">
+					<input type="checkbox"
+					       name="piedra"
+					       value="<?php echo esc_attr( $piedra->slug ); ?>"
+					       <?php checked( $f_piedra, $piedra->slug ); ?>
+					       onchange="murgApplyFilter('piedra', this.checked ? this.value : '')">
+					<span class="murg-filter-check__box"></span>
+					<span class="murg-filter-check__label"><?php echo esc_html( $piedra->name ); ?></span>
+					<span class="murg-filter-check__count"><?php echo (int) $piedra->count; ?></span>
+				</label>
+				<?php endforeach; ?>
+			</div>
+		</details>
+		<?php endif; ?>
+
+		<!-- Color de Oro -->
+		<?php if ( ! empty( $colores_oro ) ) : ?>
+		<details class="murg-filter-group" <?php echo $f_color ? 'open' : ''; ?>>
+			<summary class="murg-filter-group__title">Metal</summary>
+			<div class="murg-filter-group__body">
+				<?php
+				$color_swatches = [
+					'amarillo'  => '#D4A843',
+					'blanco'    => '#E8E4DC',
+					'rosado'    => '#E8B4A0',
+					'combinado' => 'linear-gradient(135deg, #D4A843 50%, #E8E4DC 50%)',
+				];
+				foreach ( $colores_oro as $color ) :
+					$swatch = $color_swatches[ $color->slug ] ?? '#ccc';
+					$is_gradient = strpos( $swatch, 'gradient' ) !== false;
+				?>
+				<label class="murg-filter-swatch <?php echo $f_color === $color->slug ? 'is-active' : ''; ?>">
+					<input type="checkbox"
+					       name="color"
+					       value="<?php echo esc_attr( $color->slug ); ?>"
+					       <?php checked( $f_color, $color->slug ); ?>
+					       onchange="murgApplyFilter('color', this.checked ? this.value : '')"
+					       class="murg-sr-only">
+					<span class="murg-filter-swatch__circle"
+					      style="<?php echo $is_gradient ? 'background:' . $swatch : 'background-color:' . $swatch; ?>">
+					</span>
+					<span class="murg-filter-swatch__label"><?php echo esc_html( $color->name ); ?></span>
+				</label>
+				<?php endforeach; ?>
+			</div>
+		</details>
+		<?php endif; ?>
+
+		<!-- Ordenar -->
+		<details class="murg-filter-group">
+			<summary class="murg-filter-group__title">Ordenar por</summary>
+			<div class="murg-filter-group__body">
+				<?php
+				$sort_options = [
+					'date'       => 'Más recientes',
+					'popularity' => 'Más vendidos',
+					'price-asc'  => 'Precio: menor a mayor',
+					'price-desc' => 'Precio: mayor a menor',
+				];
+				foreach ( $sort_options as $val => $label ) :
+				?>
+				<label class="murg-filter-check">
+					<input type="radio"
+					       name="orderby"
+					       value="<?php echo esc_attr( $val ); ?>"
+					       <?php checked( $f_orderby, $val ); ?>
+					       onchange="murgApplyFilter('orderby', this.value)">
+					<span class="murg-filter-check__radio"></span>
+					<span class="murg-filter-check__label"><?php echo esc_html( $label ); ?></span>
+				</label>
+				<?php endforeach; ?>
+			</div>
+		</details>
+
+	</aside>
+
+	<!-- MAIN CONTENT -->
+	<div class="murg-shop-content">
+
+		<!-- Top bar -->
+		<div class="murg-shop-topbar">
+			<div class="murg-shop-topbar__left">
+				<button class="murg-filter-toggle" id="murg-filter-toggle" aria-label="Mostrar filtros">
+					<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M1 3h14M3 8h10M5 13h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+					Filtros
+				</button>
+				<span class="murg-shop-topbar__count"><?php echo (int) $total; ?> producto<?php echo $total !== 1 ? 's' : ''; ?></span>
+			</div>
+			<div class="murg-shop-topbar__right">
+				<div class="murg-eyebrow"><?php echo esc_html( $sh_eyebrow ); ?></div>
+			</div>
+		</div>
+
+		<!-- Products grid -->
+		<?php if ( ! empty( $products ) ) : ?>
+		<div class="murg-shop-grid">
+			<?php foreach ( $products as $product ) :
+				$img_id  = $product->get_image_id();
+				$is_sale = $product->is_on_sale();
+				$is_new  = $product->is_featured();
+				$sku     = $product->get_sku();
+			?>
+			<article class="murg-product murg-product--grid">
+				<a class="murg-product__link" href="<?php echo esc_url( $product->get_permalink() ); ?>">
+					<div class="murg-product__img">
+						<?php if ( $img_id ) :
+							echo wp_get_attachment_image( $img_id, 'large', false, [
+								'loading' => 'lazy',
+								'alt'     => $product->get_name(),
+							] );
+						else : ?>
+							<img src="<?php echo esc_url( wc_placeholder_img_src() ); ?>"
+							     alt="<?php echo esc_attr( $product->get_name() ); ?>"
+							     loading="lazy">
+						<?php endif; ?>
+
+						<?php if ( $is_sale ) : ?>
+						<span class="murg-product__tag">
+							<?php echo esc_html( murguia_ajuste( 'prod_badge_oferta', 'Oferta', 'producto' ) ); ?>
+						</span>
+						<?php elseif ( $is_new ) : ?>
+						<span class="murg-product__tag">
+							<?php echo esc_html( murguia_ajuste( 'prod_badge_nuevo', 'Nuevo', 'producto' ) ); ?>
+						</span>
+						<?php endif; ?>
+					</div>
+
+					<div class="murg-product__meta">
+						<h2 class="murg-product__name"><?php echo esc_html( $product->get_name() ); ?></h2>
+						<div class="murg-product__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
+					</div>
+					<?php if ( $sku ) : ?>
+					<p class="murg-product__ref">
+						<?php echo esc_html( murguia_ajuste( 'prod_ref_prefix', 'REF.', 'producto' ) ); ?>
+						<?php echo esc_html( strtoupper( $sku ) ); ?>
+					</p>
+					<?php endif; ?>
+				</a>
+			</article>
+			<?php endforeach; ?>
+		</div>
+
+		<?php if ( $total_pages > 1 ) : ?>
+		<nav class="murg-pagination" aria-label="Paginación de tienda">
+			<?php for ( $i = 1; $i <= $total_pages; $i++ ) :
+				$url = $i === 1 ? $shop_url : trailingslashit( $shop_url ) . 'page/' . $i . '/';
+				$url = add_query_arg( array_filter( [
+					'cat'     => $f_cat,
+					'piedra'  => $f_piedra,
+					'color'   => $f_color,
+					'min'     => $f_min !== '' ? $f_min : null,
+					'max'     => $f_max !== '' ? $f_max : null,
+					'orderby' => $f_orderby !== 'date' ? $f_orderby : null,
+				], function( $v ) { return $v !== null && $v !== ''; } ), $url );
+			?>
+			<a href="<?php echo esc_url( $url ); ?>"
+			   class="murg-pagination__item <?php echo $i === $paged ? 'is-active' : ''; ?>"
+			   <?php echo $i === $paged ? 'aria-current="page"' : ''; ?>>
+				<?php echo $i; ?>
+			</a>
+			<?php endfor; ?>
+		</nav>
+		<?php endif; ?>
+
+		<?php else : ?>
+		<div class="murg-shop-empty">
+			<p class="murg-eyebrow">Sin resultados</p>
+			<p style="margin-top:16px;color:var(--murg-muted)">No encontramos productos con los filtros seleccionados.</p>
+			<a href="<?php echo esc_url( $shop_url ); ?>" class="murg-btn" style="margin-top:32px;display:inline-block;width:auto;padding:14px 40px;">
+				Limpiar filtros
+			</a>
+		</div>
+		<?php endif; ?>
+
+	</div>
+</div>
+</div>
+
+<?php get_template_part( 'template-parts/murg-footer' ); ?>
+
+<?php wp_footer(); ?>
+</body>
+</html>
