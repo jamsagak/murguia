@@ -159,6 +159,16 @@ $related       = array_filter( array_map( 'wc_get_product', $related_ids ) );
 $shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/tienda/' );
 
 // -----------------------------------------------------------------
+// Guía de tallas — imagen subida por producto (ACF)
+// -----------------------------------------------------------------
+$guia_tallas        = function_exists( 'get_field' ) ? get_field( 'murg_guia_tallas', $product_id ) : null;
+$guia_tallas_titulo = function_exists( 'get_field' ) ? get_field( 'murg_guia_tallas_titulo', $product_id ) : '';
+$has_guia_tallas    = ! empty( $guia_tallas ) && ! empty( $guia_tallas['url'] );
+if ( empty( $guia_tallas_titulo ) ) {
+	$guia_tallas_titulo = 'Guía de tallas';
+}
+
+// -----------------------------------------------------------------
 // Iconos SVG del trust bar (inline, theme-scoped)
 // -----------------------------------------------------------------
 function murg_prod_trust_icon( $name ) {
@@ -205,7 +215,7 @@ function murg_prod_trust_icon( $name ) {
 
 	<!-- ==== GALERÍA ==== -->
 	<div class="murg-product-detail__gallery">
-		<div class="murg-pdgallery" data-total="<?php echo (int) count( $all_img_ids ); ?>">
+		<div class="murg-pdgallery <?php echo count( $all_img_ids ) <= 1 ? 'murg-pdgallery--single' : ''; ?>" data-total="<?php echo (int) count( $all_img_ids ); ?>">
 
 			<!-- Thumbs (verticales en desktop / horizontales en mobile) -->
 			<?php if ( count( $all_img_ids ) > 1 ) : ?>
@@ -315,6 +325,23 @@ function murg_prod_trust_icon( $name ) {
 		<?php endif; ?>
 
 		<div class="murg-product-detail__divider" aria-hidden="true"></div>
+
+		<!-- Guía de tallas (solo si el producto tiene imagen cargada en ACF) -->
+		<?php if ( $has_guia_tallas ) : ?>
+		<button class="murg-sizeguide-btn" type="button"
+		        data-target="murg-sizeguide"
+		        aria-haspopup="dialog"
+		        aria-controls="murg-sizeguide">
+			<svg class="murg-sizeguide-btn__icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+				<path d="M3 8h18v8H3z"/>
+				<path d="M7 8v4M11 8v6M15 8v4M19 8v6"/>
+			</svg>
+			<span><?php echo esc_html( $guia_tallas_titulo ); ?></span>
+			<svg class="murg-sizeguide-btn__arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+				<path d="M9 5l7 7-7 7"/>
+			</svg>
+		</button>
+		<?php endif; ?>
 
 		<!-- Add to cart (WooCommerce) -->
 		<div class="murg-product-detail__atc">
@@ -460,6 +487,45 @@ function murg_prod_trust_icon( $name ) {
 			return $full ? [ 'src' => $full ] : null;
 		}, $all_img_ids ) ) ) );
 	?></script>
+</div>
+<?php endif; ?>
+
+<!-- ============================================================
+     MODAL DE GUÍA DE TALLAS (solo si hay imagen ACF cargada)
+     ============================================================ -->
+<?php if ( $has_guia_tallas ) : ?>
+<div class="murg-sizeguide"
+     id="murg-sizeguide"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="murg-sizeguide-title"
+     aria-hidden="true">
+	<div class="murg-sizeguide__backdrop" data-close="murg-sizeguide" aria-hidden="true"></div>
+	<div class="murg-sizeguide__panel" role="document">
+		<header class="murg-sizeguide__header">
+			<h2 class="murg-sizeguide__title murg-serif" id="murg-sizeguide-title">
+				<?php echo esc_html( $guia_tallas_titulo ); ?>
+			</h2>
+			<button class="murg-sizeguide__close"
+			        type="button"
+			        data-close="murg-sizeguide"
+			        aria-label="Cerrar guía de tallas">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+					<path d="M6 6l12 12M6 18L18 6"/>
+				</svg>
+			</button>
+		</header>
+		<div class="murg-sizeguide__body">
+			<img class="murg-sizeguide__img"
+			     src="<?php echo esc_url( $guia_tallas['url'] ); ?>"
+			     alt="<?php echo esc_attr( $guia_tallas['alt'] ?: $guia_tallas_titulo ); ?>"
+			     <?php if ( ! empty( $guia_tallas['width'] ) && ! empty( $guia_tallas['height'] ) ) : ?>
+			     width="<?php echo (int) $guia_tallas['width']; ?>"
+			     height="<?php echo (int) $guia_tallas['height']; ?>"
+			     <?php endif; ?>
+			     loading="lazy">
+		</div>
+	</div>
 </div>
 <?php endif; ?>
 

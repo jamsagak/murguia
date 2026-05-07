@@ -202,6 +202,48 @@
 	}
 
 	/* ------------------------------------------------------------------
+	   SIZE GUIDE MODAL — abrir/cerrar con botón, backdrop y ESC
+	   ------------------------------------------------------------------ */
+	var sgBtns    = Array.prototype.slice.call( document.querySelectorAll( '[data-target="murg-sizeguide"]' ) );
+	var sgModal   = document.getElementById( 'murg-sizeguide' );
+	var sgClosers = sgModal ? Array.prototype.slice.call( sgModal.querySelectorAll( '[data-close="murg-sizeguide"]' ) ) : [];
+	var sgLastFocus = null;
+
+	function sgOpen() {
+		if ( ! sgModal ) return;
+		sgLastFocus = document.activeElement;
+		sgModal.classList.add( 'is-open' );
+		sgModal.setAttribute( 'aria-hidden', 'false' );
+		document.body.style.overflow = 'hidden';
+		// Mover foco al botón de cerrar
+		var close = sgModal.querySelector( '.murg-sizeguide__close' );
+		if ( close ) { close.focus(); }
+	}
+	function sgClose() {
+		if ( ! sgModal ) return;
+		sgModal.classList.remove( 'is-open' );
+		sgModal.setAttribute( 'aria-hidden', 'true' );
+		document.body.style.overflow = '';
+		if ( sgLastFocus && typeof sgLastFocus.focus === 'function' ) {
+			sgLastFocus.focus();
+		}
+	}
+
+	if ( sgModal && sgBtns.length ) {
+		sgBtns.forEach( function ( b ) {
+			b.addEventListener( 'click', sgOpen );
+		} );
+		sgClosers.forEach( function ( c ) {
+			c.addEventListener( 'click', sgClose );
+		} );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && sgModal.classList.contains( 'is-open' ) ) {
+				sgClose();
+			}
+		} );
+	}
+
+	/* ------------------------------------------------------------------
 	   RELATED PRODUCTS SLIDER — translateX track en single-product
 	   ------------------------------------------------------------------ */
 	var relTrack = document.getElementById( 'murg-rel-track' );
