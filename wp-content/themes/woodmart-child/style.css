@@ -1460,6 +1460,27 @@
   border-color: var(--murg-gold);
   color: var(--murg-ink);
 }
+.murg-pagination__item.is-active {
+  font-weight: 500;
+  cursor: default;
+  pointer-events: none;
+}
+.murg-pagination__item--dots {
+  border: 0;
+  letter-spacing: 0.2em;
+  cursor: default;
+  pointer-events: none;
+}
+.murg-pagination__item--dots:hover {
+  border-color: transparent;
+  color: var(--murg-muted);
+}
+.murg-pagination__item--prev,
+.murg-pagination__item--next {
+  font-size: 20px;
+  line-height: 1;
+  color: var(--murg-ink);
+}
 
 /* ============================================================
    BREADCRUMB

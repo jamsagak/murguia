@@ -386,27 +386,53 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			<?php endforeach; ?>
 		</div>
 
-		<?php if ( $total_pages > 1 ) : ?>
+		<?php if ( $total_pages > 1 ) :
+			// Base URL preservando filtros activos
+			$base_args = array_filter( [
+				'cat'     => $f_cat,
+				'piedra'  => $f_piedra,
+				'color'   => $f_color,
+				'min'     => $f_min !== '' ? $f_min : null,
+				'max'     => $f_max !== '' ? $f_max : null,
+				'orderby' => $f_orderby !== 'date' ? $f_orderby : null,
+			], function( $v ) { return $v !== null && $v !== ''; } );
+
+			$pag_links = paginate_links( [
+				'base'      => trailingslashit( $shop_url ) . 'page/%#%/',
+				'format'    => '',
+				'current'   => $paged,
+				'total'     => $total_pages,
+				'mid_size'  => 1,
+				'end_size'  => 1,
+				'prev_text' => '&lsaquo;',
+				'next_text' => '&rsaquo;',
+				'type'      => 'array',
+				'add_args'  => $base_args,
+			] );
+		?>
+		<?php if ( $pag_links ) : ?>
 		<nav class="murg-pagination" aria-label="Paginación de tienda">
-			<?php for ( $i = 1; $i <= $total_pages; $i++ ) :
-				$url = $i === 1 ? $shop_url : trailingslashit( $shop_url ) . 'page/' . $i . '/';
-				$url = add_query_arg( array_filter( [
-					'cat'     => $f_cat,
-					'piedra'  => $f_piedra,
-					'color'   => $f_color,
-					'min'     => $f_min !== '' ? $f_min : null,
-					'max'     => $f_max !== '' ? $f_max : null,
-					'orderby' => $f_orderby !== 'date' ? $f_orderby : null,
-				], function( $v ) { return $v !== null && $v !== ''; } ), $url );
-			?>
-			<a href="<?php echo esc_url( $url ); ?>"
-			   class="murg-pagination__item <?php echo $i === $paged ? 'is-active' : ''; ?>"
-			   <?php echo $i === $paged ? 'aria-current="page"' : ''; ?>>
-				<?php echo $i; ?>
-			</a>
-			<?php endfor; ?>
+			<?php foreach ( $pag_links as $link ) :
+				// paginate_links() genera class="prev page-numbers" | "page-numbers current" | "next page-numbers" | "page-numbers dots"
+				// Normalizamos a BEM .murg-pagination__item + modifiers.
+				$link = preg_replace_callback(
+					'/class="([^"]*)"/',
+					function ( $m ) {
+						$raw     = $m[1];
+						$modifiers = [];
+						if ( false !== strpos( $raw, 'current' ) ) $modifiers[] = 'is-active';
+						if ( false !== strpos( $raw, 'dots' ) )    $modifiers[] = 'murg-pagination__item--dots';
+						if ( false !== strpos( $raw, 'prev' ) )    $modifiers[] = 'murg-pagination__item--prev';
+						if ( false !== strpos( $raw, 'next' ) )    $modifiers[] = 'murg-pagination__item--next';
+						$all = array_merge( [ 'murg-pagination__item' ], $modifiers );
+						return 'class="' . implode( ' ', $all ) . '"';
+					},
+					$link
+				);
+				echo $link; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — output controlado por paginate_links()
+			endforeach; ?>
 		</nav>
-		<?php endif; ?>
+		<?php endif; endif; ?>
 
 		<?php else : ?>
 		<div class="murg-shop-empty">

@@ -948,3 +948,201 @@ function murguia_reorganize_woodmart_cpts() {
 		add_submenu_page( 'xts_dashboard', $label, $label, 'manage_options', $menu_slug );
 	}
 }
+
+/* ==================================================================
+   FRONTEND CLEANUP — Quitar assets y clases de WoodMart/Elementor que
+   no usamos en nuestros templates custom (.murg-*).
+   Mantenemos woodmart-style (parent) + jQuery + WC essentials para
+   que header/footer administrativos, carrito y login sigan funcionando.
+   ================================================================== */
+
+/**
+ * Detecta si el request actual usa uno de nuestros templates custom.
+ * Se usa para aplicar cleanup solo en esas páginas.
+ */
+function murguia_is_custom_template() {
+	// Home custom
+	if ( is_front_page() ) {
+		return true;
+	}
+	// Shop y archivos de productos
+	if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {
+		return true;
+	}
+	// Producto individual (tenemos single-product.php)
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		return true;
+	}
+	// Página con plantilla "Contacto" (page-contact.php)
+	if ( is_page() && 'page-contact.php' === get_page_template_slug() ) {
+		return true;
+	}
+	// Página de contacto por slug, si no se asignó la plantilla
+	if ( is_page( 'contacto' ) ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Dequeue selectivo de CSS/JS innecesarios en páginas custom.
+ * Priority 9999 para correr después de todos los enqueue.
+ */
+function murguia_dequeue_unused_assets() {
+	if ( ! murguia_is_custom_template() ) {
+		return;
+	}
+
+	// Handles de estilos de WoodMart que no usamos (shop widgets, Elementor, etc).
+	$styles_to_drop = [
+		// Shop widgets / layouts de WoodMart — tenemos nuestro propio shop layout
+		'wd-widget-active-filters',
+		'wd-woo-shop-predefined',
+		'wd-shop-title-categories',
+		'wd-woo-categories-loop-nav-mobile-accordion',
+		'wd-woo-shop-el-products-per-page',
+		'wd-woo-shop-page-title',
+		'wd-woo-mod-shop-loop-head',
+		'wd-woo-shop-el-order-by',
+		'wd-woo-shop-el-products-view',
+		'wd-woo-mod-shop-attributes',
+		'wd-woo-opt-coming-soon',
+
+		// Header / toolbar de WoodMart — tenemos nuestro nav custom
+		'wd-bottom-toolbar',
+		'wd-mod-sticky-sidebar-opener',
+		'wd-mod-tools',
+		'wd-header-elements-base',
+		'wd-shop-off-canvas-sidebar',
+		'wd-header-cart-side',
+		'wd-header-cart',
+		'wd-header-my-account',
+
+		// Fuentes de WoodMart (Lora, Marcellus SC) — usamos Cormorant+Inter
+		'xts-google-fonts',
+
+		// CSS dinámicos generados por WoodMart Options (header builder + theme settings)
+		'xts-style-header_562797',
+		'xts-style-theme_settings_default',
+
+		// WooCommerce blocks (Gutenberg) — no los usamos en estos templates
+		'wc-blocks-style',
+		'wc-blocks-vendors-style',
+		'wp-block-library',
+
+		// Elementor — nuestras páginas custom no usan Elementor
+		'elementor-frontend',
+		'elementor-icons',
+		'elementor-gallery',
+		'elementor-wp-admin-bar',
+		'elementor-post-8',
+		'elementor-post-2830',
+	];
+
+	foreach ( $styles_to_drop as $handle ) {
+		wp_dequeue_style( $handle );
+		wp_deregister_style( $handle );
+	}
+
+	// Dequeue por prefijo dinámico (xts-style-header_*, xts-style-theme_settings_*, elementor-post-*).
+	// Estos handles cambian de nombre según config/post, así que los buscamos.
+	global $wp_styles;
+	if ( isset( $wp_styles ) && is_object( $wp_styles ) ) {
+		foreach ( (array) $wp_styles->registered as $handle => $_ ) {
+			if ( 0 === strpos( $handle, 'xts-style-header_' )
+				|| 0 === strpos( $handle, 'xts-style-theme_settings_' )
+				|| preg_match( '/^elementor-post-\d+$/', $handle ) ) {
+				wp_dequeue_style( $handle );
+				wp_deregister_style( $handle );
+			}
+		}
+	}
+
+	// Scripts innecesarios
+	$scripts_to_drop = [
+		'elementor-frontend',
+		'elementor-frontend-modules',
+		'elementor-webpack-runtime',
+		'elementor-pro-frontend',
+		'elementor-waypoints',
+	];
+	foreach ( $scripts_to_drop as $handle ) {
+		wp_dequeue_script( $handle );
+		wp_deregister_script( $handle );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'murguia_dequeue_unused_assets', 99999 );
+
+/**
+ * Filtrar body_class para quitar ruido de WoodMart/Elementor en nuestros
+ * templates custom. Preserva woocommerce* porque WC depende de ellas para
+ * AJAX de carrito. También preserva logged-in/admin-bar para coherencia.
+ */
+function murguia_filter_body_class( $classes ) {
+	if ( ! murguia_is_custom_template() ) {
+		return $classes;
+	}
+
+	$drop_prefixes = [ 'elementor-', 'wd-', 'xts-', 'woodmart-ajax-shop-', 'categories-accordion-', 'sticky-toolbar-' ];
+	$drop_exact    = [
+		'woodmart-archive-shop',
+		'wrapper-full-width',
+		'woocommerce-no-js', // WC añade 'woocommerce-js' si hay JS, no nos sirve la negación
+		'theme-woodmart',    // nos quedamos con 'wp-theme-woodmart' que es la canónica de WP
+	];
+
+	$classes = array_filter( $classes, function ( $class ) use ( $drop_prefixes, $drop_exact ) {
+		if ( in_array( $class, $drop_exact, true ) ) {
+			return false;
+		}
+		foreach ( $drop_prefixes as $prefix ) {
+			if ( 0 === strpos( $class, $prefix ) ) {
+				return false;
+			}
+		}
+		return true;
+	} );
+
+	return array_values( $classes );
+}
+add_filter( 'body_class', 'murguia_filter_body_class', 9999 );
+
+/**
+ * Remover hooks de wp_body_open de WoodMart en nuestras páginas custom
+ * (skip-links, toolbar bottom, etc). Mantenemos wp_body_open() en los
+ * templates para compatibilidad con otros plugins (admin bar, etc).
+ */
+function murguia_clean_body_open_hooks() {
+	if ( ! murguia_is_custom_template() ) {
+		return;
+	}
+	// WoodMart imprime .wd-skip-links vía get_template_part en su header.
+	// El HTML aparece porque WoodMart tiene hooks en wp_body_open → los removemos.
+	remove_all_actions( 'woodmart_before_header_action' );
+	remove_all_actions( 'woodmart_after_header_action' );
+	// Cualquier callback anónimo enganchado directamente a wp_body_open por WoodMart:
+	// no podemos targetearlo por nombre, pero quitamos todos los handlers que no
+	// sean de WP core (priority 10 = wp_admin_bar_render).
+	global $wp_filter;
+	if ( isset( $wp_filter['wp_body_open'] ) ) {
+		foreach ( $wp_filter['wp_body_open']->callbacks as $priority => $callbacks ) {
+			foreach ( $callbacks as $id => $cb ) {
+				// Conservar admin bar y cualquier callback de core.
+				if ( false !== strpos( $id, 'wp_admin_bar_render' ) ) {
+					continue;
+				}
+				// Identificar callbacks de WoodMart por su función/clase.
+				$target = $cb['function'];
+				if ( is_array( $target ) && is_object( $target[0] ) ) {
+					$class = get_class( $target[0] );
+					if ( false !== stripos( $class, 'woodmart' ) || false !== stripos( $class, 'XTS' ) ) {
+						remove_action( 'wp_body_open', $target, $priority );
+					}
+				} elseif ( is_string( $target ) && ( 0 === stripos( $target, 'woodmart_' ) || 0 === stripos( $target, 'xts_' ) ) ) {
+					remove_action( 'wp_body_open', $target, $priority );
+				}
+			}
+		}
+	}
+}
+add_action( 'wp', 'murguia_clean_body_open_hooks', 99 );
