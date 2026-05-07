@@ -74,19 +74,171 @@
 		document.querySelectorAll( '.murg-pdgallery__thumb' )
 	);
 
+	function pdSetActive( index ) {
+		if ( ! pdThumbs[ index ] ) return;
+		pdThumbs.forEach( function ( t ) { t.classList.remove( 'is-active' ); } );
+		pdThumbs[ index ].classList.add( 'is-active' );
+		if ( pdMainImg ) {
+			pdMainImg.style.opacity = '0';
+			var nextSrc = pdThumbs[ index ].dataset.full;
+			setTimeout( function () {
+				pdMainImg.src = nextSrc;
+				pdMainImg.removeAttribute( 'srcset' );
+				pdMainImg.removeAttribute( 'sizes' );
+				pdMainImg.style.opacity = '1';
+			}, 220 );
+		}
+	}
+
 	if ( pdMainImg && pdThumbs.length ) {
-		pdThumbs.forEach( function ( thumb ) {
-			thumb.addEventListener( 'click', function () {
-				pdThumbs.forEach( function ( t ) { t.classList.remove( 'is-active' ); } );
-				thumb.classList.add( 'is-active' );
-				pdMainImg.style.opacity = '0';
-				var nextSrc = thumb.dataset.full;
-				setTimeout( function () {
-					pdMainImg.src        = nextSrc;
-					pdMainImg.style.opacity = '1';
-				}, 300 );
+		pdThumbs.forEach( function ( thumb, i ) {
+			thumb.addEventListener( 'click', function () { pdSetActive( i ); } );
+		} );
+	}
+
+	/* ------------------------------------------------------------------
+	   PRODUCT LIGHTBOX
+	   ------------------------------------------------------------------ */
+	var lightbox = document.getElementById( 'murg-lightbox' );
+	if ( lightbox ) {
+		var lbImg     = document.getElementById( 'murg-lightbox-img' );
+		var lbCaption = document.getElementById( 'murg-lightbox-caption' );
+		var lbClose   = document.getElementById( 'murg-lightbox-close' );
+		var lbPrev    = document.getElementById( 'murg-lightbox-prev' );
+		var lbNext    = document.getElementById( 'murg-lightbox-next' );
+		var lbDataEl  = document.getElementById( 'murg-lightbox-data' );
+		var lbZoomBtn = document.getElementById( 'murg-pdg-zoom' );
+		var lbMain    = document.querySelector( '.murg-pdgallery__main' );
+
+		var lbImages = [];
+		try { lbImages = JSON.parse( lbDataEl.textContent || '[]' ); } catch ( e ) { lbImages = []; }
+		var lbIdx = 0;
+
+		function lbRender() {
+			if ( ! lbImages[ lbIdx ] ) return;
+			lbImg.style.opacity = '0';
+			var src = lbImages[ lbIdx ].src;
+			var img = new Image();
+			img.onload = function () {
+				lbImg.src = src;
+				lbImg.style.opacity = '1';
+			};
+			img.src = src;
+			if ( lbCaption ) {
+				lbCaption.textContent = ( lbIdx + 1 ) + ' / ' + lbImages.length;
+			}
+		}
+
+		function lbOpen( fromIndex ) {
+			if ( ! lbImages.length ) return;
+			lbIdx = typeof fromIndex === 'number' ? fromIndex : 0;
+			lightbox.classList.add( 'is-open' );
+			lightbox.setAttribute( 'aria-hidden', 'false' );
+			document.body.style.overflow = 'hidden';
+			lbRender();
+		}
+		function lbCloseFn() {
+			lightbox.classList.remove( 'is-open' );
+			lightbox.setAttribute( 'aria-hidden', 'true' );
+			document.body.style.overflow = '';
+		}
+		function lbStep( delta ) {
+			if ( ! lbImages.length ) return;
+			lbIdx = ( lbIdx + delta + lbImages.length ) % lbImages.length;
+			lbRender();
+		}
+
+		if ( lbClose ) lbClose.addEventListener( 'click', lbCloseFn );
+		if ( lbPrev )  lbPrev .addEventListener( 'click', function () { lbStep( -1 ); } );
+		if ( lbNext )  lbNext .addEventListener( 'click', function () { lbStep(  1 ); } );
+
+		lightbox.addEventListener( 'click', function ( e ) {
+			if ( e.target === lightbox ) { lbCloseFn(); }
+		} );
+
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( ! lightbox.classList.contains( 'is-open' ) ) return;
+			if ( e.key === 'Escape' )      lbCloseFn();
+			if ( e.key === 'ArrowLeft' )   lbStep( -1 );
+			if ( e.key === 'ArrowRight' )  lbStep(  1 );
+		} );
+
+		// Open from main image click or zoom button — sync index to active thumb
+		function lbOpenFromMain() {
+			var activeThumb = document.querySelector( '.murg-pdgallery__thumb.is-active' );
+			var idx = activeThumb ? parseInt( activeThumb.dataset.index, 10 ) : 0;
+			if ( isNaN( idx ) ) idx = 0;
+			lbOpen( idx );
+		}
+		if ( lbMain )    lbMain   .addEventListener( 'click', lbOpenFromMain );
+		if ( lbZoomBtn ) lbZoomBtn.addEventListener( 'click', function ( e ) {
+			e.stopPropagation();
+			lbOpenFromMain();
+		} );
+	}
+
+	/* ------------------------------------------------------------------
+	   PRODUCT TABS — Descripción / Detalles / Cuidado
+	   ------------------------------------------------------------------ */
+	var ptabTriggers = Array.prototype.slice.call( document.querySelectorAll( '.murg-ptabs__trigger' ) );
+	var ptabPanels   = Array.prototype.slice.call( document.querySelectorAll( '.murg-ptabs__panel' ) );
+
+	if ( ptabTriggers.length && ptabPanels.length ) {
+		ptabTriggers.forEach( function ( trg ) {
+			trg.addEventListener( 'click', function () {
+				var target = trg.dataset.target;
+				ptabTriggers.forEach( function ( t ) {
+					t.classList.toggle( 'is-active', t === trg );
+					t.setAttribute( 'aria-selected', t === trg ? 'true' : 'false' );
+				} );
+				ptabPanels.forEach( function ( p ) {
+					var isTarget = p.id === 'murg-ptab-' + target;
+					p.classList.toggle( 'is-active', isTarget );
+					if ( isTarget ) { p.removeAttribute( 'hidden' ); }
+					else            { p.setAttribute( 'hidden', '' ); }
+				} );
 			} );
 		} );
+	}
+
+	/* ------------------------------------------------------------------
+	   RELATED PRODUCTS SLIDER — translateX track en single-product
+	   ------------------------------------------------------------------ */
+	var relTrack = document.getElementById( 'murg-rel-track' );
+	var relPrev  = document.getElementById( 'murg-rel-prev' );
+	var relNext  = document.getElementById( 'murg-rel-next' );
+
+	if ( relTrack && relPrev && relNext ) {
+		var relItems   = relTrack.querySelectorAll( '.murg-related__item' );
+		var relTotal   = relItems.length;
+		var relCurrent = 0;
+
+		function relPerView() {
+			if ( window.innerWidth <= 480 )  return 1;
+			if ( window.innerWidth <= 1024 ) return 2;
+			return 3;
+		}
+		function relMaxIdx() { return Math.max( 0, relTotal - relPerView() ); }
+
+		function relUpdate() {
+			var perView = relPerView();
+			if ( relCurrent > relMaxIdx() ) relCurrent = relMaxIdx();
+			// percentage-based slide — each item occupies (100/perView)%
+			var shift = -( 100 / perView ) * relCurrent;
+			relTrack.style.transform = 'translateX(' + shift + '%)';
+			relPrev.disabled = relCurrent <= 0;
+			relNext.disabled = relCurrent >= relMaxIdx();
+		}
+
+		relPrev.addEventListener( 'click', function () { if ( relCurrent > 0 )          { relCurrent--; relUpdate(); } } );
+		relNext.addEventListener( 'click', function () { if ( relCurrent < relMaxIdx() ) { relCurrent++; relUpdate(); } } );
+
+		window.addEventListener( 'resize', function () {
+			// keep current within bounds on resize
+			relUpdate();
+		} );
+
+		relUpdate();
 	}
 
 	/* ------------------------------------------------------------------
