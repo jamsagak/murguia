@@ -458,34 +458,37 @@
 		var bsDragOffsetX = 0;
 		var bsDragging    = false;
 		var bsDragMoved   = false;
-		var bsTrackW      = 0;
-		var DRAG_THRESHOLD = 8;   // px mínimos para considerar drag real
+		var bsSlideW      = 0; // ancho en px de un slide (= ancho del contenedor visible)
+		var DRAG_THRESHOLD  = 8;  // px mínimos para considerar drag real
 		var SWIPE_THRESHOLD = 60; // px para cambiar de slide al soltar
 
 		function bsDragStart( clientX ) {
-			bsDragging   = true;
-			bsDragMoved  = false;
-			bsDragStartX = clientX;
+			bsDragging    = true;
+			bsDragMoved   = false;
+			bsDragStartX  = clientX;
 			bsDragOffsetX = 0;
-			bsTrackW = bsTrack.parentElement.offsetWidth;
+			// El ancho de un slide es el ancho del wrapper visible (.murg-products)
+			bsSlideW = bsTrack.parentElement.offsetWidth || bsSlideEls[0].offsetWidth || 0;
 			bsAutoStop();
 			bsTrack.classList.add( 'is-dragging' );
 			if ( bsSection ) bsSection.classList.add( 'is-dragging' );
 		}
 
 		function bsDragMove( clientX ) {
-			if ( ! bsDragging ) return;
+			if ( ! bsDragging || bsSlideW === 0 ) return;
 			var delta = clientX - bsDragStartX;
 			if ( Math.abs( delta ) > DRAG_THRESHOLD ) bsDragMoved = true;
 			if ( ! bsDragMoved ) return;
 			bsDragOffsetX = delta;
-			// Resistencia en los extremos
+			// Resistencia elástica en los extremos
 			var raw = delta;
 			if ( ( bsCurrent === 0 && delta > 0 ) || ( bsCurrent === bsSlides - 1 && delta < 0 ) ) {
-				raw = delta * 0.25;
+				raw = delta * 0.2;
 			}
-			var pct = ( -100 * bsCurrent ) + ( raw / bsTrackW * 100 );
-			bsTrack.style.transform = 'translateX(' + pct + '%)';
+			// Base en px: posición del slide actual + desplazamiento del drag
+			var basePx  = -bsCurrent * bsSlideW;
+			var totalPx = basePx + raw;
+			bsTrack.style.transform = 'translateX(' + totalPx + 'px)';
 		}
 
 		function bsDragEnd() {
@@ -501,7 +504,8 @@
 					bsCurrent--;
 				}
 			}
-			bsUpdate(); // con transición CSS
+			// bsUpdate() vuelve a usar translateX(%) con transición CSS suave
+			bsUpdate();
 			bsAutoStart();
 		}
 
