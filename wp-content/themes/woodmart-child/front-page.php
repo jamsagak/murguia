@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * Front Page — Joyería Murguía
  *
@@ -359,10 +359,6 @@ if ( empty( $bestseller_ids ) && function_exists( 'wc_get_page_id' ) ) {
 					$usados_ids[]     = $pid;
 					break;
 				}
-			}
-			wp_reset_postdata();
-		}
-	}
 			}
 			wp_reset_postdata();
 		}
