@@ -432,21 +432,26 @@
 		}
 
 		/* ── Actualizar botones e info ───────────────────────────── */
+		function bsGetPerSlide() {
+			// Refleja cuántos productos son visibles según el breakpoint CSS
+			if ( window.innerWidth <= 768 )  return 1;
+			if ( window.innerWidth <= 1024 ) return 2;
+			return 3;
+		}
+
 		function bsUpdateUI() {
-			// Índice real (sin contar clones): pos-1 cuando hay clones
 			var realIdx = bsRealCount > 1 ? bsPos - 1 : bsPos;
-			// Normalizar: los clones tienen realIdx -1 y bsRealCount
 			if ( realIdx < 0 )            realIdx = bsRealCount - 1;
 			if ( realIdx >= bsRealCount ) realIdx = 0;
 
-			// En loop infinito los botones nunca se deshabilitan
 			bsPrev.disabled = false;
 			bsNext.disabled = false;
 
 			if ( bsInfo && bsTotal ) {
-				var from = bsPerSlide * realIdx + 1;
-				var to   = Math.min( bsPerSlide * ( realIdx + 1 ), bsTotal );
-				bsInfo.textContent = from + '–' + to + ' de ' + bsTotal;
+				var perSlide = bsGetPerSlide();
+				var from = perSlide * realIdx + 1;
+				var to   = Math.min( perSlide * ( realIdx + 1 ), bsTotal );
+				bsInfo.textContent = from + '\u2013' + to + ' de ' + bsTotal;
 			}
 		}
 
@@ -896,26 +901,37 @@
 
 	/* ===========================================================
 	   SCROLL REVEAL — animaciones de entrada al hacer scroll
-	   Usa IntersectionObserver para no bloquear el hilo principal.
-	   Los elementos con [data-reveal] se animan al entrar al viewport.
 	   =========================================================== */
 	if ( 'IntersectionObserver' in window ) {
 		var revealObs = new IntersectionObserver( function ( entries ) {
 			entries.forEach( function ( entry ) {
 				if ( ! entry.isIntersecting ) return;
 				entry.target.classList.add( 'is-revealed' );
-				revealObs.unobserve( entry.target ); // solo una vez
+				// Limpiar delay inline después de revelar para no afectar hovers futuros
+				entry.target.addEventListener( 'transitionend', function clearDelay() {
+					entry.target.style.transitionDelay = '';
+					entry.target.removeEventListener( 'transitionend', clearDelay );
+				}, { once: true } );
+				revealObs.unobserve( entry.target );
 			} );
 		}, {
 			threshold: 0.12,
 			rootMargin: '0px 0px -40px 0px'
 		} );
 
-		// Elementos que se animan individualmente
+		// Fix #4: procesar bloques primero para que el guard closest funcione después
+		document.querySelectorAll( '.murg-bestsellers, .murg-certifications' ).forEach( function ( el ) {
+			if ( el.closest( '[aria-hidden="true"]' ) ) return;
+			el.setAttribute( 'data-reveal-block', '' );
+			revealObs.observe( el );
+		} );
+
+		// Elementos individuales — Fix #2+3: saltar clones (aria-hidden)
+		// Fix #4: saltar elementos dentro de data-reveal-block (ya animado como bloque)
+		// Fix #1: stagger por posición dentro del padre, no índice global
 		var revealSelectors = [
 			'.murg-section__header',
 			'.murg-collection',
-			'.murg-product',
 			'.murg-statement .murg-eyebrow',
 			'.murg-statement__quote',
 			'.murg-statement__attr',
@@ -925,24 +941,29 @@
 			'.murg-contact__lede',
 			'.murg-info-block',
 			'.murg-form',
+			// .murg-product excluido — está dentro de .murg-bestsellers (data-reveal-block)
 		];
 
 		revealSelectors.forEach( function ( sel ) {
-			document.querySelectorAll( sel ).forEach( function ( el, i ) {
+			document.querySelectorAll( sel ).forEach( function ( el ) {
+				// Saltar clones del slider
+				if ( el.closest( '[aria-hidden="true"]' ) ) return;
+				// Saltar elementos dentro de un bloque que ya se anima completo
+				if ( el.closest( '[data-reveal-block]' ) ) return;
+
+				// Stagger por posición dentro del mismo padre (Fix #1)
+				var siblings = el.parentElement
+					? Array.from( el.parentElement.querySelectorAll( sel ) )
+					: [];
+				var idx = siblings.indexOf( el );
 				el.setAttribute( 'data-reveal', '' );
-				// Stagger: cada hijo dentro del mismo padre se retrasa ligeramente
-				el.style.transitionDelay = ( i % 4 ) * 0.08 + 's';
+				el.style.transitionDelay = Math.max( 0, idx % 4 ) * 0.08 + 's';
 				revealObs.observe( el );
 			} );
 		} );
 
-		// Secciones completas con reveal de bloque (fade simple, sin delay)
-		document.querySelectorAll( '.murg-bestsellers, .murg-certifications' ).forEach( function ( el ) {
-			el.setAttribute( 'data-reveal-block', '' );
-			revealObs.observe( el );
-		} );
 	} else {
-		// Fallback para navegadores sin IntersectionObserver: mostrar todo
+		// Fallback — mostrar todo sin animación
 		document.querySelectorAll( '[data-reveal], [data-reveal-block]' ).forEach( function ( el ) {
 			el.classList.add( 'is-revealed' );
 		} );
