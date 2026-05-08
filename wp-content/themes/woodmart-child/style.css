@@ -2836,3 +2836,127 @@
     grid-column: 1;
   }
 }
+
+/* ============================================================
+   SEARCH OVERLAY (nav)
+   ============================================================ */
+.murg-nav__search-trigger {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+.murg-nav__search-trigger:hover { color: var(--murg-gold); }
+
+.murg-search {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.murg-search.is-open {
+  pointer-events: auto;
+  opacity: 1;
+}
+.murg-search__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.92);
+}
+.murg-search__panel {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin-top: 18vh;
+  padding: 0 24px;
+  text-align: center;
+}
+.murg-search__close {
+  position: fixed;
+  top: 28px;
+  right: 32px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--murg-cream);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+.murg-search__close:hover { color: var(--murg-gold); }
+
+.murg-search__inner .murg-eyebrow {
+  color: var(--murg-gold);
+  margin-bottom: 14px;
+}
+.murg-search__title {
+  font-size: clamp(28px, 4vw, 44px);
+  color: var(--murg-cream);
+  font-weight: 400;
+  margin: 0 0 36px;
+  letter-spacing: -0.005em;
+}
+.murg-search__form {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(245, 240, 232, 0.4);
+  padding-bottom: 12px;
+  transition: border-color 0.25s;
+}
+.murg-search__form:focus-within {
+  border-bottom-color: var(--murg-gold);
+}
+.murg-search__input {
+  flex: 1;
+  background: transparent;
+  border: 0;
+  outline: 0;
+  color: var(--murg-cream);
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(22px, 3vw, 32px);
+  font-weight: 300;
+  padding: 8px 0;
+  letter-spacing: 0.01em;
+}
+.murg-search__input::placeholder {
+  color: rgba(245, 240, 232, 0.4);
+  font-style: italic;
+}
+.murg-search__submit {
+  background: transparent;
+  border: 0;
+  color: var(--murg-cream);
+  cursor: pointer;
+  padding: 8px 4px 8px 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s;
+}
+.murg-search__submit:hover { color: var(--murg-gold); }
+.murg-search__hint {
+  margin-top: 18px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(245, 240, 232, 0.5);
+}
+body.murg-search-open { overflow: hidden; }
+
+@media (max-width: 480px) {
+  .murg-search__panel { margin-top: 14vh; padding: 0 16px; }
+  .murg-search__close { top: 16px; right: 16px; }
+}

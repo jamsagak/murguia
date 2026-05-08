@@ -627,4 +627,45 @@
 		}
 	}
 
+	/* ------------------------------------------------------------------
+	   SEARCH OVERLAY — abre input full-screen al click en "Buscar"
+	   ------------------------------------------------------------------ */
+	var srcModal   = document.getElementById( 'murg-search' );
+	var srcOpenBtn = document.getElementById( 'murg-search-open' );
+	var srcInput   = document.getElementById( 'murg-search-input' );
+	var srcLastFocus = null;
+
+	function srcOpen() {
+		if ( ! srcModal ) return;
+		srcLastFocus = document.activeElement;
+		srcModal.classList.add( 'is-open' );
+		srcModal.setAttribute( 'aria-hidden', 'false' );
+		document.body.classList.add( 'murg-search-open' );
+		// Foco al input despues de la transicion
+		setTimeout( function () {
+			if ( srcInput ) { srcInput.focus(); srcInput.select(); }
+		}, 100 );
+	}
+	function srcClose() {
+		if ( ! srcModal ) return;
+		srcModal.classList.remove( 'is-open' );
+		srcModal.setAttribute( 'aria-hidden', 'true' );
+		document.body.classList.remove( 'murg-search-open' );
+		if ( srcLastFocus && typeof srcLastFocus.focus === 'function' ) {
+			srcLastFocus.focus();
+		}
+	}
+
+	if ( srcModal && srcOpenBtn ) {
+		srcOpenBtn.addEventListener( 'click', srcOpen );
+		srcModal.querySelectorAll( '[data-close="murg-search"]' ).forEach( function ( el ) {
+			el.addEventListener( 'click', srcClose );
+		} );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && srcModal.classList.contains( 'is-open' ) ) {
+				srcClose();
+			}
+		} );
+	}
+
 } )();
