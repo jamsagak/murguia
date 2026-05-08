@@ -874,27 +874,28 @@
    ============================================================ */
 .murg-certifications {
   background: var(--murg-cream);
-  padding: 100px 0 0;
+  padding: 120px 0 0;
   text-align: center;
   overflow: hidden;
 }
 
 .murg-certifications__title {
   color: var(--murg-ink);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 38px;
-  margin-bottom: 50px;
-  letter-spacing: 0.02em;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: 0.005em;
+  margin-bottom: 60px;
 }
 
 .murg-certifications__carousel {
   position: relative;
   width: 100%;
-  height: 200px; /* Mas alto para dar aire a los logos grandes */
-  max-width: 1400px;
+  height: 240px; /* Mas alto para dar aire a los logos grandes */
+  max-width: 1600px;
   margin: 0 auto;
   border-bottom: 1px solid rgba(26,26,26,0.1);
-  padding-bottom: 50px;
+  padding-bottom: 60px;
 }
 
 /* Gradientes para difuminar los bordes */
@@ -902,7 +903,7 @@
 .murg-certifications__carousel::after {
   content: "";
   position: absolute;
-  top: 0; bottom: 50px; /* match padding-bottom */
+  top: 0; bottom: 60px; /* match padding-bottom */
   width: 15%;
   z-index: 10;
   pointer-events: none;
@@ -925,7 +926,7 @@
   position: absolute;
   top: 40%;
   left: 50%;
-  width: 320px;
+  width: 380px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -937,7 +938,7 @@
 }
 
 .murg-certifications__logo[data-pos="center"] {
-  transform: translate(-50%, -50%) scale(1.3);
+  transform: translate(-50%, -50%) scale(1.4);
   opacity: 1;
   filter: grayscale(0%);
   z-index: 3;
@@ -945,25 +946,25 @@
 }
 
 .murg-certifications__logo[data-pos="left"] {
-  transform: translate(calc(-50% - 380px), -50%) scale(0.85);
+  transform: translate(calc(-50% - 460px), -50%) scale(0.9);
   opacity: 0.5;
   z-index: 2;
 }
 
 .murg-certifications__logo[data-pos="right"] {
-  transform: translate(calc(-50% + 380px), -50%) scale(0.85);
+  transform: translate(calc(-50% + 460px), -50%) scale(0.9);
   opacity: 0.5;
   z-index: 2;
 }
 
 .murg-certifications__logo[data-pos="hidden-left"] {
-  transform: translate(calc(-50% - 600px), -50%) scale(0.5);
+  transform: translate(calc(-50% - 700px), -50%) scale(0.5);
   opacity: 0;
   z-index: 1;
 }
 
 .murg-certifications__logo[data-pos="hidden-right"] {
-  transform: translate(calc(-50% + 600px), -50%) scale(0.5);
+  transform: translate(calc(-50% + 700px), -50%) scale(0.5);
   opacity: 0;
   z-index: 1;
 }
@@ -974,7 +975,7 @@
 }
 
 .murg-certifications__logo img {
-  max-height: 90px;
+  max-height: 110px;
   width: auto;
   max-width: 100%;
   object-fit: contain;

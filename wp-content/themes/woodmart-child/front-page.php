@@ -468,7 +468,7 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_cert_logos', murguia_ajust
 ?>
 <?php if ( ! empty( $cert_logos ) || current_user_can('edit_theme_options') ) : ?>
 <section class="murg-certifications" aria-label="<?php echo esc_attr( $cert_titulo ); ?>">
-	<div class="murg-eyebrow murg-certifications__title"><?php echo esc_html( $cert_titulo ); ?></div>
+	<h2 class="murg-certifications__title murg-serif"><?php echo esc_html( $cert_titulo ); ?></h2>
 	<div class="murg-certifications__carousel" id="cert-carousel">
 		<div class="murg-certifications__track">
 			<?php if ( ! empty( $cert_logos ) ) : ?>
