@@ -2535,91 +2535,178 @@
 .murg-account__content .woocommerce-error::before,
 .murg-account__content .woocommerce-info::before { display: none; }
 
-/* ---- Dashboard (logueado) sidebar nav ---- */
-.murg-account__content .woocommerce-MyAccount-navigation {
-  float: left;
-  width: 180px;
-  margin-right: 48px;
-  background: transparent;
-  border: 0;
-  padding: 0;
+/* ============================================================
+   DASHBOARD — Mi Cuenta logueado
+   Layout: grid 2 cols (sidebar nav + content)
+   ============================================================ */
+.murg-dashboard {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 56px;
+  align-items: start;
 }
-.murg-account__content .woocommerce-MyAccount-navigation ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+
+/* ---- Sidebar nav ---- */
+.murg-dashboard__nav {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  position: sticky;
+  top: 100px;
 }
-.murg-account__content .woocommerce-MyAccount-navigation li { margin-bottom: 1px; }
-.murg-account__content .woocommerce-MyAccount-navigation li a {
+.murg-dashboard__nav-link {
   display: block;
-  padding: 9px 14px;
+  padding: 10px 14px;
   font-family: 'Inter', sans-serif;
   font-size: 10px;
-  letter-spacing: 0.16em;
+  font-weight: 400;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--murg-muted);
   text-decoration: none;
-  transition: all 0.15s;
+  transition: color 0.15s;
+  border-left: 2px solid transparent;
 }
-.murg-account__content .woocommerce-MyAccount-navigation li a:hover,
-.murg-account__content .woocommerce-MyAccount-navigation li.is-active a {
+.murg-dashboard__nav-link:hover { color: var(--murg-ink); }
+.murg-dashboard__nav-link.is-active {
   color: var(--murg-ink);
-  background: var(--murg-cream-deep);
+  border-left-color: var(--murg-gold);
+  background: transparent;
 }
 
-/* ---- Dashboard content — sin iconos rotos ni navegación duplicada ---- */
-
-/* Ocultar los enlaces redundantes del dashboard WC (Escritorio, Pedidos, etc.)
-   porque ya están en la sidebar */
-.murg-account__content .woocommerce-MyAccount-content nav.woocommerce-MyAccount-navigation,
-.murg-account__content .woocommerce-MyAccount-dashboard .woocommerce-dashboard-links,
-.murg-account__content .woocommerce-MyAccount-dashboard > p:not(:first-of-type) a[href*="my-account"] {
-  display: none !important;
+/* ---- Content area ---- */
+.murg-dashboard__content {
+  min-width: 0;
+  min-height: 400px;
+  max-width: 620px;
 }
 
-/* Eliminar los íconos pseudo-element rotos (cuadros vacíos) */
-.murg-account__content .woocommerce-MyAccount-content *::before,
-.murg-account__content .woocommerce-MyAccount-dashboard *::before,
-.murg-account__content .woocommerce-MyAccount-content .woocommerce-MyAccount-dashboard .dashboard-link::before {
-  content: none !important;
-  display: none !important;
+/* Saludo custom minimal */
+.murg-dashboard__greeting {
+  border-bottom: 1px solid var(--murg-line);
+  padding-bottom: 24px;
+  margin-bottom: 24px;
+}
+.murg-dashboard__hello {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 32px;
+  line-height: 1.1;
+  color: var(--murg-ink);
+  margin: 0 0 4px;
+}
+.murg-dashboard__hello em {
+  font-style: italic;
+  color: var(--murg-gold-soft);
+}
+.murg-dashboard__email {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--murg-muted);
+  letter-spacing: 0.05em;
+  margin: 0;
 }
 
-/* Pero preservar el ::before del show-password-input */
-.murg-account__content .show-password-input::before {
-  content: '' !important;
-  display: block !important;
+.murg-dashboard__blurb {
+  margin-bottom: 32px;
 }
-
-/* Layout del contenido del dashboard */
-.murg-account__content .woocommerce-MyAccount-content {
-  overflow: hidden;
-  min-height: 300px;
-  max-width: 560px;
-}
-.murg-account__content .woocommerce-MyAccount-content p {
-  font-size: 14px;
+.murg-dashboard__blurb p {
+  font-size: 13px;
   color: var(--murg-muted);
   line-height: 1.75;
+  margin: 0;
 }
 
-/* Ajustar el "Hola, Nombre" — más pequeño */
-.murg-account__content .woocommerce-MyAccount-content p:first-child {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 26px;
+/* ---- Section (Pedidos recientes, etc.) ---- */
+.murg-dashboard__section {
+  margin-bottom: 32px;
+}
+.murg-dashboard__section-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+  margin: 0 0 16px;
+}
+
+.murg-dashboard__orders {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+}
+.murg-dashboard__orders li {
+  border-bottom: 1px solid var(--murg-line);
+}
+.murg-dashboard__order {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  gap: 20px;
+  align-items: center;
+  padding: 14px 0;
+  text-decoration: none;
   color: var(--murg-ink);
-  line-height: 1.2;
-  margin-bottom: 20px;
+  transition: opacity 0.2s;
+}
+.murg-dashboard__order:hover { opacity: 0.7; }
+.murg-dashboard__order-ref {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  color: var(--murg-ink);
+}
+.murg-dashboard__order-date {
+  font-size: 12px;
+  color: var(--murg-muted);
+}
+.murg-dashboard__order-status {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--murg-gold-soft);
+}
+.murg-dashboard__order-total {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: var(--murg-ink);
 }
 
-/* Tablas (pedidos, descargas, direcciones) */
-.murg-account__content .woocommerce-MyAccount-content table {
+.murg-dashboard__see-all {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  color: var(--murg-gold-soft);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.murg-dashboard__see-all:hover { color: var(--murg-gold); }
+
+/* ---- Fallback: endpoints con contenido de WC (orders, downloads, etc.) ---- */
+.murg-dashboard__content > p,
+.murg-dashboard__content > h2,
+.murg-dashboard__content > h3 {
+  font-size: 14px;
+  color: var(--murg-ink);
+  line-height: 1.6;
+}
+.murg-dashboard__content h2,
+.murg-dashboard__content h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 24px;
+  margin-bottom: 16px;
+  color: var(--murg-ink);
+}
+
+/* Tablas WC (pedidos, descargas) */
+.murg-dashboard__content table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  margin-top: 8px;
+  margin-bottom: 24px;
 }
-.murg-account__content .woocommerce-MyAccount-content table th {
+.murg-dashboard__content table th {
   font-family: 'Inter', sans-serif;
   font-size: 10px;
   letter-spacing: 0.18em;
@@ -2630,31 +2717,110 @@
   padding: 12px 0;
   border-bottom: 1px solid var(--murg-line);
 }
-.murg-account__content .woocommerce-MyAccount-content table td {
-  padding: 14px 0;
+.murg-dashboard__content table td {
+  padding: 16px 0;
   border-bottom: 1px solid var(--murg-line);
   color: var(--murg-ink);
+  vertical-align: middle;
 }
-.murg-account__content .woocommerce-MyAccount-content table a,
-.murg-account__content .woocommerce-MyAccount-content .woocommerce-button {
+.murg-dashboard__content table a.button,
+.murg-dashboard__content .woocommerce-button {
+  display: inline-block;
   font-family: 'Inter', sans-serif;
   font-size: 10px;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--murg-gold-soft);
+  color: var(--murg-ink);
   text-decoration: none;
+  padding: 8px 16px;
+  border: 1px solid var(--murg-line);
+  background: transparent;
+  transition: all 0.2s;
+  border-radius: 0;
 }
-.murg-account__content .woocommerce-MyAccount-content table a:hover,
-.murg-account__content .woocommerce-MyAccount-content .woocommerce-button:hover {
+.murg-dashboard__content table a.button:hover,
+.murg-dashboard__content .woocommerce-button:hover {
+  border-color: var(--murg-gold);
   color: var(--murg-gold);
+  background: transparent;
+}
+
+/* Formularios de WC (edit address, edit account) */
+.murg-dashboard__content form .form-row {
+  margin-bottom: 16px;
+}
+.murg-dashboard__content form .form-row label {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+  margin-bottom: 6px;
+}
+.murg-dashboard__content form input[type="text"],
+.murg-dashboard__content form input[type="email"],
+.murg-dashboard__content form input[type="password"],
+.murg-dashboard__content form input[type="tel"],
+.murg-dashboard__content form textarea,
+.murg-dashboard__content form .select2-selection,
+.murg-dashboard__content form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--murg-line);
+  background: var(--murg-cream);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--murg-ink);
+  border-radius: 0;
+  box-shadow: none;
+  height: 46px;
+  line-height: 1.4;
+}
+.murg-dashboard__content form input:focus,
+.murg-dashboard__content form textarea:focus,
+.murg-dashboard__content form select:focus {
+  outline: none;
+  border-color: var(--murg-gold);
+}
+
+/* ---- Matar completamente el dashboard de WoodMart si llegara a aparecer ---- */
+.murg-dashboard__content .wd-my-account-links,
+.murg-dashboard__content .wd-nav-my-acc,
+.murg-dashboard__content .wd-my-acc-dashboard,
+.murg-dashboard__content .woocommerce-dashboard-links,
+.murg-dashboard__content .woocommerce-MyAccount-dashboard .woocommerce-info {
+  display: none !important;
+}
+.murg-dashboard__content .wd-nav-icon,
+.murg-dashboard__content .wd-my-account-links *::before,
+.murg-dashboard__content .wd-nav-my-acc *::before {
+  display: none !important;
+  content: none !important;
 }
 
 @media (max-width: 768px) {
   .murg-account__content { padding: 0 20px 60px; }
   .murg-auth-grid { grid-template-columns: 1fr; gap: 48px; }
-  .murg-account__content .woocommerce-MyAccount-navigation {
-    float: none;
-    width: auto;
-    margin: 0 0 32px;
+  .murg-dashboard {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+  .murg-dashboard__nav {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 2px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--murg-line);
+  }
+  .murg-dashboard__hello { font-size: 26px; }
+  .murg-dashboard__order {
+    grid-template-columns: 1fr auto;
+    gap: 4px;
+  }
+  .murg-dashboard__order-date,
+  .murg-dashboard__order-status {
+    grid-column: 1;
   }
 }
