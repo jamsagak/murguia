@@ -209,7 +209,7 @@ if ( empty( $hero_slides ) ) {
 	<?php endif; ?>
 
 	<div class="murg-hero__foot" aria-hidden="true">
-		<div>Lima &middot; Per\xc3\xba</div>
+		<div>Lima &middot; Perú</div>
 	</div>
 </section>
 
