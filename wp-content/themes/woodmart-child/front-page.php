@@ -32,38 +32,185 @@ function murg_f( $key, $fallback = '' ) {
      01 HERO
      ============================================================ -->
 <?php
-$hero_eyebrow = murg_f( 'hp_hero_eyebrow',   'Colección Otoño · MMXXVI' );
-$hero_titulo  = murg_f( 'hp_hero_titulo',     'Joyería <em>Murguía</em>' );
+$hero_eyebrow = murg_f( 'hp_hero_eyebrow',   'Colecci\xc3\xb3n Oto\xc3\xb1o \xc2\xb7 MMXXVI' );
+$hero_titulo  = murg_f( 'hp_hero_titulo',     'Joyer\xc3\xada <em>Murgu\xc3\xada</em>' );
 $hero_sub     = murg_f( 'hp_hero_subtitulo',  'Orfebrería peruana desde 1962' );
 $hero_cta_txt = murg_f( 'hp_hero_cta_texto',  'Ver Colección' );
 $hero_cta_url = murg_f( 'hp_hero_cta_link',   '#colecciones' );
-$hero_img     = murg_f( 'hp_hero_imagen',      [] );
+
+// Slider del hero — imágenes y/o videos
+$hero_slides = [];
+if ( function_exists( 'have_rows' ) && have_rows( 'hp_hero_slides', murguia_ajuste_id() ) ) {
+	while ( have_rows( 'hp_hero_slides', murguia_ajuste_id() ) ) {
+		the_row();
+		$tipo        = get_sub_field( 'tipo' ) ?: 'imagen';
+		$img         = get_sub_field( 'imagen' );
+		$video_url   = trim( (string) get_sub_field( 'video_url' ) );
+		$vid_inicio  = (int) ( get_sub_field( 'video_inicio' ) ?: 0 );
+		$vid_fin_raw = get_sub_field( 'video_fin' );
+		$vid_fin     = ( $vid_fin_raw !== '' && $vid_fin_raw !== null && $vid_fin_raw !== false )
+		                ? (int) $vid_fin_raw : 15;
+
+		// Determinar el tipo real según lo que tenga contenido
+		if ( $tipo === 'video' && empty( $video_url ) ) continue;
+		if ( $tipo === 'imagen' && empty( $img['url'] ) ) continue;
+
+		// Parsear video: detectar YouTube, Vimeo o mp4 directo
+		$video_embed = '';
+		$video_mp4   = '';
+		if ( $tipo === 'video' ) {
+			if ( preg_match( '/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $video_url, $m ) ) {
+				$vid = $m[1];
+				$video_embed = 'https://www.youtube.com/embed/' . $vid
+					. '?autoplay=1&mute=1&loop=1&playlist=' . $vid
+					. '&controls=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1'
+					. ( $vid_inicio > 0 ? '&start=' . $vid_inicio : '' );
+			} elseif ( preg_match( '/vimeo\.com\/(\d+)/', $video_url, $m ) ) {
+				$vid = $m[1];
+				$video_embed = 'https://player.vimeo.com/video/' . $vid
+					. '?autoplay=1&muted=1&loop=1&background=1'
+					. ( $vid_inicio > 0 ? '#t=' . $vid_inicio . 's' : '' );
+			} else {
+				$video_mp4 = $video_url;
+			}
+		}
+
+		// Duración en ms para el autoplay del slider
+		$duracion_ms = $tipo === 'video' ? ( ( $vid_fin - $vid_inicio ) * 1000 ) : 5000;
+
+		$hero_slides[] = [
+			'tipo'        => $tipo,
+			// Imagen
+			'url'         => $img['url'] ?? '',
+			'alt'         => $img['alt'] ?? '',
+			// Video
+			'video_embed' => $video_embed,
+			'video_mp4'   => $video_mp4,
+			'video_url'   => $video_url,
+			'video_inicio'=> $vid_inicio,
+			'video_fin'   => $vid_fin,
+			// Timing
+			'intervalo'   => $tipo === 'video' ? max( $duracion_ms, 2000 ) : 5000,
+			// Contenido
+			'eyebrow'     => (string) get_sub_field( 'eyebrow' ),
+			'titulo'      => (string) get_sub_field( 'titulo' ),
+			'subtitulo'   => (string) get_sub_field( 'subtitulo' ),
+			'cta_texto'   => (string) get_sub_field( 'cta_texto' ),
+			'cta_link'    => (string) get_sub_field( 'cta_link' ),
+		];
+	}
+}
+// Fallback: campo legado hp_hero_imagen
+if ( empty( $hero_slides ) ) {
+	$legacy = murg_f( 'hp_hero_imagen', [] );
+	if ( ! empty( $legacy['url'] ) ) {
+		$hero_slides[] = [
+			'tipo' => 'imagen', 'url' => $legacy['url'], 'alt' => $legacy['alt'] ?? '',
+			'video_embed' => '', 'video_mp4' => '', 'video_url' => '', 'intervalo' => 5000,
+			'eyebrow' => '', 'titulo' => '', 'subtitulo' => '', 'cta_texto' => '', 'cta_link' => '',
+		];
+	}
+}
 ?>
-<section class="murg-hero" aria-label="Hero">
-	<div class="murg-hero__bg">
-		<?php if ( ! empty( $hero_img['url'] ) ) : ?>
-			<img class="murg-hero__img"
-			     src="<?php echo esc_url( $hero_img['url'] ); ?>"
-			     alt="<?php echo esc_attr( $hero_img['alt'] ?? '' ); ?>">
-		<?php endif; ?>
-		<div class="murg-hero__vignette"></div>
-	</div>
-	<div class="murg-hero__content">
-		<div class="murg-eyebrow murg-hero__eyebrow"><?php echo esc_html( $hero_eyebrow ); ?></div>
-		<h1 class="murg-serif murg-hero__title"><?php echo wp_kses( $hero_titulo, [ 'em' => [] ] ); ?></h1>
-		<p class="murg-hero__sub"><?php echo esc_html( $hero_sub ); ?></p>
-		<div class="murg-hero__divider" aria-hidden="true"></div>
-		<a href="<?php echo esc_url( $hero_cta_url ); ?>" class="murg-hero__cta">
-			<?php echo esc_html( $hero_cta_txt ); ?>
-		</a>
-	</div>
-	<div class="murg-hero__foot" aria-hidden="true">
-		<div>Lima · Perú</div>
-		<div class="murg-scroll-indicator">
-			<span>Descubrir</span>
-			<span class="murg-scroll-line"></span>
+<section class="murg-hero" id="murg-hero-slider" aria-label="Hero">
+
+	<?php foreach ( $hero_slides as $idx => $slide ) :
+		// Contenido: usa el del slide si existe, si no el global
+		$s_eyebrow   = $slide['eyebrow']   ?: $hero_eyebrow;
+		$s_titulo    = $slide['titulo']    ?: $hero_titulo;
+		$s_subtitulo = $slide['subtitulo'] ?: $hero_sub;
+		$s_cta_txt   = $slide['cta_texto'] ?: $hero_cta_txt;
+		$s_cta_url   = $slide['cta_link']  ?: $hero_cta_url;
+	?>
+	<div class="murg-hero__slide<?php echo $idx === 0 ? ' is-active' : ''; ?>"
+	     data-intervalo="<?php echo (int) $slide['intervalo']; ?>"
+	     <?php if ( $slide['tipo'] === 'video' ) : ?>
+	     data-video-inicio="<?php echo (int) $slide['video_inicio']; ?>"
+	     data-video-fin="<?php echo (int) $slide['video_fin']; ?>"
+	     <?php endif; ?>
+	     aria-hidden="<?php echo $idx === 0 ? 'false' : 'true'; ?>">
+
+		<!-- Fondo -->
+		<div class="murg-hero__bg">
+			<?php if ( $slide['tipo'] === 'video' ) : ?>
+
+				<?php if ( $slide['video_embed'] ) : ?>
+				<div class="murg-hero__video-wrap">
+					<iframe class="murg-hero__video-iframe"
+					        src="<?php echo esc_url( $slide['video_embed'] ); ?>"
+					        frameborder="0"
+					        allow="autoplay; fullscreen"
+					        allowfullscreen
+					        loading="<?php echo $idx === 0 ? 'eager' : 'lazy'; ?>"
+					        data-video-iframe></iframe>
+				</div>
+				<?php elseif ( $slide['video_mp4'] ) : ?>
+				<video class="murg-hero__video-mp4"
+				       src="<?php echo esc_url( $slide['video_mp4'] ); ?>"
+				       autoplay muted playsinline
+				       data-video-mp4
+				       data-inicio="<?php echo (int) $slide['video_inicio']; ?>"
+				       data-fin="<?php echo (int) $slide['video_fin']; ?>"></video>
+				<?php endif; ?>
+
+			<?php else : ?>
+				<img class="murg-hero__img"
+				     src="<?php echo esc_url( $slide['url'] ); ?>"
+				     alt="<?php echo esc_attr( $slide['alt'] ); ?>"
+				     <?php echo $idx > 0 ? 'loading="lazy"' : ''; ?>>
+			<?php endif; ?>
+			<div class="murg-hero__vignette"></div>
 		</div>
-		<div>N° 01 / 05</div>
+
+		<!-- Contenido -->
+		<div class="murg-hero__content">
+			<div class="murg-eyebrow murg-hero__eyebrow"><?php echo esc_html( $s_eyebrow ); ?></div>
+			<h1 class="murg-serif murg-hero__title"><?php echo wp_kses( $s_titulo, [ 'em' => [] ] ); ?></h1>
+			<p class="murg-hero__sub"><?php echo esc_html( $s_subtitulo ); ?></p>
+			<div class="murg-hero__divider" aria-hidden="true"></div>
+			<a href="<?php echo esc_url( $s_cta_url ); ?>" class="murg-hero__cta">
+				<?php echo esc_html( $s_cta_txt ); ?>
+			</a>
+		</div>
+
+	</div>
+	<?php endforeach; ?>
+
+	<?php if ( empty( $hero_slides ) ) : ?>
+	<div class="murg-hero__slide is-active" data-intervalo="5000" aria-hidden="false">
+		<div class="murg-hero__bg"></div>
+		<div class="murg-hero__content">
+			<div class="murg-eyebrow murg-hero__eyebrow"><?php echo esc_html( $hero_eyebrow ); ?></div>
+			<h1 class="murg-serif murg-hero__title"><?php echo wp_kses( $hero_titulo, [ 'em' => [] ] ); ?></h1>
+			<p class="murg-hero__sub"><?php echo esc_html( $hero_sub ); ?></p>
+			<div class="murg-hero__divider" aria-hidden="true"></div>
+			<a href="<?php echo esc_url( $hero_cta_url ); ?>" class="murg-hero__cta">
+				<?php echo esc_html( $hero_cta_txt ); ?>
+			</a>
+		</div>
+	</div>
+	<?php endif; ?>
+
+	<!-- Dots y progreso (fuera de los slides, siempre encima) -->
+	<?php if ( count( $hero_slides ) > 1 ) : ?>
+	<div class="murg-hero__dots" aria-label="Navegación de slides" role="tablist">
+		<?php foreach ( $hero_slides as $idx => $slide ) : ?>
+		<button class="murg-hero__dot<?php echo $idx === 0 ? ' is-active' : ''; ?>"
+		        data-index="<?php echo $idx; ?>"
+		        role="tab"
+		        aria-selected="<?php echo $idx === 0 ? 'true' : 'false'; ?>"
+		        aria-label="Slide <?php echo $idx + 1; ?> de <?php echo count( $hero_slides ); ?>">
+			<span class="murg-hero__dot-line"></span>
+		</button>
+		<?php endforeach; ?>
+	</div>
+	<div class="murg-hero__progress" aria-hidden="true">
+		<div class="murg-hero__progress-bar"></div>
+	</div>
+	<?php endif; ?>
+
+	<div class="murg-hero__foot" aria-hidden="true">
+		<div>Lima &middot; Per\xc3\xba</div>
 	</div>
 </section>
 

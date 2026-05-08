@@ -233,9 +233,30 @@
 }
 
 .murg-hero__divider {
-  width: 1px; height: 48px;
-  background: var(--murg-gold);
+  position: relative;
+  width: 1px; height: 56px;
   margin: 0 auto 40px;
+  overflow: visible;
+}
+.murg-hero__divider::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0;
+  width: 1px; height: 100%;
+  background: rgba(201,168,76,0.25);
+}
+.murg-hero__divider::after {
+  content: "";
+  position: absolute;
+  top: -20px; left: 0;
+  width: 1px; height: 32px;
+  background: linear-gradient(to bottom, transparent, var(--murg-gold));
+  animation: murg-scroll-fall 2s infinite cubic-bezier(0.4, 0, 0.6, 1);
+}
+@keyframes murg-scroll-fall {
+  0%   { top: -32px; opacity: 0; }
+  30%  { opacity: 1; }
+  100% { top: 56px;  opacity: 0; }
 }
 
 .murg-hero__cta {
@@ -256,46 +277,145 @@
 .murg-hero__cta:hover {
   background: var(--murg-gold);
   color: var(--murg-black);
+  animation: none;
+}
+@keyframes murg-cta-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+  50%       { box-shadow: 0 0 0 6px rgba(201,168,76,0.18); }
+}
+.murg-hero__cta {
+  animation: murg-cta-pulse 3s infinite ease-in-out;
 }
 
 .murg-hero__foot {
   position: absolute;
-  bottom: 36px; left: 60px; right: 60px;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
+  bottom: 36px; left: 60px;
   color: rgba(245,240,232,0.55);
   font-size: 10px;
   letter-spacing: 0.28em;
   text-transform: uppercase;
+  z-index: 10;
+}
+
+/* .murg-scroll-indicator eliminado — reemplazado por murg-hero__divider animado */
+
+/* ============================================================
+   HERO SLIDER
+   ============================================================ */
+
+.murg-hero__slide {
+  position: absolute; inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+.murg-hero__slide.is-active {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 1;
+}
+.murg-hero__slide .murg-hero__bg {
+  position: absolute; inset: 0;
+}
+.murg-hero__slide .murg-hero__content {
+  position: absolute;
+  inset: 0;
   z-index: 2;
 }
 
-.murg-scroll-indicator {
+/* Video de fondo — iframe (YouTube/Vimeo) */
+.murg-hero__video-wrap {
+  position: absolute; inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.murg-hero__video-iframe {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 177.78vh;
+  height: 56.25vw;
+  min-width: 100%;
+  min-height: 100%;
+  transform: translate(-50%, -50%);
+  border: 0;
+  pointer-events: none;
+}
+/* Video mp4 directo */
+.murg-hero__video-mp4 {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* Dots — líneas horizontales centradas en bottom */
+.murg-hero__dots {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  z-index: 10;
+}
+.murg-hero__dot {
   display: flex;
   align-items: center;
-  gap: 14px;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 8px 0;
+  cursor: pointer;
+  width: 32px;
+  -webkit-appearance: none;
+  appearance: none;
+  outline: none;
 }
-
-.murg-scroll-line {
-  width: 40px; height: 1px;
-  background: rgba(245,240,232,0.4);
-  position: relative;
-  overflow: hidden;
+.murg-hero__dot:hover,
+.murg-hero__dot:focus {
+  background: none;
+  outline: none;
 }
-
-.murg-scroll-line::after {
-  content: "";
-  position: absolute;
-  top: 0; left: -40px;
-  width: 40px; height: 1px;
+.murg-hero__dot-line {
+  display: block;
+  width: 100%;
+  height: 2px;
+  border-radius: 2px;
+  background: rgba(245,240,232,0.35);
+  transition: background 0.35s ease;
+}
+.murg-hero__dot:hover .murg-hero__dot-line {
   background: var(--murg-gold);
-  animation: murg-scroll-pulse 2.6s infinite ease-in-out;
+}
+.murg-hero__dot.is-active .murg-hero__dot-line {
+  background: var(--murg-gold);
 }
 
-@keyframes murg-scroll-pulse {
-  0%   { left: -40px; }
-  100% { left:  40px; }
+/* Barra de progreso */
+.murg-hero__progress {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(201,168,76,0.12);
+  z-index: 10;
+}
+.murg-hero__progress-bar {
+  height: 100%;
+  width: 0%;
+  background: var(--murg-gold);
+  transition: width linear;
+}
+
+/* Mobile */
+@media (max-width: 767px) {
+  .murg-hero__dots {
+    bottom: 64px;
+  }
+  .murg-hero__dot {
+    width: 24px;
+  }
 }
 
 /* ============================================================
@@ -588,8 +708,8 @@
 
 .murg-product__meta {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline;
+  flex-direction: column;
+  gap: 4px;
   margin-bottom: 8px;
 }
 
