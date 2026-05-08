@@ -2538,8 +2538,8 @@
 /* ---- Dashboard (logueado) sidebar nav ---- */
 .murg-account__content .woocommerce-MyAccount-navigation {
   float: left;
-  width: 200px;
-  margin-right: 64px;
+  width: 180px;
+  margin-right: 48px;
   background: transparent;
   border: 0;
   padding: 0;
@@ -2549,17 +2549,17 @@
   padding: 0;
   margin: 0;
 }
-.murg-account__content .woocommerce-MyAccount-navigation li { margin-bottom: 2px; }
+.murg-account__content .woocommerce-MyAccount-navigation li { margin-bottom: 1px; }
 .murg-account__content .woocommerce-MyAccount-navigation li a {
   display: block;
-  padding: 10px 16px;
+  padding: 9px 14px;
   font-family: 'Inter', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--murg-muted);
   text-decoration: none;
-  transition: all 0.2s;
+  transition: all 0.15s;
 }
 .murg-account__content .woocommerce-MyAccount-navigation li a:hover,
 .murg-account__content .woocommerce-MyAccount-navigation li.is-active a {
@@ -2567,14 +2567,86 @@
   background: var(--murg-cream-deep);
 }
 
+/* ---- Dashboard content — sin iconos rotos ni navegación duplicada ---- */
+
+/* Ocultar los enlaces redundantes del dashboard WC (Escritorio, Pedidos, etc.)
+   porque ya están en la sidebar */
+.murg-account__content .woocommerce-MyAccount-content nav.woocommerce-MyAccount-navigation,
+.murg-account__content .woocommerce-MyAccount-dashboard .woocommerce-dashboard-links,
+.murg-account__content .woocommerce-MyAccount-dashboard > p:not(:first-of-type) a[href*="my-account"] {
+  display: none !important;
+}
+
+/* Eliminar los íconos pseudo-element rotos (cuadros vacíos) */
+.murg-account__content .woocommerce-MyAccount-content *::before,
+.murg-account__content .woocommerce-MyAccount-dashboard *::before,
+.murg-account__content .woocommerce-MyAccount-content .woocommerce-MyAccount-dashboard .dashboard-link::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Pero preservar el ::before del show-password-input */
+.murg-account__content .show-password-input::before {
+  content: '' !important;
+  display: block !important;
+}
+
+/* Layout del contenido del dashboard */
 .murg-account__content .woocommerce-MyAccount-content {
   overflow: hidden;
   min-height: 300px;
+  max-width: 560px;
 }
 .murg-account__content .woocommerce-MyAccount-content p {
   font-size: 14px;
   color: var(--murg-muted);
   line-height: 1.75;
+}
+
+/* Ajustar el "Hola, Nombre" — más pequeño */
+.murg-account__content .woocommerce-MyAccount-content p:first-child {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  color: var(--murg-ink);
+  line-height: 1.2;
+  margin-bottom: 20px;
+}
+
+/* Tablas (pedidos, descargas, direcciones) */
+.murg-account__content .woocommerce-MyAccount-content table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 8px;
+}
+.murg-account__content .woocommerce-MyAccount-content table th {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+  font-weight: 400;
+  text-align: left;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--murg-line);
+}
+.murg-account__content .woocommerce-MyAccount-content table td {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--murg-line);
+  color: var(--murg-ink);
+}
+.murg-account__content .woocommerce-MyAccount-content table a,
+.murg-account__content .woocommerce-MyAccount-content .woocommerce-button {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--murg-gold-soft);
+  text-decoration: none;
+}
+.murg-account__content .woocommerce-MyAccount-content table a:hover,
+.murg-account__content .woocommerce-MyAccount-content .woocommerce-button:hover {
+  color: var(--murg-gold);
 }
 
 @media (max-width: 768px) {
