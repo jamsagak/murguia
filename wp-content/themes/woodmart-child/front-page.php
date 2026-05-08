@@ -309,23 +309,88 @@ $best_titulo   = murg_f( 'hp_best_titulo',     'Los <em>esenciales</em>' );
 $best_temporada = murg_f( 'hp_best_temporada', 'Otoño MMXXVI' );
 $bestseller_ids = murg_f( 'hp_best_productos', [] );
 
-// Fallback automático: productos más vendidos de WooCommerce.
+// Fallback automático: un producto por categoría (el más vendido de cada una).
 if ( empty( $bestseller_ids ) && function_exists( 'wc_get_page_id' ) ) {
-	$bs_query       = new WP_Query( [
-		'post_type'      => 'product',
-		'posts_per_page' => 9,
-		'meta_key'       => 'total_sales',
-		'orderby'        => 'meta_value_num',
-		'order'          => 'DESC',
-		'post_status'    => 'publish',
+
+	// Categorías a excluir: contenedores genéricos que no representan un tipo de pieza
+	$cats_excluir = [ 'uncategorized', 'catalogo', 'marcas', 'ofertas', 'ofertas-promociones',
+	                  'promociones', 'dscto-cyber', 'destacados', 'accessories' ];
+
+	$todas_cats = get_terms( [
+		'taxonomy'   => 'product_cat',
+		'hide_empty' => true,
+		'fields'     => 'id=>slug',
 	] );
-	$bestseller_ids = wp_list_pluck( $bs_query->posts, 'ID' );
-	wp_reset_postdata();
+
+	$bestseller_ids = [];
+	$usados_ids     = []; // evitar duplicar el mismo producto en distintas categorías
+
+	if ( ! is_wp_error( $todas_cats ) ) {
+		// Ordenar aleatoriamente para variar la selección en cada visita
+		$slugs = array_values( $todas_cats );
+		$ids   = array_keys( $todas_cats );
+		array_multisort( array_map( fn() => mt_rand(), $slugs ), SORT_NUMERIC, $slugs, $ids );
+		$todas_cats = array_combine( $ids, $slugs );
+
+		foreach ( $todas_cats as $cat_id => $cat_slug ) {
+			if ( in_array( $cat_slug, $cats_excluir, true ) ) continue;
+
+			$cat_query = new WP_Query( [
+				'post_type'      => 'product',
+				'post_status'    => 'publish',
+				'posts_per_page' => 5,
+				'tax_query'      => [ [
+					'taxonomy' => 'product_cat',
+					'field'    => 'term_id',
+					'terms'    => $cat_id,
+				] ],
+				'meta_key'       => 'total_sales',
+				'orderby'        => 'meta_value_num',
+				'order'          => 'DESC',
+				'fields'         => 'ids',
+			] );
+
+			if ( $cat_query->have_posts() ) {
+				foreach ( $cat_query->posts as $pid ) {
+					if ( in_array( $pid, $usados_ids, true ) ) continue;
+					$p = wc_get_product( $pid );
+					if ( ! $p || ! $p->is_in_stock() || ! $p->is_visible() ) continue;
+					$bestseller_ids[] = $pid;
+					$usados_ids[]     = $pid;
+					break;
+				}
+			}
+			wp_reset_postdata();
+		}
+	}
+			}
+			wp_reset_postdata();
+		}
+	}
+
+	// Si por alguna razón quedaron menos de 3, completar con los más vendidos globales
+	if ( count( $bestseller_ids ) < 3 ) {
+		$fill_query = new WP_Query( [
+			'post_type'      => 'product',
+			'post_status'    => 'publish',
+			'posts_per_page' => -1,
+			'meta_key'       => 'total_sales',
+			'orderby'        => 'meta_value_num',
+			'order'          => 'DESC',
+			'fields'         => 'ids',
+			'post__not_in'   => $bestseller_ids,
+		] );
+		foreach ( $fill_query->posts as $pid ) {
+			if ( in_array( $pid, $bestseller_ids, true ) ) continue;
+			$bestseller_ids[] = $pid;
+		}
+		wp_reset_postdata();
+	}
 }
 
 $size_classes    = [ 'murg-product--primary', 'murg-product--secondary', 'murg-product--tertiary' ];
 $per_slide       = 3;
-$all_product_ids = array_slice( $bestseller_ids, 0, 9 );
+$all_product_ids = $bestseller_ids; // sin límite — todas las categorías disponibles
 
 // Construye un array unificado de items; usa demos si no hay productos WC.
 $items = [];
