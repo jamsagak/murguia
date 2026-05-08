@@ -7,6 +7,8 @@
  * automáticamente porque la página tiene slug "mi-cuenta".
  */
 defined( 'ABSPATH' ) || exit;
+
+$is_logged = is_user_logged_in();
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -15,40 +17,25 @@ defined( 'ABSPATH' ) || exit;
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <?php wp_head(); ?>
 </head>
-<body <?php body_class( 'murg-account' ); ?>>
+<body <?php body_class( 'murg-account' . ( $is_logged ? ' murg-account--logged' : ' murg-account--guest' ) ); ?>>
 <?php wp_body_open(); ?>
 
 <?php get_template_part( 'template-parts/murg-nav' ); ?>
 
-<div class="murg-breadcrumb">
-	<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Inicio</a>
-	<span aria-hidden="true">·</span>
-	<span>Mi Cuenta</span>
-</div>
-
 <!-- ============================================================
-     PAGE HEADER
+     PAGE HEADER — solo cuando NO está logueado (Acceso/Registro)
      ============================================================ -->
+<?php if ( ! $is_logged ) : ?>
 <header class="murg-page-header">
 	<div class="murg-eyebrow">Mi Cuenta</div>
 	<h1 class="murg-serif murg-page-header__title">
-		<?php
-		if ( is_user_logged_in() ) {
-			$user = wp_get_current_user();
-			printf(
-				/* translators: %s = nombre del usuario */
-				esc_html__( 'Hola, %s', 'woodmart' ),
-				esc_html( $user->display_name )
-			);
-		} else {
-			esc_html_e( 'Acceso', 'woodmart' );
-		}
-		?>
+		<?php esc_html_e( 'Acceso', 'woodmart' ); ?>
 	</h1>
 </header>
+<?php endif; ?>
 
 <!-- ============================================================
-     WOCOMMERCE MY ACCOUNT
+     WOOCOMMERCE MY ACCOUNT
      ============================================================ -->
 <div class="murg-account__content">
 	<?php echo do_shortcode( '[woocommerce_my_account]' ); ?>

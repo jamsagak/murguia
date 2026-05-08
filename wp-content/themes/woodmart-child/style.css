@@ -2392,10 +2392,21 @@
    ============================================================ */
 .murg-account .murg-page-header { text-align: center; padding-bottom: 24px; }
 
+/* Cuando el usuario está logueado quitamos el margin top porque el
+   saludo del dashboard ya actua como heading de la pagina. */
+.murg-account--logged .murg-account__content {
+  margin-top: 0;
+  padding-top: 96px;
+}
+.murg-account--guest .murg-account__content {
+  padding-top: 0;
+}
+
 .murg-account__content {
-  max-width: 740px;
+  max-width: 1100px;
   margin: 0 auto 80px;
-  padding: 0 64px;
+  padding-left: 64px;
+  padding-right: 64px;
 }
 
 /* ---- Login / Register grid (2 cols) ---- */
@@ -2550,17 +2561,17 @@
 .murg-dashboard__nav {
   display: flex;
   flex-direction: column;
-  gap: 1px;
+  gap: 2px;
   position: sticky;
   top: 100px;
 }
 .murg-dashboard__nav-link {
   display: block;
-  padding: 10px 14px;
+  padding: 14px 18px;
   font-family: 'Inter', sans-serif;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--murg-muted);
   text-decoration: none;
@@ -2578,22 +2589,23 @@
 .murg-dashboard__content {
   min-width: 0;
   min-height: 400px;
-  max-width: 620px;
+  max-width: 720px;
 }
 
 /* Saludo custom minimal */
 .murg-dashboard__greeting {
   border-bottom: 1px solid var(--murg-line);
-  padding-bottom: 24px;
-  margin-bottom: 24px;
+  padding-bottom: 28px;
+  margin-bottom: 32px;
 }
 .murg-dashboard__hello {
   font-family: 'Cormorant Garamond', serif;
   font-weight: 400;
-  font-size: 32px;
-  line-height: 1.1;
+  font-size: clamp(32px, 4.5vw, 56px);
+  line-height: 1.05;
   color: var(--murg-ink);
-  margin: 0 0 4px;
+  margin: 0 0 8px;
+  letter-spacing: -0.01em;
 }
 .murg-dashboard__hello em {
   font-style: italic;
@@ -2601,17 +2613,17 @@
 }
 .murg-dashboard__email {
   font-family: 'Inter', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   color: var(--murg-muted);
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
   margin: 0;
 }
 
 .murg-dashboard__blurb {
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 .murg-dashboard__blurb p {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--murg-muted);
   line-height: 1.75;
   margin: 0;
@@ -2619,7 +2631,7 @@
 
 /* ---- Section (Pedidos recientes, etc.) ---- */
 .murg-dashboard__section {
-  margin-bottom: 32px;
+  margin-bottom: 40px;
 }
 .murg-dashboard__section-title {
   font-family: 'Inter', sans-serif;
@@ -2801,6 +2813,7 @@
 
 @media (max-width: 768px) {
   .murg-account__content { padding: 0 20px 60px; }
+  .murg-account--logged .murg-account__content { padding-top: 40px; }
   .murg-auth-grid { grid-template-columns: 1fr; gap: 48px; }
   .murg-dashboard {
     grid-template-columns: 1fr;
@@ -2814,7 +2827,6 @@
     padding-bottom: 16px;
     border-bottom: 1px solid var(--murg-line);
   }
-  .murg-dashboard__hello { font-size: 26px; }
   .murg-dashboard__order {
     grid-template-columns: 1fr auto;
     gap: 4px;
