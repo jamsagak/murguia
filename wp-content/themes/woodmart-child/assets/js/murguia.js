@@ -894,4 +894,58 @@
 		}
 	}
 
+	/* ===========================================================
+	   SCROLL REVEAL — animaciones de entrada al hacer scroll
+	   Usa IntersectionObserver para no bloquear el hilo principal.
+	   Los elementos con [data-reveal] se animan al entrar al viewport.
+	   =========================================================== */
+	if ( 'IntersectionObserver' in window ) {
+		var revealObs = new IntersectionObserver( function ( entries ) {
+			entries.forEach( function ( entry ) {
+				if ( ! entry.isIntersecting ) return;
+				entry.target.classList.add( 'is-revealed' );
+				revealObs.unobserve( entry.target ); // solo una vez
+			} );
+		}, {
+			threshold: 0.12,
+			rootMargin: '0px 0px -40px 0px'
+		} );
+
+		// Elementos que se animan individualmente
+		var revealSelectors = [
+			'.murg-section__header',
+			'.murg-collection',
+			'.murg-product',
+			'.murg-statement .murg-eyebrow',
+			'.murg-statement__quote',
+			'.murg-statement__attr',
+			'.murg-certifications__title',
+			'.murg-certifications__carousel',
+			'.murg-contact__title',
+			'.murg-contact__lede',
+			'.murg-info-block',
+			'.murg-form',
+		];
+
+		revealSelectors.forEach( function ( sel ) {
+			document.querySelectorAll( sel ).forEach( function ( el, i ) {
+				el.setAttribute( 'data-reveal', '' );
+				// Stagger: cada hijo dentro del mismo padre se retrasa ligeramente
+				el.style.transitionDelay = ( i % 4 ) * 0.08 + 's';
+				revealObs.observe( el );
+			} );
+		} );
+
+		// Secciones completas con reveal de bloque (fade simple, sin delay)
+		document.querySelectorAll( '.murg-bestsellers, .murg-certifications' ).forEach( function ( el ) {
+			el.setAttribute( 'data-reveal-block', '' );
+			revealObs.observe( el );
+		} );
+	} else {
+		// Fallback para navegadores sin IntersectionObserver: mostrar todo
+		document.querySelectorAll( '[data-reveal], [data-reveal-block]' ).forEach( function ( el ) {
+			el.classList.add( 'is-revealed' );
+		} );
+	}
+
 } )();
