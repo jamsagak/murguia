@@ -4,7 +4,7 @@
  * Reads brand name from homepage ajustes (global branding values).
  *
  * Estructura (espejo de joyeriamurguia.com):
- * Izquierda: Novios | Alta Joyería | Catálogo | Marcas
+ * Izquierda: Novios | Catálogo | Marcas
  * Centro:    Logo
  * Derecha:   Citas | Cuenta | Buscar | Bolsa
  */
@@ -54,10 +54,6 @@ $_marca_links = [
 				<a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Diseño a Medida</a>
 			</div>
 		</div>
-
-		<!-- Alta Joyería — destacado -->
-		<a href="<?php echo esc_url( home_url( '/alta-joyeria/' ) ); ?>"
-		   class="murg-nav__link murg-nav__link--highlight">Alta Joyería</a>
 
 		<!-- Catálogo — dropdown -->
 		<div class="murg-nav__item murg-nav__item--drop">
