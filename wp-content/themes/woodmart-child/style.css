@@ -2386,3 +2386,145 @@
   .murg-related__item { flex: 0 0 100%; max-width: 100%; }
   .murg-pdgallery__thumb { width: 60px; height: 60px; }
 }
+
+/* ============================================================
+   MY ACCOUNT PAGE
+   ============================================================ */
+.murg-account .murg-page-header { text-align: center; padding-bottom: 32px; }
+
+.murg-account__content {
+  max-width: 820px;
+  margin: 0 auto 80px;
+  padding: 0 64px;
+}
+
+/* WC login/register form */
+.murg-account__content .u-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+
+.murg-account__content h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  font-size: 26px;
+  margin-bottom: 24px;
+  color: var(--murg-ink);
+}
+
+.murg-account__content .form-row {
+  margin-bottom: 16px;
+}
+
+.murg-account__content .form-row label {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+  margin-bottom: 6px;
+}
+
+.murg-account__content .input-text {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid var(--murg-line);
+  background: var(--murg-cream);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--murg-ink);
+  transition: border-color 0.2s;
+}
+.murg-account__content .input-text:focus {
+  outline: none;
+  border-color: var(--murg-gold);
+}
+
+.murg-account__content .woocommerce-form-login__rememberme {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--murg-muted);
+}
+
+.murg-account__content .woocommerce-Button {
+  background: var(--murg-ink);
+  color: var(--murg-cream);
+  border: none;
+  padding: 14px 32px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.murg-account__content .woocommerce-Button:hover { background: var(--murg-gold); }
+
+/* WC dashboard / account nav */
+.murg-account__content .woocommerce-MyAccount-navigation {
+  float: left;
+  width: 200px;
+  margin-right: 64px;
+}
+.murg-account__content .woocommerce-MyAccount-navigation ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.murg-account__content .woocommerce-MyAccount-navigation li {
+  margin-bottom: 4px;
+}
+.murg-account__content .woocommerce-MyAccount-navigation a {
+  display: block;
+  padding: 10px 16px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+  text-decoration: none;
+  transition: color 0.2s, background 0.2s;
+}
+.murg-account__content .woocommerce-MyAccount-navigation a:hover,
+.murg-account__content .woocommerce-MyAccount-navigation .is-active a {
+  color: var(--murg-ink);
+  background: var(--murg-cream-deep);
+}
+
+.murg-account__content .woocommerce-MyAccount-content {
+  overflow: hidden;
+  min-height: 300px;
+}
+.murg-account__content .woocommerce-MyAccount-content p {
+  font-size: 14px;
+  color: var(--murg-muted);
+  line-height: 1.75;
+}
+
+/* WC notices */
+.murg-account__content .woocommerce-notices-wrapper {
+  margin-bottom: 24px;
+}
+.murg-account__content .woocommerce-message,
+.murg-account__content .woocommerce-error,
+.murg-account__content .woocommerce-info {
+  background: var(--murg-cream-deep);
+  border-left: 3px solid var(--murg-gold);
+  padding: 16px 24px;
+  margin-bottom: 16px;
+  font-size: 13px;
+  color: var(--murg-ink);
+}
+@media (max-width: 768px) {
+  .murg-account__content { padding: 0 20px; margin-bottom: 60px; }
+  .murg-account__content .u-columns { grid-template-columns: 1fr; gap: 40px; }
+  .murg-account__content .woocommerce-MyAccount-navigation {
+    float: none;
+    width: auto;
+    margin-right: 0;
+    margin-bottom: 32px;
+  }
+}

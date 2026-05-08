@@ -1244,6 +1244,10 @@ function murguia_is_custom_template() {
 	if ( is_front_page() ) {
 		return true;
 	}
+	// Mi Cuenta (WooCommerce)
+	if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+		return true;
+	}
 	// Shop y archivos de productos
 	if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {
 		return true;
