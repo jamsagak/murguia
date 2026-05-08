@@ -525,7 +525,9 @@
 			bsDragMoved   = false;
 			bsDragStartX  = clientX;
 			bsDragOffsetX = 0;
-			bsSlideW      = bsTrack.parentElement.offsetWidth || 0;
+			// Medir el slide real con getBoundingClientRect para incluir padding/box-sizing
+			var firstSlide = bsTrack.querySelector( '.murg-products__slide' );
+			bsSlideW = firstSlide ? firstSlide.getBoundingClientRect().width : bsTrack.parentElement.offsetWidth || 0;
 			bsAutoStop();
 			bsTrack.classList.add( 'is-dragging' );
 			if ( bsSection ) bsSection.classList.add( 'is-dragging' );

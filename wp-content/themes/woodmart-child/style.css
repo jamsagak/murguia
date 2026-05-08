@@ -652,6 +652,19 @@
   user-select: none;
 }
 
+.murg-products__slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 24px;
+  align-items: start;
+  /* Separación visual entre grupos: padding en ambos lados.
+     El JS compensa midiendo el ancho real del slide con getBoundingClientRect. */
+  padding: 0 32px;
+  box-sizing: border-box;
+}
+
 /* Estado durante drag — sin transición para seguir el dedo/mouse en tiempo real */
 .murg-products__track.is-dragging {
   transition: none;
@@ -672,6 +685,10 @@
   grid-template-columns: 1fr 1fr 1fr;
   gap: 24px;
   align-items: start;
+  /* Padding lateral para crear separación visual entre grupos al transicionar */
+  padding-left: 40px;
+  padding-right: 40px;
+  box-sizing: border-box;
 }
 
 /* Todos los slides usan el mismo layout uniforme */
