@@ -36,7 +36,7 @@ $hero_eyebrow = murg_f( 'hp_hero_eyebrow',   'Colecci\xc3\xb3n Oto\xc3\xb1o \xc2
 $hero_titulo  = murg_f( 'hp_hero_titulo',     'Joyer\xc3\xada <em>Murgu\xc3\xada</em>' );
 $hero_sub     = murg_f( 'hp_hero_subtitulo',  'Orfebrería peruana desde 1962' );
 $hero_cta_txt = murg_f( 'hp_hero_cta_texto',  'Ver Colección' );
-$hero_cta_url = murg_f( 'hp_hero_cta_link',   '#colecciones' );
+$hero_cta_url = murg_f( 'hp_hero_cta_link',   home_url( '/shop/' ) );
 
 // Slider del hero — imágenes y/o videos
 $hero_slides = [];

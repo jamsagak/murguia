@@ -156,7 +156,7 @@ $related_limit = max( 3, (int) murguia_ajuste( 'prod_related_cantidad', 6, 'prod
 $related_ids   = wc_get_related_products( $product_id, $related_limit );
 $related       = array_filter( array_map( 'wc_get_product', $related_ids ) );
 
-$shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/tienda/' );
+$shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/shop/' );
 
 // -----------------------------------------------------------------
 // Guía de tallas — imagen subida por producto (ACF)

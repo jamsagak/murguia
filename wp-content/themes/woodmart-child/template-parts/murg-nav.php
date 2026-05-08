@@ -14,8 +14,8 @@ $_nav_logo_sub = murguia_ajuste( 'hp_nav_logo_sub', 'Joyería · Lima' );
 			<a href="#">Colecciones</a>
 			<a href="#">Joyería</a>
 		<?php endif; ?>
-		<a href="#">Bodas</a>
-		<a href="#">Atelier</a>
+		<a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Bodas</a>
+		<a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Atelier</a>
 	</div>
 	<a class="murg-nav__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 		<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia-blanco.png' ); ?>"
@@ -32,7 +32,7 @@ $_nav_logo_sub = murguia_ajuste( 'hp_nav_logo_sub', 'Joyería · Lima' );
 			height="auto">
 	</a>
 	<div class="murg-nav__right">
-		<a href="<?php echo esc_url( home_url( '/#contacto' ) ); ?>">Citas</a>
+		<a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Citas</a>
 		<?php if ( function_exists( 'wc_get_page_id' ) ) : ?>
 			<a href="<?php echo esc_url( get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) ); ?>">Cuenta</a>
 			<a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Buscar</a>

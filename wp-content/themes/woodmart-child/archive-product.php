@@ -6,7 +6,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $per_page = max( 4, (int) murguia_ajuste( 'sh_por_pagina', 12, 'tienda' ) );
-$shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/tienda/' );
+$shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/shop/' );
 
 // --- Leer filtros desde GET ---
 $paged        = max( 1, (int) ( get_query_var( 'paged' ) ?: get_query_var( 'page' ) ?: 1 ) );
