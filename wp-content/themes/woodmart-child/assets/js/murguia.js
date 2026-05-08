@@ -371,7 +371,9 @@
 	};
 
 	/* ------------------------------------------------------------------
-	   BESTSELLERS SLIDER — drag · autoplay · teclado
+	   BESTSELLERS SLIDER — loop infinito · drag · autoplay · teclado
+	   Técnica: clona primer y último slide, hace jump silencioso en los
+	   extremos para dar sensación de loop continuo sin salto visible.
 	   ------------------------------------------------------------------ */
 	var bsTrack   = document.getElementById( 'murg-bs-track' );
 	var bsPrev    = document.getElementById( 'murg-bs-prev' );
@@ -380,43 +382,94 @@
 	var bsSection = document.getElementById( 'bestsellers' );
 
 	if ( bsTrack && bsPrev && bsNext ) {
-		var bsSlideEls  = bsTrack.querySelectorAll( '.murg-products__slide' );
-		var bsSlides    = bsSlideEls.length;
-		var bsTotal     = parseInt( bsTrack.dataset.total, 10 ) ||
-		                  bsTrack.querySelectorAll( '.murg-product' ).length;
-		var bsPerSlide  = 3;
-		var bsCurrent   = 0;
-		var bsAutoTimer = null;
-		var BS_INTERVAL = 5000; // ms entre slides automáticos
+		var bsRealSlides = Array.from( bsTrack.querySelectorAll( '.murg-products__slide' ) );
+		var bsRealCount  = bsRealSlides.length;
+		var bsTotal      = parseInt( bsTrack.dataset.total, 10 ) ||
+		                   bsTrack.querySelectorAll( '.murg-product' ).length;
+		var bsPerSlide   = 3;
+		var BS_INTERVAL  = 5000;
+		var bsAutoTimer  = null;
+		var bsJumping    = false; // true durante el jump silencioso post-loop
 
-		/* ── Render ──────────────────────────────────────────────── */
-		function bsUpdate( animate ) {
-			if ( animate === false ) {
-				bsTrack.classList.add( 'is-dragging' );
-			} else {
-				bsTrack.classList.remove( 'is-dragging' );
-			}
-			bsTrack.style.transform = 'translateX(' + ( -100 * bsCurrent ) + '%)';
-			bsPrev.disabled = bsCurrent === 0;
-			bsNext.disabled = bsCurrent >= bsSlides - 1;
+		// Solo activar loop si hay más de 1 slide real
+		if ( bsRealCount > 1 ) {
+			// Clonar último slide al inicio, primero al final
+			var bsCloneFirst = bsRealSlides[0].cloneNode( true );
+			var bsCloneLast  = bsRealSlides[ bsRealCount - 1 ].cloneNode( true );
+			bsCloneFirst.setAttribute( 'aria-hidden', 'true' );
+			bsCloneLast.setAttribute(  'aria-hidden', 'true' );
+			bsTrack.insertBefore( bsCloneLast,  bsTrack.firstChild );
+			bsTrack.appendChild( bsCloneFirst );
+		}
+
+		// Índice real: 0..bsRealCount-1 (los clones están en posición 0 y N+1)
+		var bsAllSlides = bsTrack.querySelectorAll( '.murg-products__slide' );
+		var bsTotal2    = bsAllSlides.length; // real + 2 clones
+		// Empezar en índice 1 (primer slide real, los clones son 0 y last)
+		var bsPos       = bsRealCount > 1 ? 1 : 0;
+
+		/* ── Posicionar sin transición ───────────────────────────── */
+		function bsJumpTo( idx ) {
+			bsJumping = true;
+			bsTrack.classList.add( 'is-dragging' ); // quita transición CSS
+			bsPos = idx;
+			bsTrack.style.transform = 'translateX(' + ( -100 * bsPos ) + '%)';
+			// requestAnimationFrame doble para asegurar que el browser pintó antes de re-habilitar transición
+			requestAnimationFrame( function () {
+				requestAnimationFrame( function () {
+					bsTrack.classList.remove( 'is-dragging' );
+					bsJumping = false;
+				} );
+			} );
+		}
+
+		/* ── Mover con transición ────────────────────────────────── */
+		function bsMoveTo( idx ) {
+			bsTrack.classList.remove( 'is-dragging' );
+			bsPos = idx;
+			bsTrack.style.transform = 'translateX(' + ( -100 * bsPos ) + '%)';
+			bsUpdateUI();
+		}
+
+		/* ── Actualizar botones e info ───────────────────────────── */
+		function bsUpdateUI() {
+			// Índice real (sin contar clones): pos-1 cuando hay clones
+			var realIdx = bsRealCount > 1 ? bsPos - 1 : bsPos;
+			// Normalizar: los clones tienen realIdx -1 y bsRealCount
+			if ( realIdx < 0 )            realIdx = bsRealCount - 1;
+			if ( realIdx >= bsRealCount ) realIdx = 0;
+
+			// En loop infinito los botones nunca se deshabilitan
+			bsPrev.disabled = false;
+			bsNext.disabled = false;
+
 			if ( bsInfo && bsTotal ) {
-				var from = bsPerSlide * bsCurrent + 1;
-				var to   = Math.min( bsPerSlide * ( bsCurrent + 1 ), bsTotal );
+				var from = bsPerSlide * realIdx + 1;
+				var to   = Math.min( bsPerSlide * ( realIdx + 1 ), bsTotal );
 				bsInfo.textContent = from + '–' + to + ' de ' + bsTotal;
 			}
 		}
 
-		function bsGo( idx ) {
-			bsCurrent = Math.max( 0, Math.min( idx, bsSlides - 1 ) );
-			bsUpdate();
-		}
+		/* ── Detectar llegada a clon y hacer jump ────────────────── */
+		bsTrack.addEventListener( 'transitionend', function () {
+			if ( bsJumping ) return;
+			if ( bsRealCount <= 1 ) return;
+			// Si llegamos al clon del último (pos 0) → saltar al último real
+			if ( bsPos === 0 ) {
+				bsJumpTo( bsRealCount );
+			}
+			// Si llegamos al clon del primero (pos bsRealCount+1) → saltar al primero real
+			if ( bsPos === bsRealCount + 1 ) {
+				bsJumpTo( 1 );
+			}
+		} );
 
 		/* ── Autoplay ────────────────────────────────────────────── */
 		function bsAutoStart() {
 			bsAutoStop();
-			if ( bsSlides <= 1 ) return;
+			if ( bsRealCount <= 1 ) return;
 			bsAutoTimer = setInterval( function () {
-				bsGo( bsCurrent < bsSlides - 1 ? bsCurrent + 1 : 0 );
+				bsMoveTo( bsPos + 1 );
 			}, BS_INTERVAL );
 		}
 
@@ -424,7 +477,6 @@
 			if ( bsAutoTimer ) { clearInterval( bsAutoTimer ); bsAutoTimer = null; }
 		}
 
-		// Pausa al hover sobre la sección
 		if ( bsSection ) {
 			bsSection.addEventListener( 'mouseenter', bsAutoStop );
 			bsSection.addEventListener( 'mouseleave', bsAutoStart );
@@ -433,42 +485,47 @@
 		/* ── Botones ─────────────────────────────────────────────── */
 		bsPrev.addEventListener( 'click', function () {
 			bsAutoStop();
-			if ( bsCurrent > 0 ) { bsCurrent--; bsUpdate(); }
+			bsMoveTo( bsPos - 1 );
 			bsAutoStart();
 		} );
 		bsNext.addEventListener( 'click', function () {
 			bsAutoStop();
-			if ( bsCurrent < bsSlides - 1 ) { bsCurrent++; bsUpdate(); }
+			bsMoveTo( bsPos + 1 );
 			bsAutoStart();
 		} );
 
-		/* ── Teclado (solo cuando el slider está en viewport) ───── */
+		/* ── Teclado ─────────────────────────────────────────────── */
 		document.addEventListener( 'keydown', function ( e ) {
 			if ( e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' ) return;
 			var rect = bsTrack.getBoundingClientRect();
 			if ( rect.top >= window.innerHeight || rect.bottom <= 0 ) return;
 			bsAutoStop();
-			if ( e.key === 'ArrowLeft'  && bsCurrent > 0 )            { bsCurrent--; bsUpdate(); }
-			if ( e.key === 'ArrowRight' && bsCurrent < bsSlides - 1 ) { bsCurrent++; bsUpdate(); }
+			if ( e.key === 'ArrowLeft' )  bsMoveTo( bsPos - 1 );
+			if ( e.key === 'ArrowRight' ) bsMoveTo( bsPos + 1 );
 			bsAutoStart();
 		} );
 
-		/* ── Drag con mouse ──────────────────────────────────────── */
-		var bsDragStartX  = 0;
-		var bsDragOffsetX = 0;
-		var bsDragging    = false;
-		var bsDragMoved   = false;
-		var bsSlideW      = 0; // ancho en px de un slide (= ancho del contenedor visible)
-		var DRAG_THRESHOLD  = 8;  // px mínimos para considerar drag real
-		var SWIPE_THRESHOLD = 60; // px para cambiar de slide al soltar
+		/* ── Drag (mouse + touch) ────────────────────────────────── */
+		var bsDragStartX   = 0;
+		var bsDragOffsetX  = 0;
+		var bsDragging     = false;
+		var bsDragMoved    = false;
+		var bsSlideW       = 0;
+		var DRAG_THRESHOLD  = 8;
+		var SWIPE_THRESHOLD = 60;
+
+		// Bloquear drag nativo del navegador en imágenes y links dentro del track
+		bsTrack.addEventListener( 'dragstart', function ( e ) {
+			e.preventDefault();
+		} );
 
 		function bsDragStart( clientX ) {
+			if ( bsJumping ) return;
 			bsDragging    = true;
 			bsDragMoved   = false;
 			bsDragStartX  = clientX;
 			bsDragOffsetX = 0;
-			// El ancho de un slide es el ancho del wrapper visible (.murg-products)
-			bsSlideW = bsTrack.parentElement.offsetWidth || bsSlideEls[0].offsetWidth || 0;
+			bsSlideW      = bsTrack.parentElement.offsetWidth || 0;
 			bsAutoStop();
 			bsTrack.classList.add( 'is-dragging' );
 			if ( bsSection ) bsSection.classList.add( 'is-dragging' );
@@ -480,65 +537,59 @@
 			if ( Math.abs( delta ) > DRAG_THRESHOLD ) bsDragMoved = true;
 			if ( ! bsDragMoved ) return;
 			bsDragOffsetX = delta;
-			// Resistencia elástica en los extremos
-			var raw = delta;
-			if ( ( bsCurrent === 0 && delta > 0 ) || ( bsCurrent === bsSlides - 1 && delta < 0 ) ) {
-				raw = delta * 0.2;
-			}
-			// Base en px: posición del slide actual + desplazamiento del drag
-			var basePx  = -bsCurrent * bsSlideW;
-			var totalPx = basePx + raw;
+			var basePx  = -bsPos * bsSlideW;
+			var totalPx = basePx + delta;
 			bsTrack.style.transform = 'translateX(' + totalPx + 'px)';
 		}
 
 		function bsDragEnd() {
 			if ( ! bsDragging ) return;
 			bsDragging = false;
-			bsTrack.classList.remove( 'is-dragging' );
 			if ( bsSection ) bsSection.classList.remove( 'is-dragging' );
 
 			if ( bsDragMoved ) {
-				if ( bsDragOffsetX < -SWIPE_THRESHOLD && bsCurrent < bsSlides - 1 ) {
-					bsCurrent++;
-				} else if ( bsDragOffsetX > SWIPE_THRESHOLD && bsCurrent > 0 ) {
-					bsCurrent--;
+				if ( bsDragOffsetX < -SWIPE_THRESHOLD ) {
+					bsMoveTo( bsPos + 1 );
+				} else if ( bsDragOffsetX > SWIPE_THRESHOLD ) {
+					bsMoveTo( bsPos - 1 );
+				} else {
+					// No llegó al umbral — volver al mismo slide con transición
+					bsMoveTo( bsPos );
 				}
+			} else {
+				bsTrack.classList.remove( 'is-dragging' );
 			}
-			// bsUpdate() vuelve a usar translateX(%) con transición CSS suave
-			bsUpdate();
 			bsAutoStart();
 		}
 
-		// Mouse events
+		// Mouse
 		bsTrack.addEventListener( 'mousedown', function ( e ) {
 			if ( e.button !== 0 ) return;
+			e.preventDefault(); // evita selección de texto durante drag
 			bsDragStart( e.clientX );
 		} );
 		document.addEventListener( 'mousemove', function ( e ) {
 			bsDragMove( e.clientX );
 		} );
-		document.addEventListener( 'mouseup', function () {
-			bsDragEnd();
-		} );
+		document.addEventListener( 'mouseup', bsDragEnd );
 
-		// Touch events
+		// Touch
 		bsTrack.addEventListener( 'touchstart', function ( e ) {
 			bsDragStart( e.touches[0].clientX );
 		}, { passive: true } );
 		bsTrack.addEventListener( 'touchmove', function ( e ) {
 			bsDragMove( e.touches[0].clientX );
 		}, { passive: true } );
-		bsTrack.addEventListener( 'touchend', function () {
-			bsDragEnd();
-		} );
+		bsTrack.addEventListener( 'touchend', bsDragEnd );
 
-		// Evitar que el drag active links de los cards
+		// Cancelar click en links si hubo drag
 		bsTrack.addEventListener( 'click', function ( e ) {
 			if ( bsDragMoved ) e.preventDefault();
 		}, true );
 
 		/* ── Init ────────────────────────────────────────────────── */
-		bsUpdate();
+		bsJumpTo( bsPos ); // posicionar en slide 1 sin animación
+		bsUpdateUI();
 		bsAutoStart();
 	}
 

@@ -388,7 +388,7 @@ $total_slides   = max( 1, (int) ceil( $total_products / $per_slide ) );
 					<a href="<?php echo esc_url( $it['url'] ); ?>" class="murg-product__link">
 						<div class="murg-product__img">
 							<?php if ( $it['img'] ) : ?>
-								<img src="<?php echo esc_url( $it['img'] ); ?>" alt="<?php echo esc_attr( $it['alt'] ); ?>" loading="lazy">
+								<img src="<?php echo esc_url( $it['img'] ); ?>" alt="<?php echo esc_attr( $it['alt'] ); ?>" loading="lazy" draggable="false">
 							<?php elseif ( ! empty( $it['shape'] ) ) : ?>
 								<div class="murg-product__placeholder murg-product__placeholder--<?php echo esc_attr( $it['shape'] ); ?>" aria-hidden="true">
 									<span class="murg-product__shape"></span>
