@@ -650,24 +650,34 @@
 				var fin    = parseInt( slide.dataset.videoFin, 10 ) || 0;
 				var inicio = parseInt( slide.dataset.videoInicio, 10 ) || 0;
 
-				if ( iframe && fin > 0 ) {
-					var startedAt = Date.now();
-					var durMs     = ( fin - inicio ) * 1000;
-					hsVideoFinTimer = setInterval( function () {
-						if ( hsPaused ) return;
-						if ( Date.now() - startedAt >= durMs ) {
-							hsClearVideoFinTimer();
-							hsGoTo( hsCurrent + 1 );
-						}
-					}, 250 );
-				}
 				if ( iframe ) {
-					try { iframe.contentWindow.postMessage( '{"event":"command","func":"playVideo","args":[]}', '*' ); } catch(e) {}
-					try { iframe.contentWindow.postMessage( JSON.stringify( { method: 'play' } ), '*' ); } catch(e) {}
+					// Reiniciar siempre al tiempo de inicio antes de reproducir
+					var seekCmd = JSON.stringify( { event: 'command', func: 'seekTo', args: [ inicio, true ] } );
+					var seekVimeo = JSON.stringify( { method: 'setCurrentTime', value: inicio } );
+					try { iframe.contentWindow.postMessage( seekCmd, '*' ); } catch(e) {}
+					try { iframe.contentWindow.postMessage( seekVimeo, '*' ); } catch(e) {}
+					// Pequeño delay para que el seek se procese antes del play
+					setTimeout( function () {
+						try { iframe.contentWindow.postMessage( '{"event":"command","func":"playVideo","args":[]}', '*' ); } catch(e) {}
+						try { iframe.contentWindow.postMessage( JSON.stringify( { method: 'play' } ), '*' ); } catch(e) {}
+					}, 80 );
+
+					if ( fin > 0 ) {
+						var startedAt = Date.now();
+						var durMs     = ( fin - inicio ) * 1000;
+						hsVideoFinTimer = setInterval( function () {
+							if ( hsPaused ) return;
+							if ( Date.now() - startedAt >= durMs ) {
+								hsClearVideoFinTimer();
+								hsGoTo( hsCurrent + 1 );
+							}
+						}, 250 );
+					}
 				}
 
 				if ( mp4 ) {
-					if ( inicio > 0 ) { try { mp4.currentTime = inicio; } catch(e) {} }
+					// Reiniciar siempre al tiempo de inicio (0 si no está definido)
+					try { mp4.currentTime = inicio; } catch(e) {}
 					if ( fin > 0 ) {
 						mp4._murgFinHandler = function () {
 							if ( mp4.currentTime >= fin ) {
