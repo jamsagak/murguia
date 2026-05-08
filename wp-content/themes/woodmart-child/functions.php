@@ -1196,7 +1196,9 @@ function murguia_register_per_product_fields() {
 add_filter( 'template_include', 'murguia_override_shop_template', 99999 );
 
 function murguia_override_shop_template( $template ) {
-	if ( is_shop() || is_product_taxonomy() ) {
+	$is_product_search = is_search() && isset( $_GET['post_type'] ) && 'product' === $_GET['post_type'];
+
+	if ( is_shop() || is_product_taxonomy() || $is_product_search ) {
 		$custom = get_stylesheet_directory() . '/archive-product.php';
 		if ( file_exists( $custom ) ) {
 			return $custom;

@@ -105,6 +105,7 @@
 .murg-nav__left,
 .murg-nav__right {
   display: flex;
+  align-items: center;
   gap: 36px;
   font-size: 11px;
   letter-spacing: 0.22em;
@@ -2850,6 +2851,9 @@
   cursor: pointer;
   letter-spacing: inherit;
   text-transform: inherit;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
 }
 .murg-nav__search-trigger:hover { color: var(--murg-gold); }
 
@@ -2919,21 +2923,36 @@
 .murg-search__form:focus-within {
   border-bottom-color: var(--murg-gold);
 }
-.murg-search__input {
+.murg-search .murg-search__input,
+.murg-search input.murg-search__input[type="search"] {
   flex: 1;
-  background: transparent;
-  border: 0;
-  outline: 0;
-  color: var(--murg-cream);
+  background: transparent !important;
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  color: var(--murg-cream) !important;
+  -webkit-text-fill-color: var(--murg-cream);
+  caret-color: var(--murg-gold);
   font-family: 'Cormorant Garamond', serif;
   font-size: clamp(22px, 3vw, 32px);
   font-weight: 300;
   padding: 8px 0;
   letter-spacing: 0.01em;
+  height: auto;
+  border-radius: 0;
 }
 .murg-search__input::placeholder {
   color: rgba(245, 240, 232, 0.4);
   font-style: italic;
+  opacity: 1;
+}
+/* Override autofill background del browser */
+.murg-search__input:-webkit-autofill,
+.murg-search__input:-webkit-autofill:hover,
+.murg-search__input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--murg-cream);
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  transition: background-color 9999s ease-in-out 0s;
 }
 .murg-search__submit {
   background: transparent;

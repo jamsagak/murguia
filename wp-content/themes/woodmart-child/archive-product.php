@@ -16,6 +16,7 @@ $f_color      = isset( $_GET['color'] )    ? sanitize_key( $_GET['color'] )    :
 $f_min        = isset( $_GET['min'] )      ? (float) $_GET['min']              : '';
 $f_max        = isset( $_GET['max'] )      ? (float) $_GET['max']              : '';
 $f_orderby    = isset( $_GET['orderby'] )  ? sanitize_key( $_GET['orderby'] )  : 'date';
+$f_search     = isset( $_GET['s'] )        ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : '';
 
 // --- Build WC query ---
 $query_args = [
@@ -26,6 +27,9 @@ $query_args = [
 	'orderby'    => 'date',
 	'order'      => 'DESC',
 ];
+if ( $f_search !== '' ) {
+	$query_args['s'] = $f_search;
+}
 if ( $f_cat ) {
 	$query_args['category'] = [ $f_cat ];
 }
