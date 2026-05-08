@@ -51,9 +51,8 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_hero_slides', murguia_ajus
 		$vid_fin     = ( $vid_fin_raw !== '' && $vid_fin_raw !== null && $vid_fin_raw !== false )
 		                ? (int) $vid_fin_raw : 15;
 
-		// Determinar el tipo real según lo que tenga contenido
+		// Descartar solo videos sin URL — las imagenes pueden estar vacias (placeholder)
 		if ( $tipo === 'video' && empty( $video_url ) ) continue;
-		if ( $tipo === 'imagen' && empty( $img['url'] ) ) continue;
 
 		// Parsear video: detectar YouTube, Vimeo o mp4 directo
 		$video_embed = '';
