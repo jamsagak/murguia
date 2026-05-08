@@ -431,21 +431,17 @@
 		var hsTotal   = hsSlides.length;
 		var hsTimer   = null;
 		var hsPaused  = false;
+		var hsRemainingMs = 0;
+		var hsStartTime = 0;
 
-		if ( hsTotal <= 1 ) {
-			// Solo una imagen — nada que hacer
-		} else {
+		if ( hsTotal > 1 ) {
 			function hsGetIntervalo() {
 				return parseInt( hsSlides[ hsCurrent ].dataset.intervalo, 10 ) || 5000;
 			}
 
-			function hsPad( n ) {
-				return ( n < 10 ? '0' : '' ) + n;
-			}
+			function hsPad( n ) { return ( n < 10 ? '0' : '' ) + n; }
 
-			// Pausar video de un slide (iframe YT/Vimeo o mp4)
-			var hsVideoFinTimer = null; // timer para fin de video en iframe
-
+			var hsVideoFinTimer = null;
 			function hsClearVideoFinTimer() {
 				if ( hsVideoFinTimer ) { clearInterval( hsVideoFinTimer ); hsVideoFinTimer = null; }
 			}
@@ -472,38 +468,28 @@
 				var inicio = parseInt( slide.dataset.videoInicio, 10 ) || 0;
 
 				if ( iframe && fin > 0 ) {
-					// Para iframes (YT/Vimeo) usamos un timer basado en tiempo transcurrido
-					// ya que no podemos leer currentTime cross-origin
 					var startedAt = Date.now();
 					var durMs     = ( fin - inicio ) * 1000;
-					hsClearVideoFinTimer();
 					hsVideoFinTimer = setInterval( function () {
 						if ( hsPaused ) return;
 						if ( Date.now() - startedAt >= durMs ) {
 							hsClearVideoFinTimer();
-							clearTimeout( hsTimer );
 							hsGoTo( hsCurrent + 1 );
-							hsScheduleNext();
 						}
 					}, 250 );
-					try { iframe.contentWindow.postMessage( '{"event":"command","func":"playVideo","args":[]}', '*' ); } catch(e) {}
-					try { iframe.contentWindow.postMessage( JSON.stringify( { method: 'play' } ), '*' ); } catch(e) {}
-				} else if ( iframe ) {
+				}
+				if ( iframe ) {
 					try { iframe.contentWindow.postMessage( '{"event":"command","func":"playVideo","args":[]}', '*' ); } catch(e) {}
 					try { iframe.contentWindow.postMessage( JSON.stringify( { method: 'play' } ), '*' ); } catch(e) {}
 				}
 
 				if ( mp4 ) {
-					// Saltar al segundo de inicio
 					if ( inicio > 0 ) { try { mp4.currentTime = inicio; } catch(e) {} }
-					// Listener timeupdate para el fin
 					if ( fin > 0 ) {
 						mp4._murgFinHandler = function () {
 							if ( mp4.currentTime >= fin ) {
 								mp4.removeEventListener( 'timeupdate', mp4._murgFinHandler );
-								clearTimeout( hsTimer );
 								hsGoTo( hsCurrent + 1 );
-								hsScheduleNext();
 							}
 						};
 						mp4.addEventListener( 'timeupdate', mp4._murgFinHandler );
@@ -513,10 +499,14 @@
 			}
 
 			function hsGoTo( idx ) {
-				// Pausar video del slide saliente
-				hsPauseVideo( hsSlides[ hsCurrent ] );
+				var nextIdx = ( idx + hsTotal ) % hsTotal;
+				if ( nextIdx === hsCurrent ) return; // Evitar doble click en el mismo slide
 
-				// Salida del slide actual
+				// Detener transiciones actuales y timers
+				clearTimeout( hsTimer );
+
+				// Salida
+				hsPauseVideo( hsSlides[ hsCurrent ] );
 				hsSlides[ hsCurrent ].classList.remove( 'is-active' );
 				hsSlides[ hsCurrent ].setAttribute( 'aria-hidden', 'true' );
 				if ( hsDots[ hsCurrent ] ) {
@@ -524,9 +514,10 @@
 					hsDots[ hsCurrent ].setAttribute( 'aria-selected', 'false' );
 				}
 
-				hsCurrent = ( idx + hsTotal ) % hsTotal;
+				// Cambio
+				hsCurrent = nextIdx;
 
-				// Entrada del nuevo slide
+				// Entrada
 				hsSlides[ hsCurrent ].classList.add( 'is-active' );
 				hsSlides[ hsCurrent ].setAttribute( 'aria-hidden', 'false' );
 				if ( hsDots[ hsCurrent ] ) {
@@ -534,15 +525,18 @@
 					hsDots[ hsCurrent ].setAttribute( 'aria-selected', 'true' );
 				}
 
-				// Reproducir video del slide entrante
-				hsPlayVideo( hsSlides[ hsCurrent ] );
-
-				// Actualizar contador
 				if ( hsCounter ) {
 					hsCounter.textContent = hsPad( hsCurrent + 1 ) + ' / ' + hsPad( hsTotal );
 				}
 
+				hsPlayVideo( hsSlides[ hsCurrent ] );
+
+				// Reiniciar logica de tiempo
+				hsRemainingMs = hsGetIntervalo();
 				hsStartProgress();
+				if ( ! hsPaused ) {
+					hsScheduleNext( hsRemainingMs );
+				}
 			}
 
 			function hsStartProgress() {
@@ -550,9 +544,10 @@
 					hsBar.style.transition = 'none';
 					hsBar.style.width = '0%';
 					void hsBar.offsetWidth; // reflow
-					var dur = hsGetIntervalo();
-					hsBar.style.transition = 'width ' + dur + 'ms linear';
-					hsBar.style.width = '100%';
+					if ( ! hsPaused ) {
+						hsBar.style.transition = 'width ' + hsRemainingMs + 'ms linear';
+						hsBar.style.width = '100%';
+					}
 				}
 			}
 
@@ -560,53 +555,53 @@
 				if ( hsBar ) {
 					var w = window.getComputedStyle( hsBar ).width;
 					var tw = window.getComputedStyle( heroSlider ).width;
+					var pct = ( parseFloat( w ) / parseFloat( tw ) ) * 100;
 					hsBar.style.transition = 'none';
-					hsBar.style.width = ( parseFloat( w ) / parseFloat( tw ) * 100 ).toFixed( 2 ) + '%';
+					hsBar.style.width = pct.toFixed( 2 ) + '%';
+					
+					// Calcular tiempo restante exacto basado en el porcentaje visual
+					hsRemainingMs = hsGetIntervalo() * ( 1 - pct / 100 );
 				}
 			}
 
 			function hsResumeProgress() {
 				if ( hsBar ) {
-					var pct      = parseFloat( hsBar.style.width ) || 0;
-					var remaining = hsGetIntervalo() * ( 1 - pct / 100 );
-					hsBar.style.transition = 'width ' + Math.max( remaining, 0 ) + 'ms linear';
+					hsBar.style.transition = 'width ' + Math.max( hsRemainingMs, 0 ) + 'ms linear';
 					hsBar.style.width = '100%';
 				}
 			}
 
-			function hsScheduleNext() {
+			function hsScheduleNext( ms ) {
 				clearTimeout( hsTimer );
 				hsTimer = setTimeout( function () {
-					if ( ! hsPaused ) {
-						hsGoTo( hsCurrent + 1 );
-						hsScheduleNext();
-					}
-				}, hsGetIntervalo() );
+					hsGoTo( hsCurrent + 1 );
+				}, ms );
 			}
 
-			// Click en dots
+			// Clicks en dots
 			hsDots.forEach( function ( dot ) {
 				dot.addEventListener( 'click', function () {
 					var idx = parseInt( dot.dataset.index, 10 );
-					clearTimeout( hsTimer );
 					hsGoTo( idx );
-					hsScheduleNext();
 				} );
 			} );
 
 			// Pausa al hover
 			heroSlider.addEventListener( 'mouseenter', function () {
+				if ( hsPaused ) return;
 				hsPaused = true;
 				clearTimeout( hsTimer );
 				hsStopProgress();
 			} );
+			
 			heroSlider.addEventListener( 'mouseleave', function () {
+				if ( ! hsPaused ) return;
 				hsPaused = false;
 				hsResumeProgress();
-				hsScheduleNext();
+				hsScheduleNext( hsRemainingMs );
 			} );
 
-			// Swipe en touch (móvil)
+			// Swipe touch
 			var hsTouchX = null;
 			heroSlider.addEventListener( 'touchstart', function ( e ) {
 				hsTouchX = e.touches[0].clientX;
@@ -616,14 +611,13 @@
 				var dx = e.changedTouches[0].clientX - hsTouchX;
 				hsTouchX = null;
 				if ( Math.abs( dx ) < 40 ) return;
-				clearTimeout( hsTimer );
 				hsGoTo( dx < 0 ? hsCurrent + 1 : hsCurrent - 1 );
-				hsScheduleNext();
 			}, { passive: true } );
 
-			// Arrancar
+			// Arrancar el primero
+			hsRemainingMs = hsGetIntervalo();
 			hsStartProgress();
-			hsScheduleNext();
+			hsScheduleNext( hsRemainingMs );
 		}
 	}
 
