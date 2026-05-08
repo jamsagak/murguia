@@ -870,54 +870,123 @@
 }
 
 /* ============================================================
-   CERTIFICACIONES
+   CERTIFICACIONES (Carrusel 3D)
    ============================================================ */
 .murg-certifications {
   background: var(--murg-cream);
-  padding: 80px 60px 0;
+  padding: 80px 0 0;
   text-align: center;
+  overflow: hidden;
 }
 
 .murg-certifications__title {
   color: var(--murg-muted);
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
-.murg-certifications__logos {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 64px;
-  flex-wrap: wrap;
-  padding-bottom: 40px;
-  border-bottom: 1px solid rgba(26,26,26,0.1);
-  max-width: 1000px;
+.murg-certifications__carousel {
+  position: relative;
+  width: 100%;
+  height: 160px; /* Fixed height to contain absolute elements */
+  max-width: 1200px;
   margin: 0 auto;
+  border-bottom: 1px solid rgba(26,26,26,0.1);
+  padding-bottom: 40px;
+}
+
+/* Gradientes para difuminar los bordes */
+.murg-certifications__carousel::before,
+.murg-certifications__carousel::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 40px; /* match padding-bottom */
+  width: 15%;
+  z-index: 10;
+  pointer-events: none;
+}
+.murg-certifications__carousel::before {
+  left: 0;
+  background: linear-gradient(to right, var(--murg-cream), transparent);
+}
+.murg-certifications__carousel::after {
+  right: 0;
+  background: linear-gradient(to left, var(--murg-cream), transparent);
+}
+
+.murg-certifications__track {
+  position: absolute;
+  inset: 0;
 }
 
 .murg-certifications__logo {
-  display: block;
-  opacity: 0.6;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 260px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transform: translate(-50%, -50%) scale(0.6);
+  opacity: 0;
+  transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.8s ease, filter 0.8s ease;
+  filter: grayscale(100%);
+  pointer-events: none;
 }
 
-a.murg-certifications__logo:hover {
+.murg-certifications__logo[data-pos="center"] {
+  transform: translate(-50%, -50%) scale(1.2);
   opacity: 1;
-  transform: translateY(-2px);
+  filter: grayscale(0%);
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.murg-certifications__logo[data-pos="left"] {
+  transform: translate(calc(-50% - 280px), -50%) scale(0.8);
+  opacity: 0.4;
+  z-index: 2;
+}
+
+.murg-certifications__logo[data-pos="right"] {
+  transform: translate(calc(-50% + 280px), -50%) scale(0.8);
+  opacity: 0.4;
+  z-index: 2;
+}
+
+.murg-certifications__logo[data-pos="hidden-left"] {
+  transform: translate(calc(-50% - 400px), -50%) scale(0.5);
+  opacity: 0;
+  z-index: 1;
+}
+
+.murg-certifications__logo[data-pos="hidden-right"] {
+  transform: translate(calc(-50% + 400px), -50%) scale(0.5);
+  opacity: 0;
+  z-index: 1;
+}
+
+.murg-certifications__logo a,
+.murg-certifications__logo img {
+  display: block;
 }
 
 .murg-certifications__logo img {
-  max-height: 48px;
+  max-height: 65px;
   width: auto;
-  display: block;
-  mix-blend-mode: multiply; /* Helps if logos have white backgrounds */
+  max-width: 100%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
 }
 
 .murg-certifications__placeholder {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
   color: var(--murg-muted);
   font-size: 12px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  z-index: 20;
 }
 
 /* ============================================================
@@ -1160,7 +1229,6 @@ a.murg-certifications__logo:hover {
   .murg-statement__quote { font-size: 40px; max-width: 760px; }
 
   .murg-certifications { padding-top: 60px; padding-left: 32px; padding-right: 32px; }
-  .murg-certifications__logos { gap: 40px; }
 
   .murg-contact { padding: 90px 32px; }
   .murg-contact__grid { grid-template-columns: 1fr; gap: 64px; }
@@ -1208,9 +1276,16 @@ a.murg-certifications__logo:hover {
   .murg-statement__quote { font-size: 28px; line-height: 1.3; margin-bottom: 36px; }
   .murg-statement .murg-eyebrow { margin-bottom: 28px; }
 
-  .murg-certifications { padding: 48px 20px 0; }
-  .murg-certifications__logos { gap: 24px 32px; padding-bottom: 32px; }
-  .murg-certifications__logo img { max-height: 36px; }
+  .murg-certifications { padding: 48px 0 0; }
+  .murg-certifications__logo[data-pos="left"] {
+    transform: translate(calc(-50% - 140px), -50%) scale(0.7);
+  }
+  .murg-certifications__logo[data-pos="right"] {
+    transform: translate(calc(-50% + 140px), -50%) scale(0.7);
+  }
+  .murg-certifications__logo[data-pos="center"] {
+    transform: translate(-50%, -50%) scale(1.1);
+  }
 
   .murg-contact { padding: 72px 20px; }
   .murg-contact__grid { gap: 48px; }

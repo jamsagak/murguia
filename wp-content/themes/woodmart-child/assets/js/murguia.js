@@ -668,4 +668,58 @@
 		} );
 	}
 
+	/* ------------------------------------------------------------------
+	   CERTIFICACIONES (Carrusel 3D)
+	   ------------------------------------------------------------------ */
+	var certCarousel = document.getElementById('cert-carousel');
+	if (certCarousel) {
+		var certTrack = certCarousel.querySelector('.murg-certifications__track');
+		if (certTrack) {
+			var logos = Array.from(certTrack.children);
+			var total = logos.length;
+			
+			if (total > 0) {
+				// Clonar si hay menos de 5 logos para tener suficientes para las posiciones ocultas
+				if (total < 5) {
+					var toClone = total === 1 ? 4 : (total === 2 ? 3 : (total === 3 ? 2 : 1));
+					for (var c = 0; c < toClone; c++) {
+						logos.forEach(function(l) {
+							var clone = l.cloneNode(true);
+							certTrack.appendChild(clone);
+						});
+					}
+					logos = Array.from(certTrack.children);
+					total = logos.length;
+				}
+				
+				var currentIndex = 0;
+				
+				function updateCertPositions() {
+					logos.forEach(function(logo, i) {
+						var pos = 'hidden-right'; // default
+						
+						if (i === currentIndex) {
+							pos = 'center';
+						} else if (i === (currentIndex + 1) % total) {
+							pos = 'right';
+						} else if (i === (currentIndex - 1 + total) % total) {
+							pos = 'left';
+						} else if (i === (currentIndex - 2 + total) % total) {
+							pos = 'hidden-left';
+						}
+						
+						logo.setAttribute('data-pos', pos);
+					});
+				}
+				
+				updateCertPositions();
+				
+				setInterval(function() {
+					currentIndex = (currentIndex + 1) % total;
+					updateCertPositions();
+				}, 2500); // Rota cada 2.5 segundos
+			}
+		}
+	}
+
 } )();

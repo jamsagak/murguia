@@ -469,28 +469,30 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_cert_logos', murguia_ajust
 <?php if ( ! empty( $cert_logos ) || current_user_can('edit_theme_options') ) : ?>
 <section class="murg-certifications" aria-label="<?php echo esc_attr( $cert_titulo ); ?>">
 	<div class="murg-eyebrow murg-certifications__title"><?php echo esc_html( $cert_titulo ); ?></div>
-	<div class="murg-certifications__logos">
-		<?php if ( ! empty( $cert_logos ) ) : ?>
-			<?php foreach ( $cert_logos as $logo ) : ?>
-				<?php if ( ! empty( $logo['imagen']['url'] ) ) : ?>
-					<?php if ( ! empty( $logo['link'] ) ) : ?>
-						<a href="<?php echo esc_url( $logo['link'] ); ?>" target="_blank" rel="noopener noreferrer" class="murg-certifications__logo">
-					<?php else : ?>
-						<div class="murg-certifications__logo">
+	<div class="murg-certifications__carousel" id="cert-carousel">
+		<div class="murg-certifications__track">
+			<?php if ( ! empty( $cert_logos ) ) : ?>
+				<?php foreach ( $cert_logos as $logo ) : ?>
+					<?php if ( ! empty( $logo['imagen']['url'] ) ) : ?>
+						<?php if ( ! empty( $logo['link'] ) ) : ?>
+							<a href="<?php echo esc_url( $logo['link'] ); ?>" target="_blank" rel="noopener noreferrer" class="murg-certifications__logo">
+						<?php else : ?>
+							<div class="murg-certifications__logo">
+						<?php endif; ?>
+						
+						<img src="<?php echo esc_url( $logo['imagen']['url'] ); ?>" alt="<?php echo esc_attr( $logo['imagen']['alt'] ?? '' ); ?>" loading="lazy">
+						
+						<?php if ( ! empty( $logo['link'] ) ) : ?>
+							</a>
+						<?php else : ?>
+							</div>
+						<?php endif; ?>
 					<?php endif; ?>
-					
-					<img src="<?php echo esc_url( $logo['imagen']['url'] ); ?>" alt="<?php echo esc_attr( $logo['imagen']['alt'] ?? '' ); ?>" loading="lazy">
-					
-					<?php if ( ! empty( $logo['link'] ) ) : ?>
-						</a>
-					<?php else : ?>
-						</div>
-					<?php endif; ?>
-				<?php endif; ?>
-			<?php endforeach; ?>
-		<?php else : ?>
-			<div class="murg-certifications__placeholder">[ Agrega los logos desde Ajustes Murguía > Inicio ]</div>
-		<?php endif; ?>
+				<?php endforeach; ?>
+			<?php else : ?>
+				<div class="murg-certifications__placeholder">[ Agrega los logos desde Ajustes Murguía > Inicio ]</div>
+			<?php endif; ?>
+		</div>
 	</div>
 </section>
 <?php endif; ?>
