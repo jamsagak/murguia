@@ -142,6 +142,113 @@
 
 .murg-nav a:hover { opacity: 0.6; }
 
+/* ── Nav items con dropdown ────────────────────────────────── */
+.murg-nav__item {
+  position: relative;
+}
+
+.murg-nav__link {
+  /* hereda los estilos de .murg-nav__left a */
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  font-weight: inherit;
+  color: inherit;
+  text-decoration: none;
+  display: inline-block;
+}
+
+/* Alta Joyería — destacado en dorado */
+.murg-nav__link--highlight {
+  color: var(--murg-gold);
+  letter-spacing: 0.24em;
+}
+.murg-nav.is-scrolled .murg-nav__link--highlight {
+  color: var(--murg-gold-soft);
+}
+.murg-nav__link--highlight:hover { opacity: 0.8 !important; }
+
+/* Dropdown panel */
+.murg-nav__dropdown {
+  position: absolute;
+  top: calc(100% + 20px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(245,240,232,0.97);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--murg-line);
+  min-width: 220px;
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(-50%) translateY(-6px);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+  z-index: 10000;
+  color: var(--murg-ink);
+}
+
+.murg-nav__item--drop:hover .murg-nav__dropdown,
+.murg-nav__item--drop:focus-within .murg-nav__dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.murg-nav__dropdown a {
+  display: block;
+  padding: 10px 24px;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--murg-ink);
+  text-decoration: none;
+  transition: background 0.15s ease, color 0.15s ease;
+  opacity: 1 !important;
+}
+.murg-nav__dropdown a:hover {
+  background: rgba(201,168,76,0.08);
+  color: var(--murg-gold-soft);
+  opacity: 1 !important;
+}
+
+/* Línea indicadora del ítem activo en el dropdown */
+.murg-nav__item--drop > .murg-nav__link::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+  margin-top: 2px;
+}
+.murg-nav__item--drop:hover > .murg-nav__link::after {
+  transform: scaleX(1);
+}
+
+/* Contador carrito */
+.murg-nav__cart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--murg-gold);
+  color: var(--murg-black);
+  font-size: 8px;
+  font-weight: 500;
+  letter-spacing: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  vertical-align: middle;
+  margin-left: 3px;
+  line-height: 1;
+}
+
 /* ============================================================
    HERO
    ============================================================ */
