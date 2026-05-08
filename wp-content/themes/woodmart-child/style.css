@@ -647,29 +647,37 @@
 
 .murg-products__track {
   display: flex;
-  transition: transform 0.65s cubic-bezier(0.65, 0, 0.35, 1);
+  transition: transform 0.75s cubic-bezier(0.76, 0, 0.24, 1);
   will-change: transform;
+  user-select: none;
+}
+
+/* Estado durante drag — sin transición para seguir el dedo/mouse en tiempo real */
+.murg-products__track.is-dragging {
+  transition: none;
+  cursor: grabbing;
+}
+
+.murg-products {
+  cursor: grab;
+}
+.murg-products.is-dragging {
+  cursor: grabbing;
 }
 
 .murg-products__slide {
   flex: 0 0 100%;
   min-width: 100%;
   display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 24px;
-}
-
-.murg-products__slide--asymmetric {
-  grid-template-columns: 1.15fr 1fr 1fr;
   align-items: start;
 }
 
+/* Todos los slides usan el mismo layout uniforme */
+.murg-products__slide--asymmetric,
 .murg-products__slide--uniform {
   grid-template-columns: 1fr 1fr 1fr;
-}
-
-.murg-products__slide--uniform .murg-product__img {
-  aspect-ratio: auto;
-  height: clamp(260px, 42vh, 460px);
 }
 
 .murg-product {
@@ -684,22 +692,48 @@
   color: inherit;
 }
 
-.murg-product__link:hover .murg-product__img img,
-.murg-product__link:hover .murg-product__img { transform: scale(1.03); }
-.murg-product__img { transition: transform 0.7s cubic-bezier(.2,.7,.2,1); }
+.murg-product__link:hover .murg-product__img img { transform: scale(1.05); }
+.murg-product__img img    { transition: transform 0.9s cubic-bezier(.2,.8,.2,1); }
+.murg-product__link:hover .murg-product__img::after {
+  opacity: 1;
+}
 .murg-product__link:hover .murg-product__name { color: var(--murg-gold-soft); }
-.murg-product__name { transition: color 0.3s ease; }
+.murg-product__name { transition: color 0.35s ease; }
 
 .murg-product__img {
   background: var(--murg-cream);
   position: relative;
   margin-bottom: 18px;
   overflow: hidden;
+  /* Todos los cards mismo ratio — igual que el shop */
+  aspect-ratio: 4 / 5;
 }
 
-.murg-product--primary .murg-product__img   { aspect-ratio: auto; height: clamp(340px, 56vh, 600px); }
-.murg-product--secondary .murg-product__img { aspect-ratio: auto; height: clamp(240px, 38vh, 410px); margin-top: 48px; }
-.murg-product--tertiary .murg-product__img  { aspect-ratio: auto; height: clamp(300px, 48vh, 520px); }
+/* Overlay dorado sutil en hover */
+.murg-product__img::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(201, 168, 76, 0.08) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* Eliminar alturas variables — un solo aspect-ratio para todos */
+.murg-product--primary .murg-product__img,
+.murg-product--secondary .murg-product__img,
+.murg-product--tertiary .murg-product__img,
+.murg-products__slide--uniform .murg-product__img,
+.murg-products__slide--asymmetric .murg-product__img {
+  aspect-ratio: 4 / 5;
+  height: auto;
+  margin-top: 0;
+}
 
 .murg-product__img img {
   position: absolute; inset: 0;
@@ -728,9 +762,6 @@
 .murg-product__placeholder--earring  .murg-product__shape { width:  48px; height: 130px; border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%; }
 .murg-product__placeholder--cufflink .murg-product__shape { width: 110px; height: 110px; border-radius: 50%; }
 .murg-product__placeholder--pendant  .murg-product__shape { width: 130px; height: 170px; border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%; }
-
-.murg-product--secondary .murg-product__placeholder--necklace .murg-product__shape { height: 160px; }
-.murg-product--tertiary .murg-product__placeholder--bracelet .murg-product__shape  { width: 170px; }
 
 .murg-product__tag {
   position: absolute;

@@ -371,22 +371,31 @@
 	};
 
 	/* ------------------------------------------------------------------
-	   BESTSELLERS SLIDER — translateX track
+	   BESTSELLERS SLIDER — drag · autoplay · teclado
 	   ------------------------------------------------------------------ */
-	var bsTrack = document.getElementById( 'murg-bs-track' );
-	var bsPrev  = document.getElementById( 'murg-bs-prev' );
-	var bsNext  = document.getElementById( 'murg-bs-next' );
-	var bsInfo  = document.getElementById( 'murg-bs-info' );
+	var bsTrack   = document.getElementById( 'murg-bs-track' );
+	var bsPrev    = document.getElementById( 'murg-bs-prev' );
+	var bsNext    = document.getElementById( 'murg-bs-next' );
+	var bsInfo    = document.getElementById( 'murg-bs-info' );
+	var bsSection = document.getElementById( 'bestsellers' );
 
 	if ( bsTrack && bsPrev && bsNext ) {
-		var bsSlideEls = bsTrack.querySelectorAll( '.murg-products__slide' );
-		var bsSlides   = bsSlideEls.length;
-		var bsTotal    = parseInt( bsTrack.dataset.total, 10 ) ||
-		                 bsTrack.querySelectorAll( '.murg-product' ).length;
-		var bsPerSlide = 3;
-		var bsCurrent  = 0;
+		var bsSlideEls  = bsTrack.querySelectorAll( '.murg-products__slide' );
+		var bsSlides    = bsSlideEls.length;
+		var bsTotal     = parseInt( bsTrack.dataset.total, 10 ) ||
+		                  bsTrack.querySelectorAll( '.murg-product' ).length;
+		var bsPerSlide  = 3;
+		var bsCurrent   = 0;
+		var bsAutoTimer = null;
+		var BS_INTERVAL = 5000; // ms entre slides automáticos
 
-		function bsUpdate() {
+		/* ── Render ──────────────────────────────────────────────── */
+		function bsUpdate( animate ) {
+			if ( animate === false ) {
+				bsTrack.classList.add( 'is-dragging' );
+			} else {
+				bsTrack.classList.remove( 'is-dragging' );
+			}
 			bsTrack.style.transform = 'translateX(' + ( -100 * bsCurrent ) + '%)';
 			bsPrev.disabled = bsCurrent === 0;
 			bsNext.disabled = bsCurrent >= bsSlides - 1;
@@ -397,24 +406,136 @@
 			}
 		}
 
+		function bsGo( idx ) {
+			bsCurrent = Math.max( 0, Math.min( idx, bsSlides - 1 ) );
+			bsUpdate();
+		}
+
+		/* ── Autoplay ────────────────────────────────────────────── */
+		function bsAutoStart() {
+			bsAutoStop();
+			if ( bsSlides <= 1 ) return;
+			bsAutoTimer = setInterval( function () {
+				bsGo( bsCurrent < bsSlides - 1 ? bsCurrent + 1 : 0 );
+			}, BS_INTERVAL );
+		}
+
+		function bsAutoStop() {
+			if ( bsAutoTimer ) { clearInterval( bsAutoTimer ); bsAutoTimer = null; }
+		}
+
+		// Pausa al hover sobre la sección
+		if ( bsSection ) {
+			bsSection.addEventListener( 'mouseenter', bsAutoStop );
+			bsSection.addEventListener( 'mouseleave', bsAutoStart );
+		}
+
+		/* ── Botones ─────────────────────────────────────────────── */
 		bsPrev.addEventListener( 'click', function () {
+			bsAutoStop();
 			if ( bsCurrent > 0 ) { bsCurrent--; bsUpdate(); }
+			bsAutoStart();
 		} );
 		bsNext.addEventListener( 'click', function () {
+			bsAutoStop();
 			if ( bsCurrent < bsSlides - 1 ) { bsCurrent++; bsUpdate(); }
+			bsAutoStart();
 		} );
 
-		// Optional: keyboard navigation when slider is in view
+		/* ── Teclado (solo cuando el slider está en viewport) ───── */
 		document.addEventListener( 'keydown', function ( e ) {
 			if ( e.key !== 'ArrowLeft' && e.key !== 'ArrowRight' ) return;
 			var rect = bsTrack.getBoundingClientRect();
-			var inView = rect.top < window.innerHeight && rect.bottom > 0;
-			if ( ! inView ) return;
+			if ( rect.top >= window.innerHeight || rect.bottom <= 0 ) return;
+			bsAutoStop();
 			if ( e.key === 'ArrowLeft'  && bsCurrent > 0 )            { bsCurrent--; bsUpdate(); }
 			if ( e.key === 'ArrowRight' && bsCurrent < bsSlides - 1 ) { bsCurrent++; bsUpdate(); }
+			bsAutoStart();
 		} );
 
+		/* ── Drag con mouse ──────────────────────────────────────── */
+		var bsDragStartX  = 0;
+		var bsDragOffsetX = 0;
+		var bsDragging    = false;
+		var bsDragMoved   = false;
+		var bsTrackW      = 0;
+		var DRAG_THRESHOLD = 8;   // px mínimos para considerar drag real
+		var SWIPE_THRESHOLD = 60; // px para cambiar de slide al soltar
+
+		function bsDragStart( clientX ) {
+			bsDragging   = true;
+			bsDragMoved  = false;
+			bsDragStartX = clientX;
+			bsDragOffsetX = 0;
+			bsTrackW = bsTrack.parentElement.offsetWidth;
+			bsAutoStop();
+			bsTrack.classList.add( 'is-dragging' );
+			if ( bsSection ) bsSection.classList.add( 'is-dragging' );
+		}
+
+		function bsDragMove( clientX ) {
+			if ( ! bsDragging ) return;
+			var delta = clientX - bsDragStartX;
+			if ( Math.abs( delta ) > DRAG_THRESHOLD ) bsDragMoved = true;
+			if ( ! bsDragMoved ) return;
+			bsDragOffsetX = delta;
+			// Resistencia en los extremos
+			var raw = delta;
+			if ( ( bsCurrent === 0 && delta > 0 ) || ( bsCurrent === bsSlides - 1 && delta < 0 ) ) {
+				raw = delta * 0.25;
+			}
+			var pct = ( -100 * bsCurrent ) + ( raw / bsTrackW * 100 );
+			bsTrack.style.transform = 'translateX(' + pct + '%)';
+		}
+
+		function bsDragEnd() {
+			if ( ! bsDragging ) return;
+			bsDragging = false;
+			bsTrack.classList.remove( 'is-dragging' );
+			if ( bsSection ) bsSection.classList.remove( 'is-dragging' );
+
+			if ( bsDragMoved ) {
+				if ( bsDragOffsetX < -SWIPE_THRESHOLD && bsCurrent < bsSlides - 1 ) {
+					bsCurrent++;
+				} else if ( bsDragOffsetX > SWIPE_THRESHOLD && bsCurrent > 0 ) {
+					bsCurrent--;
+				}
+			}
+			bsUpdate(); // con transición CSS
+			bsAutoStart();
+		}
+
+		// Mouse events
+		bsTrack.addEventListener( 'mousedown', function ( e ) {
+			if ( e.button !== 0 ) return;
+			bsDragStart( e.clientX );
+		} );
+		document.addEventListener( 'mousemove', function ( e ) {
+			bsDragMove( e.clientX );
+		} );
+		document.addEventListener( 'mouseup', function () {
+			bsDragEnd();
+		} );
+
+		// Touch events
+		bsTrack.addEventListener( 'touchstart', function ( e ) {
+			bsDragStart( e.touches[0].clientX );
+		}, { passive: true } );
+		bsTrack.addEventListener( 'touchmove', function ( e ) {
+			bsDragMove( e.touches[0].clientX );
+		}, { passive: true } );
+		bsTrack.addEventListener( 'touchend', function () {
+			bsDragEnd();
+		} );
+
+		// Evitar que el drag active links de los cards
+		bsTrack.addEventListener( 'click', function ( e ) {
+			if ( bsDragMoved ) e.preventDefault();
+		}, true );
+
+		/* ── Init ────────────────────────────────────────────────── */
 		bsUpdate();
+		bsAutoStart();
 	}
 
 
