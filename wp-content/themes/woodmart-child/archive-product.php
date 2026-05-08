@@ -353,6 +353,7 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 							echo wp_get_attachment_image( $img_id, 'large', false, [
 								'loading' => 'lazy',
 								'alt'     => $product->get_name(),
+								'sizes'   => '(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw',
 							] );
 						else : ?>
 							<img src="<?php echo esc_url( wc_placeholder_img_src() ); ?>"

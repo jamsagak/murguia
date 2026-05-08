@@ -438,9 +438,10 @@ function murg_prod_trust_icon( $name ) {
 				<a class="murg-product__link" href="<?php echo esc_url( $rel->get_permalink() ); ?>">
 					<div class="murg-product__img">
 						<?php if ( $rel_img ) :
-							echo wp_get_attachment_image( $rel_img, 'medium_large', false, [
+							echo wp_get_attachment_image( $rel_img, 'large', false, [
 								'loading' => 'lazy',
 								'alt'     => $rel->get_name(),
+								'sizes'   => '(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw',
 							] );
 						else : ?>
 							<img src="<?php echo esc_url( wc_placeholder_img_src() ); ?>"
