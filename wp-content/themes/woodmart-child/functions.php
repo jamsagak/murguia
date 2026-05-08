@@ -584,6 +584,48 @@ function murguia_register_homepage_fields() {
 			],
 
 			/* ========================================================
+			   TAB: CERTIFICACIONES
+			   ======================================================== */
+			[
+				'key'       => 'field_murg_tab_cert',
+				'label'     => '🏅 Certificaciones',
+				'name'      => '',
+				'type'      => 'tab',
+				'placement' => 'top',
+			],
+			[
+				'key'         => 'field_murg_hp_cert_titulo',
+				'label'       => 'Título de sección',
+				'name'        => 'hp_cert_titulo',
+				'type'        => 'text',
+				'placeholder' => 'Certificados Internacionales',
+			],
+			[
+				'key'          => 'field_murg_hp_cert_logos',
+				'label'        => 'Logos',
+				'name'         => 'hp_cert_logos',
+				'type'         => 'repeater',
+				'button_label' => 'Añadir logo',
+				'layout'       => 'table',
+				'sub_fields'   => [
+					[
+						'key'          => 'field_murg_hp_cert_logo_img',
+						'label'        => 'Imagen',
+						'name'         => 'imagen',
+						'type'         => 'image',
+						'return_format'=> 'array',
+						'preview_size' => 'thumbnail',
+					],
+					[
+						'key'   => 'field_murg_hp_cert_logo_link',
+						'label' => 'Enlace (opcional)',
+						'name'  => 'link',
+						'type'  => 'url',
+					],
+				],
+			],
+
+			/* ========================================================
 			   TAB: CONTACTO
 			   ======================================================== */
 			[

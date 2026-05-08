@@ -451,6 +451,51 @@ $stmt_imagen    = murg_f( 'hp_stmt_imagen',     [] );
 </section>
 
 <!-- ============================================================
+     04.5 CERTIFICACIONES
+     ============================================================ -->
+<?php
+$cert_titulo = murg_f( 'hp_cert_titulo', 'Certificados Internacionales' );
+$cert_logos = [];
+if ( function_exists( 'have_rows' ) && have_rows( 'hp_cert_logos', murguia_ajuste_id() ) ) {
+	while ( have_rows( 'hp_cert_logos', murguia_ajuste_id() ) ) {
+		the_row();
+		$cert_logos[] = [
+			'imagen' => get_sub_field( 'imagen' ),
+			'link'   => get_sub_field( 'link' )
+		];
+	}
+}
+?>
+<?php if ( ! empty( $cert_logos ) || current_user_can('edit_theme_options') ) : ?>
+<section class="murg-certifications" aria-label="<?php echo esc_attr( $cert_titulo ); ?>">
+	<div class="murg-eyebrow murg-certifications__title"><?php echo esc_html( $cert_titulo ); ?></div>
+	<div class="murg-certifications__logos">
+		<?php if ( ! empty( $cert_logos ) ) : ?>
+			<?php foreach ( $cert_logos as $logo ) : ?>
+				<?php if ( ! empty( $logo['imagen']['url'] ) ) : ?>
+					<?php if ( ! empty( $logo['link'] ) ) : ?>
+						<a href="<?php echo esc_url( $logo['link'] ); ?>" target="_blank" rel="noopener noreferrer" class="murg-certifications__logo">
+					<?php else : ?>
+						<div class="murg-certifications__logo">
+					<?php endif; ?>
+					
+					<img src="<?php echo esc_url( $logo['imagen']['url'] ); ?>" alt="<?php echo esc_attr( $logo['imagen']['alt'] ?? '' ); ?>" loading="lazy">
+					
+					<?php if ( ! empty( $logo['link'] ) ) : ?>
+						</a>
+					<?php else : ?>
+						</div>
+					<?php endif; ?>
+				<?php endif; ?>
+			<?php endforeach; ?>
+		<?php else : ?>
+			<div class="murg-certifications__placeholder">[ Agrega los logos desde Ajustes Murguía > Inicio ]</div>
+		<?php endif; ?>
+	</div>
+</section>
+<?php endif; ?>
+
+<!-- ============================================================
      05 CONTACTO
      ============================================================ -->
 <?php
