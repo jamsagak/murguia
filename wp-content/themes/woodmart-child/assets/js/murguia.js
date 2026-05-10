@@ -986,9 +986,9 @@
 
 	if ( rcConfig ) {
 		var rcShapeVal  = document.getElementById( 'murg-rc-shape-val' );
-		var rcCaratVal  = document.getElementById( 'murg-rc-carat-val' );
-		var rcCaratIn   = document.getElementById( 'murg-rc-carat' );
-		var rcCaratFill = document.getElementById( 'murg-rc-carat-fill' );
+		var rcSizeVal   = document.getElementById( 'murg-rc-size-val' );
+		var rcSizeIn    = document.getElementById( 'murg-rc-size' );
+		var rcSizeFill  = document.getElementById( 'murg-rc-size-fill' );
 		var rcMetalVal  = document.getElementById( 'murg-rc-metal-val' );
 		var rcOriginVal = document.getElementById( 'murg-rc-origin-val' );
 
@@ -1012,19 +1012,19 @@
 			} );
 		} );
 
-		// Carat slider
-		function rcUpdateCarat() {
-			if ( ! rcCaratIn ) return;
-			var val  = parseFloat( rcCaratIn.value );
-			var min  = parseFloat( rcCaratIn.min );
-			var max  = parseFloat( rcCaratIn.max );
+		// Ring size slider
+		function rcUpdateSize() {
+			if ( ! rcSizeIn ) return;
+			var val  = parseFloat( rcSizeIn.value );
+			var min  = parseFloat( rcSizeIn.min );
+			var max  = parseFloat( rcSizeIn.max );
 			var pct  = ( ( val - min ) / ( max - min ) ) * 100;
-			if ( rcCaratFill ) rcCaratFill.style.width = pct + '%';
-			if ( rcCaratVal )  rcCaratVal.textContent  = val.toFixed( 2 ) + ' Ct';
+			if ( rcSizeFill ) rcSizeFill.style.width = pct + '%';
+			if ( rcSizeVal )  rcSizeVal.textContent  = val % 1 === 0 ? val.toFixed( 0 ) : val.toFixed( 1 );
 		}
-		if ( rcCaratIn ) {
-			rcCaratIn.addEventListener( 'input', rcUpdateCarat );
-			rcUpdateCarat();
+		if ( rcSizeIn ) {
+			rcSizeIn.addEventListener( 'input', rcUpdateSize );
+			rcUpdateSize();
 		}
 
 		// Metal selector

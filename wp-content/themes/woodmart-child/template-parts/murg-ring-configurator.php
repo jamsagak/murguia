@@ -46,12 +46,6 @@ foreach ( $product->get_attributes() as $attr ) {
 	}
 }
 
-// Extraer quilates del título (ej: "0.75Ct", "1.64ct", "1ct")
-$current_carat = 0.5;
-if ( preg_match( '/(\d+\.?\d*)\s*[Cc]t/i', $product->get_name(), $m ) ) {
-	$current_carat = (float) $m[1];
-}
-
 $shop_url = get_permalink( wc_get_page_id( 'shop' ) );
 
 // Formas de diamante con labels
@@ -117,27 +111,25 @@ $metals = [
 		</div>
 	</div>
 
-	<!-- QUILATES / CARAT SIZE -->
+	<!-- TALLA / RING SIZE -->
 	<div class="murg-rc-section">
 		<div class="murg-rc-section__header">
-			<span class="murg-rc-section__label">Quilates:</span>
-			<span class="murg-rc-section__value" id="murg-rc-carat-val">
-				<?php echo number_format( $current_carat, 2 ); ?> Ct
-			</span>
+			<span class="murg-rc-section__label">Talla:</span>
+			<span class="murg-rc-section__value" id="murg-rc-size-val">6</span>
 		</div>
 		<div class="murg-rc-carat">
-			<span class="murg-rc-carat__min">0.10 Ct</span>
+			<span class="murg-rc-carat__min">4</span>
 			<div class="murg-rc-carat__track">
-				<div class="murg-rc-carat__fill" id="murg-rc-carat-fill"></div>
+				<div class="murg-rc-carat__fill" id="murg-rc-size-fill"></div>
 				<input type="range"
 				       class="murg-rc-carat__input"
-				       id="murg-rc-carat"
-				       min="0.10"
-				       max="5"
-				       step="0.01"
-				       value="<?php echo esc_attr( $current_carat ); ?>">
+				       id="murg-rc-size"
+				       min="4"
+				       max="13"
+				       step="0.5"
+				       value="6">
 			</div>
-			<span class="murg-rc-carat__max">5 Ct</span>
+			<span class="murg-rc-carat__max">13</span>
 		</div>
 	</div>
 
