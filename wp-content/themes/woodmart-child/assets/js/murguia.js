@@ -1051,6 +1051,31 @@
 				}
 			} );
 		} );
+
+		// Size guide modal
+		var sgModal = document.getElementById( 'murg-sizeguide-modal' );
+		var sgOpen  = document.getElementById( 'murg-rc-sizeguide-open' );
+		var sgClose = document.getElementById( 'murg-sizeguide-close' );
+		var sgOverlay = document.getElementById( 'murg-sizeguide-close-overlay' );
+
+		function sgShow() {
+			if ( sgModal ) {
+				sgModal.classList.add( 'is-open' );
+				document.body.style.overflow = 'hidden';
+			}
+		}
+		function sgHide() {
+			if ( sgModal ) {
+				sgModal.classList.remove( 'is-open' );
+				document.body.style.overflow = '';
+			}
+		}
+		if ( sgOpen )    sgOpen.addEventListener( 'click', sgShow );
+		if ( sgClose )   sgClose.addEventListener( 'click', sgHide );
+		if ( sgOverlay ) sgOverlay.addEventListener( 'click', sgHide );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && sgModal && sgModal.classList.contains( 'is-open' ) ) sgHide();
+		} );
 	}
 
 } )();

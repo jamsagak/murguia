@@ -4030,6 +4030,162 @@ body.murg-search-open { overflow: hidden; }
   .murg-rc-metal { width: 36px; height: 36px; }
 }
 
+/* ---- Size Guide Link ---- */
+.murg-rc-sizeguide-link {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--murg-gold);
+  letter-spacing: 0.02em;
+  padding: 0;
+  margin-left: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: opacity 0.2s;
+}
+.murg-rc-sizeguide-link:hover { opacity: 0.7; }
+.murg-rc-sizeguide-link svg { flex-shrink: 0; stroke: var(--murg-gold); }
+
+/* ---- Size Guide Modal ---- */
+.murg-sizeguide-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.murg-sizeguide-modal.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+.murg-sizeguide-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(4px);
+}
+.murg-sizeguide-modal__panel {
+  position: relative;
+  background: var(--murg-cream);
+  border-radius: 8px;
+  padding: 40px;
+  max-width: 520px;
+  width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.25);
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+}
+.murg-sizeguide-modal.is-open .murg-sizeguide-modal__panel {
+  transform: translateY(0);
+}
+.murg-sizeguide-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.murg-sizeguide-modal__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--murg-ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+.murg-sizeguide-modal__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--murg-muted);
+  padding: 4px;
+  transition: color 0.2s;
+}
+.murg-sizeguide-modal__close:hover { color: var(--murg-ink); }
+.murg-sizeguide-modal__desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--murg-muted);
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+/* Grid de tallas */
+.murg-sizeguide-modal__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px 12px;
+  margin-bottom: 24px;
+}
+.murg-sizeguide-modal__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.murg-sizeguide-modal__ring {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 1.5px solid var(--murg-ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s, background 0.2s;
+}
+.murg-sizeguide-modal__ring:hover {
+  border-color: var(--murg-gold);
+  background: rgba(201, 168, 76, 0.06);
+}
+.murg-sizeguide-modal__num {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--murg-ink);
+}
+.murg-sizeguide-modal__mm {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: var(--murg-muted);
+  letter-spacing: 0.02em;
+}
+
+/* Tip de WhatsApp */
+.murg-sizeguide-modal__tip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(201, 168, 76, 0.08);
+  border-radius: 6px;
+  border-left: 3px solid var(--murg-gold);
+}
+.murg-sizeguide-modal__tip svg { flex-shrink: 0; }
+.murg-sizeguide-modal__tip span {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: var(--murg-ink);
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .murg-sizeguide-modal__panel { padding: 28px 20px; }
+  .murg-sizeguide-modal__grid { grid-template-columns: repeat(3, 1fr); gap: 14px 10px; }
+  .murg-sizeguide-modal__ring { width: 46px; height: 46px; }
+  .murg-sizeguide-modal__title { font-size: 24px; }
+}
+
 /* ============================================================
    CARRITO — Página de carrito WooCommerce
    ============================================================ */
