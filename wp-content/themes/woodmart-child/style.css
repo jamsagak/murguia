@@ -4073,9 +4073,11 @@ body.murg-search-open { overflow: hidden; }
   inset: 0;
   background: rgba(10, 10, 10, 0.6);
   backdrop-filter: blur(4px);
+  z-index: 10000;
 }
 .murg-sizeguide-modal__panel {
   position: relative;
+  z-index: 10001;
   background: var(--murg-cream);
   border-radius: 8px;
   padding: 40px;
