@@ -4055,3 +4055,721 @@ body.murg-search-open { overflow: hidden; }
   .murg-rc-shape { width: 42px; height: 42px; }
   .murg-rc-metal { width: 36px; height: 36px; }
 }
+
+/* ============================================================
+   HOME v2 — Nuevas secciones (Figma: Joyeria Murquia)
+   Design tokens nuevos:
+     --murg-forest:  #192e1d   (verde oscuro institucional)
+     --murg-parchment: #f4eee5 (crema cálida del Figma)
+   Tipografías nuevas: Vesper Libre, Tiro Bangla
+   ============================================================ */
+:root {
+  --murg-forest:    #192e1d;
+  --murg-parchment: #f4eee5;
+}
+
+/* ============================================================
+   BOTÓN SHARED — .murg-btn--dark
+   ============================================================ */
+.murg-btn {
+  display: inline-block;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 14px 36px;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+.murg-btn--dark {
+  background: var(--murg-forest);
+  color: var(--murg-parchment);
+  border-color: var(--murg-forest);
+}
+.murg-btn--dark:hover {
+  background: transparent;
+  color: var(--murg-forest);
+  border-color: var(--murg-forest);
+}
+
+/* ============================================================
+   02 DIAMONDS — Anillos de Compromiso
+   ============================================================ */
+.murg-diamonds {
+  background: var(--murg-parchment);
+  padding: 80px 0 60px;
+  text-align: center;
+}
+.murg-diamonds__header {
+  max-width: 640px;
+  margin: 0 auto 48px;
+  padding: 0 24px;
+}
+.murg-diamonds__title {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  color: var(--murg-forest);
+  margin-bottom: 10px;
+}
+.murg-diamonds__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+}
+
+.murg-diamonds__showcase {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto 48px;
+  padding: 0 40px;
+}
+.murg-diamonds__bg-img {
+  width: 100%;
+  max-height: 480px;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px;
+}
+
+.murg-diamonds__shapes-row {
+  display: flex;
+  justify-content: center;
+  gap: clamp(12px, 2.5vw, 40px);
+  padding: 24px 0 0;
+}
+.murg-diamonds__shapes-row--bottom {
+  padding-top: 16px;
+}
+.murg-diamonds__shape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--murg-forest);
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: opacity 0.2s;
+}
+.murg-diamonds__shape:hover { opacity: 0.65; }
+.murg-diamonds__shape img {
+  width: clamp(40px, 5vw, 72px);
+  height: auto;
+  display: block;
+}
+
+.murg-diamonds__cta-wrap {
+  text-align: center;
+  padding-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .murg-diamonds { padding: 60px 0 48px; }
+  .murg-diamonds__shapes-row { gap: 8px; flex-wrap: wrap; max-width: 360px; margin: 0 auto; }
+  .murg-diamonds__shape img { width: 36px; }
+  .murg-diamonds__shape { font-size: 9px; }
+  .murg-diamonds__bg-img { max-height: 280px; }
+  .murg-diamonds__showcase { padding: 0 16px; }
+}
+@media (max-width: 480px) {
+  .murg-diamonds__title { font-size: 26px; }
+  .murg-diamonds__shapes-row { gap: 6px; }
+  .murg-diamonds__shape img { width: 30px; }
+}
+
+/* ============================================================
+   03 NOVIOS — imagen izquierda + contenido derecha
+   ============================================================ */
+.murg-novios {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 560px;
+  background: var(--murg-cream);
+}
+.murg-novios__img-wrap {
+  overflow: hidden;
+}
+.murg-novios__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.murg-novios__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 6vw, 96px) clamp(32px, 5vw, 80px);
+  gap: 28px;
+}
+.murg-novios__title {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 4.5vw, 72px);
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--murg-forest);
+  line-height: 1.05;
+}
+.murg-novios__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+  line-height: 1.7;
+}
+.murg-novios__logos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: center;
+  margin-top: 8px;
+}
+.murg-novios__logos img {
+  height: 32px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(1) opacity(0.6);
+  transition: filter 0.2s;
+}
+.murg-novios__logos img:hover { filter: grayscale(0) opacity(1); }
+
+@media (max-width: 900px) {
+  .murg-novios { grid-template-columns: 1fr; min-height: auto; }
+  .murg-novios__img-wrap { height: 360px; }
+  .murg-novios__content { padding: 48px 32px; }
+}
+@media (max-width: 480px) {
+  .murg-novios__img-wrap { height: 260px; }
+  .murg-novios__content { padding: 40px 20px; gap: 20px; }
+  .murg-novios__title { font-size: 36px; }
+}
+
+/* ============================================================
+   04 PIEZAS QUE DESTACAN — tabs + grilla 3 productos
+   ============================================================ */
+.murg-piezas {
+  background: var(--murg-cream);
+  padding: 80px 0 72px;
+}
+.murg-piezas__tabs {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  border-bottom: 1px solid var(--murg-line);
+  margin-bottom: 48px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.murg-piezas__tabs::-webkit-scrollbar { display: none; }
+.murg-piezas__tab {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--murg-muted);
+  padding: 16px 28px;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+}
+.murg-piezas__tab:hover { color: var(--murg-forest); }
+.murg-piezas__tab.is-active {
+  color: var(--murg-forest);
+  border-bottom-color: var(--murg-forest);
+}
+.murg-piezas__header {
+  text-align: center;
+  margin-bottom: 48px;
+  padding: 0 24px;
+}
+.murg-piezas__title {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 3.5vw, 48px);
+  font-weight: 400;
+  color: var(--murg-forest);
+  letter-spacing: 0.03em;
+}
+.murg-piezas__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.murg-pieza { background: #fff; }
+.murg-pieza__link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.murg-pieza__link:hover .murg-pieza__img img {
+  transform: scale(1.03);
+}
+.murg-pieza__img {
+  overflow: hidden;
+  aspect-ratio: 3/4;
+  background: var(--murg-cream-deep);
+}
+.murg-pieza__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease;
+}
+.murg-pieza__meta {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.murg-pieza__name {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--murg-ink);
+}
+.murg-pieza__price {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: 16px;
+  color: var(--murg-forest);
+}
+.murg-pieza__price span { font-size: inherit; }
+.murg-piezas__cta-wrap {
+  text-align: center;
+  margin-top: 56px;
+}
+
+@media (max-width: 900px) {
+  .murg-piezas__grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 600px) {
+  .murg-piezas { padding: 60px 0 56px; }
+  .murg-piezas__grid { grid-template-columns: 1fr; max-width: 420px; }
+  .murg-piezas__tab { padding: 14px 18px; font-size: 10px; }
+}
+
+/* ============================================================
+   05 PRODUCTO DESTACADO — editorial split
+   ============================================================ */
+.murg-featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 600px;
+  background: var(--murg-parchment);
+}
+.murg-featured__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(40px, 5vw, 96px) clamp(32px, 5vw, 80px);
+  gap: 24px;
+}
+.murg-featured__title {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 3.5vw, 52px);
+  font-weight: 400;
+  color: var(--murg-forest);
+  line-height: 1.15;
+  letter-spacing: 0.02em;
+}
+.murg-featured__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+  line-height: 1.8;
+  max-width: 360px;
+}
+.murg-featured__img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.murg-featured__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.murg-featured__dots {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
+  gap: 7px;
+}
+.murg-featured__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.4);
+  display: block;
+  transition: background 0.2s;
+}
+.murg-featured__dot.is-active { background: #fff; }
+
+@media (max-width: 900px) {
+  .murg-featured { grid-template-columns: 1fr; min-height: auto; }
+  .murg-featured__img-wrap { height: 380px; order: -1; }
+  .murg-featured__text { padding: 48px 32px; }
+}
+@media (max-width: 480px) {
+  .murg-featured__img-wrap { height: 280px; }
+  .murg-featured__title { font-size: 28px; }
+}
+
+/* ============================================================
+   06 STATEMENT v2 — fondo oscuro, imagen + blockquote
+   ============================================================ */
+.murg-statement-v2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 600px;
+  background: var(--murg-forest);
+  color: var(--murg-parchment);
+}
+.murg-statement-v2__img-wrap {
+  position: relative;
+  overflow: hidden;
+}
+.murg-statement-v2__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 0.85;
+}
+.murg-statement-v2__dots {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  display: flex;
+  gap: 7px;
+}
+.murg-statement-v2__dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(244, 238, 229, 0.35);
+  display: block;
+}
+.murg-statement-v2__dot.is-active { background: var(--murg-parchment); }
+
+.murg-statement-v2__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(48px, 7vw, 112px) clamp(40px, 6vw, 96px);
+  gap: 32px;
+}
+.murg-statement-v2__quote {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: clamp(20px, 2.2vw, 30px);
+  font-weight: 400;
+  font-style: italic;
+  line-height: 1.55;
+  color: var(--murg-parchment);
+  border: none;
+  padding: 0;
+  margin: 0;
+  quotes: none;
+}
+.murg-statement-v2__attr {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(244, 238, 229, 0.6);
+}
+
+@media (max-width: 900px) {
+  .murg-statement-v2 { grid-template-columns: 1fr; min-height: auto; }
+  .murg-statement-v2__img-wrap { height: 360px; }
+  .murg-statement-v2__content { padding: 56px 32px; }
+}
+@media (max-width: 480px) {
+  .murg-statement-v2__img-wrap { height: 260px; }
+  .murg-statement-v2__quote { font-size: 20px; }
+  .murg-statement-v2__content { padding: 48px 20px; gap: 24px; }
+}
+
+/* ============================================================
+   07 COLECCIÓN QANTU — header + 3 imágenes
+   ============================================================ */
+.murg-qantu {
+  background: var(--murg-cream);
+  padding: 80px 0 0;
+}
+.murg-qantu__header {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 56px;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+.murg-qantu__title {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 3.5vw, 52px);
+  font-weight: 400;
+  color: var(--murg-forest);
+  letter-spacing: 0.04em;
+}
+.murg-qantu__sub {
+  font-family: 'Tiro Bangla', 'Cormorant Garamond', serif;
+  font-size: clamp(16px, 1.6vw, 22px);
+  font-style: italic;
+  color: var(--murg-muted);
+  letter-spacing: 0.02em;
+}
+.murg-qantu__gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3px;
+}
+.murg-qantu__img {
+  overflow: hidden;
+  aspect-ratio: 3/4;
+}
+.murg-qantu__img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease;
+}
+.murg-qantu__img:hover img { transform: scale(1.04); }
+
+@media (max-width: 768px) {
+  .murg-qantu { padding: 64px 0 0; }
+  .murg-qantu__gallery { gap: 2px; }
+}
+@media (max-width: 600px) {
+  .murg-qantu__gallery { grid-template-columns: 1fr; }
+  .murg-qantu__img { aspect-ratio: 4/3; }
+  .murg-qantu__header { margin-bottom: 40px; }
+}
+
+/* ============================================================
+   08 AGENDA TU VISITA — imagen + info boutique
+   ============================================================ */
+.murg-visita {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 620px;
+  background: var(--murg-parchment);
+}
+.murg-visita__img-wrap {
+  overflow: hidden;
+}
+.murg-visita__img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.murg-visita__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(48px, 6vw, 96px) clamp(40px, 5.5vw, 88px);
+  gap: 28px;
+}
+.murg-visita__title {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 3.5vw, 52px);
+  font-weight: 400;
+  color: var(--murg-forest);
+  letter-spacing: 0.03em;
+  line-height: 1.1;
+}
+.murg-visita__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--murg-muted);
+  line-height: 1.65;
+}
+.murg-visita__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+.murg-visita__row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 0;
+}
+.murg-visita__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--murg-forest);
+  font-weight: 500;
+}
+.murg-visita__value {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--murg-muted);
+  line-height: 1.5;
+}
+.murg-visita__divider {
+  height: 1px;
+  background: var(--murg-line);
+}
+.murg-visita__btns {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 900px) {
+  .murg-visita { grid-template-columns: 1fr; min-height: auto; }
+  .murg-visita__img-wrap { height: 380px; }
+  .murg-visita__content { padding: 52px 32px; }
+}
+@media (max-width: 480px) {
+  .murg-visita__img-wrap { height: 260px; }
+  .murg-visita__content { padding: 40px 20px; gap: 20px; }
+  .murg-visita__title { font-size: 28px; }
+  .murg-visita__btns { flex-direction: column; }
+  .murg-visita__btns .murg-btn { text-align: center; }
+}
+
+/* ============================================================
+   09 MARCAS — fila de logos
+   ============================================================ */
+.murg-brands {
+  background: var(--murg-cream);
+  padding: 56px 0;
+  overflow: hidden;
+}
+.murg-brands__track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.murg-brands__logo {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+.murg-brands__logo img {
+  height: 36px;
+  width: auto;
+  object-fit: contain;
+  filter: grayscale(1) opacity(0.55);
+  transition: filter 0.25s;
+}
+.murg-brands__logo:hover img { filter: grayscale(0) opacity(1); }
+
+@media (max-width: 768px) {
+  .murg-brands__track { gap: 32px; padding: 0 24px; }
+  .murg-brands__logo img { height: 28px; }
+}
+
+/* ============================================================
+   10 NEWSLETTER — CTA fondo oscuro
+   ============================================================ */
+.murg-newsletter {
+  background: var(--murg-forest);
+  padding: 96px 24px;
+  text-align: center;
+}
+.murg-newsletter__inner {
+  max-width: 560px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+}
+.murg-newsletter__title {
+  font-family: 'Vesper Libre', 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 4vw, 52px);
+  font-weight: 400;
+  color: var(--murg-parchment);
+  letter-spacing: 0.03em;
+  line-height: 1.15;
+}
+.murg-newsletter__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: rgba(244, 238, 229, 0.7);
+  line-height: 1.65;
+}
+.murg-newsletter__form { width: 100%; }
+.murg-newsletter__field {
+  display: flex;
+  gap: 0;
+  width: 100%;
+  border: 1px solid rgba(244, 238, 229, 0.3);
+}
+.murg-newsletter__field input[type="email"] {
+  flex: 1;
+  padding: 16px 20px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--murg-parchment);
+  -webkit-text-fill-color: var(--murg-parchment);
+}
+.murg-newsletter__field input[type="email"]::placeholder {
+  color: rgba(244, 238, 229, 0.45);
+  -webkit-text-fill-color: rgba(244, 238, 229, 0.45);
+}
+.murg-newsletter__field input[type="email"]:focus {
+  background: rgba(244, 238, 229, 0.06);
+}
+.murg-newsletter__field button {
+  padding: 16px 28px;
+  background: var(--murg-parchment);
+  color: var(--murg-forest);
+  border: none;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: background 0.25s, color 0.25s;
+}
+.murg-newsletter__field button:hover {
+  background: var(--murg-gold);
+  color: var(--murg-forest);
+}
+
+@media (max-width: 600px) {
+  .murg-newsletter { padding: 72px 20px; }
+  .murg-newsletter__field { flex-direction: column; border: none; gap: 8px; }
+  .murg-newsletter__field input[type="email"] {
+    border: 1px solid rgba(244, 238, 229, 0.3);
+    padding: 15px 18px;
+  }
+  .murg-newsletter__field button { padding: 15px 24px; width: 100%; }
+}
