@@ -296,6 +296,9 @@ function murg_prod_trust_icon( $name ) {
 		<div class="murg-product-detail__desc"><?php echo wp_kses_post( $product_desc ); ?></div>
 		<?php endif; ?>
 
+		<!-- Ring Configurator (solo anillos de compromiso) -->
+		<?php get_template_part( 'template-parts/murg-ring-configurator' ); ?>
+
 		<!-- Specs table -->
 		<?php
 		// Construir la lista completa (atributos + SKU + disponibilidad)
