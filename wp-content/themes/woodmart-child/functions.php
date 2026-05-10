@@ -206,6 +206,7 @@ function murguia_ensure_ajustes_defaults() {
 		[ 'post_title' => 'Tienda',            'post_name' => 'tienda' ],
 		[ 'post_title' => 'Producto',          'post_name' => 'producto' ],
 		[ 'post_title' => 'Contacto',          'post_name' => 'contacto' ],
+		[ 'post_title' => 'Alta Joyería',      'post_name' => 'alta-joyeria-page' ],
 	];
 
 	foreach ( $secciones as $data ) {
@@ -290,14 +291,138 @@ function murguia_register_homepage_fields() {
 				'name'  => 'hp_hero_cta_link',
 				'type'  => 'url',
 			],
-			[
-				'key'          => 'field_murg_hp_hero_imagen',
-				'label'        => 'Imagen de fondo',
-				'name'         => 'hp_hero_imagen',
-				'type'         => 'image',
-				'return_format'=> 'array',
-				'preview_size' => 'medium',
-				'instructions' => 'Recomendado: 1920×1080px o mayor. Se muestra oscurecida con vignette.',
+						[
+				'key'          => 'field_murg_hp_hero_slides',
+				'label'        => 'Slides del Hero',
+				'name'         => 'hp_hero_slides',
+				'type'         => 'repeater',
+				'min'          => 1,
+				'max'          => 8,
+				'layout'       => 'block',
+				'button_label' => '+ Agregar slide',
+				'instructions' => 'Cada slide puede ser una imagen o un video. Los campos de texto son opcionales: si los dejas vacíos se usará el texto por defecto definido arriba.',
+				'sub_fields'   => [
+
+					// ── FONDO ────────────────────────────────────────────
+					[
+						'key'     => 'field_murg_hp_slide_sep_fondo',
+						'label'   => '🖼️  FONDO DEL SLIDE',
+						'name'    => '',
+						'type'    => 'message',
+						'message' => 'Elige si este slide muestra una <strong>imagen fija</strong> o un <strong>video</strong> de YouTube, Vimeo o enlace directo MP4.',
+					],
+					[
+						'key'          => 'field_murg_hp_hero_slide_tipo',
+						'label'        => 'Tipo de fondo',
+						'name'         => 'tipo',
+						'type'         => 'radio',
+						'choices'      => [ 'imagen' => '🖼️ Imagen', 'video' => '🎬 Video (YouTube / Vimeo / MP4)' ],
+						'default_value'=> 'imagen',
+						'layout'       => 'horizontal',
+					],
+					[
+						'key'          => 'field_murg_hp_hero_slide_img',
+						'label'        => 'Imagen de fondo',
+						'name'         => 'imagen',
+						'type'         => 'image',
+						'return_format'=> 'array',
+						'preview_size' => 'medium',
+						'instructions' => 'Recomendado: 1920×1080 px o mayor, proporción 16:9. Solo visible si el tipo es Imagen.',
+					],
+					[
+						'key'         => 'field_murg_hp_hero_slide_video_url',
+						'label'       => 'URL del video',
+						'name'        => 'video_url',
+						'type'        => 'url',
+						'placeholder' => 'https://www.youtube.com/watch?v=XXXXXXXXXXX',
+						'instructions'=> "Pega el enlace del video. Formatos aceptados:\n• YouTube:  youtube.com/watch?v=...  ó  youtu.be/...\n• Vimeo:    vimeo.com/123456\n• MP4 directo: https://ejemplo.com/video.mp4\n\nSolo visible si el tipo es Video. Se reproduce sin sonido.",
+					],
+
+					// ── RECORTE DE VIDEO ─────────────────────────────────
+					[
+						'key'     => 'field_murg_hp_slide_sep_timing',
+						'label'   => '⏱️  RECORTE DEL VIDEO',
+						'name'    => '',
+						'type'    => 'message',
+						'message' => '<em>Solo aplica cuando el tipo es Video.</em><br>Define el fragmento que quieres mostrar. Si dejas los campos vacíos el video empieza desde el inicio y pasa al siguiente slide a los <strong>15 segundos</strong>.',
+					],
+					[
+						'key'         => 'field_murg_hp_hero_slide_video_inicio',
+						'label'       => 'Segundo de inicio',
+						'name'        => 'video_inicio',
+						'type'        => 'number',
+						'default_value'=> 0,
+						'min'         => 0,
+						'step'        => 1,
+						'append'      => 'seg',
+						'instructions'=> 'El video arranca desde este segundo. Ej: 5 → empieza en 0:05. Dejar en 0 para empezar desde el principio.',
+					],
+					[
+						'key'         => 'field_murg_hp_hero_slide_video_fin',
+						'label'       => 'Segundo de fin',
+						'name'        => 'video_fin',
+						'type'        => 'number',
+						'default_value'=> '',
+						'min'         => 1,
+						'step'        => 1,
+						'append'      => 'seg',
+						'instructions'=> 'Al llegar a este segundo el slider pasa al siguiente slide. Vacío = 15 segundos.',
+					],
+
+					// ── TEXTO ─────────────────────────────────────────────
+					[
+						'key'     => 'field_murg_hp_slide_sep_texto',
+						'label'   => '🅰️  TEXTO (opcional)',
+						'name'    => '',
+						'type'    => 'message',
+						'message' => 'Todos los campos de esta sección son <strong>opcionales</strong>. Si los dejas vacíos se usará el texto por defecto del Hero.',
+					],
+					[
+						'key'         => 'field_murg_hp_hero_slide_eyebrow',
+						'label'       => 'Eyebrow',
+						'name'        => 'eyebrow',
+						'type'        => 'text',
+						'placeholder' => 'Ej: Colección Primavera 2026',
+					],
+					[
+						'key'         => 'field_murg_hp_hero_slide_titulo',
+						'label'       => 'Título',
+						'name'        => 'titulo',
+						'type'        => 'text',
+						'placeholder' => 'Ej: Joyería <em>Murguía</em>',
+						'instructions'=> 'Usa <em>palabra</em> para itálica. Ej: Joyería <em>Murguía</em>',
+					],
+					[
+						'key'         => 'field_murg_hp_hero_slide_subtitulo',
+						'label'       => 'Subtítulo',
+						'name'        => 'subtitulo',
+						'type'        => 'text',
+						'placeholder' => 'Ej: Orfebrería peruana desde 1962',
+					],
+
+					// ── BOTÓN ─────────────────────────────────────────────
+					[
+						'key'     => 'field_murg_hp_slide_sep_cta',
+						'label'   => '🔗  BOTÓN DE ACCIÓN (opcional)',
+						'name'    => '',
+						'type'    => 'message',
+						'message' => 'Si dejas estos campos vacíos se usará el botón por defecto del Hero.',
+					],
+					[
+						'key'         => 'field_murg_hp_hero_slide_cta_texto',
+						'label'       => 'Texto del botón',
+						'name'        => 'cta_texto',
+						'type'        => 'text',
+						'placeholder' => 'Ej: Ver Colección',
+					],
+					[
+						'key'         => 'field_murg_hp_hero_slide_cta_link',
+						'label'       => 'Destino del botón',
+						'name'        => 'cta_link',
+						'type'        => 'url',
+						'placeholder' => 'https://...',
+					],
+				],
 			],
 
 			/* ========================================================
@@ -327,38 +452,23 @@ function murguia_register_homepage_fields() {
 			],
 			[
 				'key'          => 'field_murg_hp_col_items',
-				'label'        => 'Colecciones',
+				'label'        => 'Colecciones (grid Ti Sento)',
 				'name'         => 'hp_col_items',
 				'type'         => 'repeater',
-				'min'          => 1,
+				'min'          => 2,
 				'max'          => 6,
 				'layout'       => 'block',
 				'button_label' => 'Añadir Colección',
+				'instructions' => 'Los 2 primeros = bloques grandes (cuadrados). Los items 3-6 = bloques portrait en fila de 4. Marca "Solo imagen decorativa" en bloques que sean solo foto (ej: modelo).',
 				'sub_fields'   => [
 					[
-						'key'   => 'field_murg_col_nombre',
-						'label' => 'Nombre',
-						'name'  => 'nombre',
-						'type'  => 'text',
-					],
-					[
-						'key'   => 'field_murg_col_descripcion',
-						'label' => 'Descripción corta',
-						'name'  => 'descripcion',
-						'type'  => 'text',
-					],
-					[
-						'key'         => 'field_murg_col_numero',
-						'label'       => 'Número (ej: N° I)',
-						'name'        => 'numero',
-						'type'        => 'text',
-						'placeholder' => 'N° I',
-					],
-					[
-						'key'   => 'field_murg_col_link',
-						'label' => 'Link',
-						'name'  => 'link',
-						'type'  => 'url',
+						'key'           => 'field_murg_col_decorativo',
+						'label'         => 'Solo imagen decorativa',
+						'name'          => 'es_decorativo',
+						'type'          => 'true_false',
+						'default_value' => 0,
+						'ui'            => 1,
+						'instructions'  => 'Si está activo, este bloque solo muestra la imagen. No muestra texto ni link.',
 					],
 					[
 						'key'          => 'field_murg_col_imagen',
@@ -366,10 +476,42 @@ function murguia_register_homepage_fields() {
 						'name'         => 'imagen',
 						'type'         => 'image',
 						'return_format'=> 'array',
-						'preview_size' => 'thumbnail',
+						'preview_size' => 'medium',
+						'instructions' => 'Fotos lifestyle/ambientadas. Bloques grandes: mín. 1200×1200px. Bloques chicos: mín. 600×850px.',
+					],
+					[
+						'key'         => 'field_murg_col_nombre',
+						'label'       => 'Nombre',
+						'name'        => 'nombre',
+						'type'        => 'text',
+						'instructions'=> 'Nombre de la categoría. Se muestra como título.',
+						'conditional_logic' => [
+							[ [ 'field' => 'field_murg_col_decorativo', 'operator' => '!=', 'value' => '1' ] ],
+						],
+					],
+					[
+						'key'         => 'field_murg_col_link',
+						'label'       => 'Link',
+						'name'        => 'link',
+						'type'        => 'url',
+						'placeholder' => 'https://murguia.jamweb.space/shop/?product_cat=...',
+						'conditional_logic' => [
+							[ [ 'field' => 'field_murg_col_decorativo', 'operator' => '!=', 'value' => '1' ] ],
+						],
+					],
+					[
+						'key'         => 'field_murg_col_cta_texto',
+						'label'       => 'Texto del CTA',
+						'name'        => 'cta_texto',
+						'type'        => 'text',
+						'placeholder' => 'Ver Colección',
+						'instructions'=> 'Texto del enlace underline. Ej: "Ver Colección", "Ver Aretes".',
+						'conditional_logic' => [
+							[ [ 'field' => 'field_murg_col_decorativo', 'operator' => '!=', 'value' => '1' ] ],
+						],
 					],
 				],
-			],
+						],
 
 			/* ========================================================
 			   TAB: BESTSELLERS
@@ -457,6 +599,48 @@ function murguia_register_homepage_fields() {
 				'return_format'=> 'array',
 				'preview_size' => 'thumbnail',
 				'instructions' => 'Si se deja vacío, se usa el fondo negro por defecto.',
+			],
+
+			/* ========================================================
+			   TAB: CERTIFICACIONES
+			   ======================================================== */
+			[
+				'key'       => 'field_murg_tab_cert',
+				'label'     => '🏅 Certificaciones',
+				'name'      => '',
+				'type'      => 'tab',
+				'placement' => 'top',
+			],
+			[
+				'key'         => 'field_murg_hp_cert_titulo',
+				'label'       => 'Título de sección',
+				'name'        => 'hp_cert_titulo',
+				'type'        => 'text',
+				'placeholder' => 'Certificados Internacionales',
+			],
+			[
+				'key'          => 'field_murg_hp_cert_logos',
+				'label'        => 'Logos',
+				'name'         => 'hp_cert_logos',
+				'type'         => 'repeater',
+				'button_label' => 'Añadir logo',
+				'layout'       => 'table',
+				'sub_fields'   => [
+					[
+						'key'          => 'field_murg_hp_cert_logo_img',
+						'label'        => 'Imagen',
+						'name'         => 'imagen',
+						'type'         => 'image',
+						'return_format'=> 'array',
+						'preview_size' => 'thumbnail',
+					],
+					[
+						'key'   => 'field_murg_hp_cert_logo_link',
+						'label' => 'Enlace (opcional)',
+						'name'  => 'link',
+						'type'  => 'url',
+					],
+				],
 			],
 
 			/* ========================================================
@@ -780,6 +964,115 @@ function murguia_register_product_fields() {
 				'type'        => 'text',
 				'placeholder' => '¿Preguntas? Solicite una cita personal →',
 			],
+
+			/* ---- TAB: Confianza (trust bar) ---- */
+			[
+				'key'       => 'field_murg_prod_tab_trust',
+				'label'     => '✦ Barra de confianza',
+				'name'      => '',
+				'type'      => 'tab',
+				'placement' => 'top',
+			],
+			[
+				'key'         => 'field_murg_prod_trust_1',
+				'label'       => 'Ítem 1 (envío)',
+				'name'        => 'prod_trust_1',
+				'type'        => 'text',
+				'placeholder' => 'Envío seguro a todo el Perú',
+				'instructions'=> 'Vacío = ocultar. El icono es un camión de entrega.',
+			],
+			[
+				'key'         => 'field_murg_prod_trust_2',
+				'label'       => 'Ítem 2 (estuche)',
+				'name'        => 'prod_trust_2',
+				'type'        => 'text',
+				'placeholder' => 'Estuche de presentación incluido',
+				'instructions'=> 'Vacío = ocultar. Icono de caja.',
+			],
+			[
+				'key'         => 'field_murg_prod_trust_3',
+				'label'       => 'Ítem 3 (garantía)',
+				'name'        => 'prod_trust_3',
+				'type'        => 'text',
+				'placeholder' => 'Garantía de por vida',
+				'instructions'=> 'Vacío = ocultar. Icono de escudo.',
+			],
+			[
+				'key'         => 'field_murg_prod_trust_4',
+				'label'       => 'Ítem 4 (certificado)',
+				'name'        => 'prod_trust_4',
+				'type'        => 'text',
+				'placeholder' => 'Certificado de autenticidad',
+				'instructions'=> 'Vacío = ocultar. Icono de medalla.',
+			],
+
+			/* ---- TAB: Pestañas de información ---- */
+			[
+				'key'       => 'field_murg_prod_tab_tabs',
+				'label'     => '📑 Pestañas de información',
+				'name'      => '',
+				'type'      => 'tab',
+				'placement' => 'top',
+			],
+			[
+				'key'          => 'field_murg_prod_tab_desc_label',
+				'label'        => 'Etiqueta "Descripción"',
+				'name'         => 'prod_tab_desc_label',
+				'type'         => 'text',
+				'placeholder'  => 'Descripción',
+				'instructions' => 'Nombre visible de la pestaña de descripción (el contenido sale de la descripción larga de WooCommerce).',
+			],
+			[
+				'key'          => 'field_murg_prod_tab_detalles_label',
+				'label'        => 'Etiqueta "Detalles técnicos"',
+				'name'         => 'prod_tab_detalles_label',
+				'type'         => 'text',
+				'placeholder'  => 'Detalles técnicos',
+			],
+			[
+				'key'          => 'field_murg_prod_detalles_texto',
+				'label'        => 'Contenido "Detalles técnicos"',
+				'name'         => 'prod_detalles_texto',
+				'type'         => 'textarea',
+				'rows'         => 6,
+				'placeholder'  => "Oro de 18 quilates. Pureza certificada.\nPiedras naturales engastadas a mano.\nDiseño exclusivo de la Casa Murguía.",
+				'instructions' => 'Si se deja vacío, la pestaña no aparece. Se muestran saltos de línea automáticamente.',
+			],
+			[
+				'key'          => 'field_murg_prod_tab_cuidado_label',
+				'label'        => 'Etiqueta "Cuidado de la pieza"',
+				'name'         => 'prod_tab_cuidado_label',
+				'type'         => 'text',
+				'placeholder'  => 'Cuidado de la pieza',
+			],
+			[
+				'key'          => 'field_murg_prod_cuidado_texto',
+				'label'        => 'Contenido "Cuidado de la pieza"',
+				'name'         => 'prod_cuidado_texto',
+				'type'         => 'textarea',
+				'rows'         => 6,
+				'placeholder'  => "Limpie con un paño suave y seco.\nEvite el contacto con perfumes y químicos.\nGuarde en su estuche para evitar rayones.",
+				'instructions' => 'Si se deja vacío, la pestaña no aparece.',
+			],
+
+			/* ---- TAB: Relacionados ---- */
+			[
+				'key'       => 'field_murg_prod_tab_related',
+				'label'     => '↔ Productos relacionados',
+				'name'      => '',
+				'type'      => 'tab',
+				'placement' => 'top',
+			],
+			[
+				'key'          => 'field_murg_prod_related_cantidad',
+				'label'        => 'Cantidad de productos relacionados',
+				'name'         => 'prod_related_cantidad',
+				'type'         => 'number',
+				'default_value'=> 6,
+				'min'          => 3,
+				'max'          => 12,
+				'instructions' => 'Entre 3 y 12. Si son más de 3, aparecen controles de slider.',
+			],
 		],
 	] );
 }
@@ -912,6 +1205,81 @@ function murguia_register_contact_fields() {
 }
 
 /* ------------------------------------------------------------------
+   ACF FIELD GROUP — Campos por producto (se editan desde el propio
+   producto, no desde Ajustes de Diseño). Incluye guía de tallas
+   personalizada por pieza.
+   ------------------------------------------------------------------ */
+add_action( 'acf/init', 'murguia_register_per_product_fields' );
+
+function murguia_register_per_product_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+		return;
+	}
+
+	acf_add_local_field_group( [
+		'key'             => 'group_murg_per_product',
+		'title'           => 'Murguía — Datos de la pieza',
+		'location'        => [
+			[ [ 'param' => 'post_type', 'operator' => '==', 'value' => 'product' ] ],
+		],
+		'menu_order'      => 10,
+		'position'        => 'side',
+		'style'           => 'default',
+		'label_placement' => 'top',
+		'fields'          => [
+			[
+				'key'           => 'field_murg_guia_tallas',
+				'label'         => 'Guía de tallas',
+				'name'          => 'murg_guia_tallas',
+				'type'          => 'image',
+				'return_format' => 'array',
+				'preview_size'  => 'medium',
+				'library'       => 'all',
+				'mime_types'    => 'jpg,jpeg,png,webp,svg',
+				'instructions'  => 'Imagen que muestra la guía de tallas para esta pieza. Si se carga, aparece un botón "Guía de tallas" sobre el "Añadir al carrito" que la abre en un modal. Si se deja vacío, el botón no aparece. Formato recomendado: PNG/WebP, 1200x1200px máx, <300KB.',
+			],
+			[
+				'key'           => 'field_murg_guia_tallas_titulo',
+				'label'         => 'Título del modal de tallas',
+				'name'          => 'murg_guia_tallas_titulo',
+				'type'          => 'text',
+				'placeholder'   => 'Guía de tallas',
+				'instructions'  => 'Opcional. Título que aparece sobre la imagen en el modal.',
+			],
+		],
+	] );
+}
+
+/* ------------------------------------------------------------------
+   TEMPLATE OVERRIDE — Forzar nuestro archive-product.php sobre WoodMart
+   ------------------------------------------------------------------ */
+add_filter( 'template_include', 'murguia_override_shop_template', 99999 );
+
+function murguia_override_shop_template( $template ) {
+	$is_product_search = is_search() && isset( $_GET['post_type'] ) && 'product' === $_GET['post_type'];
+
+	if ( is_shop() || is_product_taxonomy() || $is_product_search ) {
+		$custom = get_stylesheet_directory() . '/archive-product.php';
+		if ( file_exists( $custom ) ) {
+			return $custom;
+		}
+	}
+
+	// Página con plantilla "Alta Joyería"
+	if ( is_page() && 'page-alta-joyeria.php' === get_page_template_slug() ) {
+		$custom = get_stylesheet_directory() . '/page-alta-joyeria.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+	// Fallback por slug
+	if ( is_page( 'alta-joyeria' ) ) {
+		$custom = get_stylesheet_directory() . '/page-alta-joyeria.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+
+	return $template;
+}
+
+/* ------------------------------------------------------------------
    ADMIN MENU — CPTs del plugin woodmart-core bajo xts_dashboard
    ------------------------------------------------------------------ */
 add_action( 'admin_menu', 'murguia_reorganize_woodmart_cpts', 999 );
@@ -932,4 +1300,361 @@ function murguia_reorganize_woodmart_cpts() {
 		remove_menu_page( $menu_slug );
 		add_submenu_page( 'xts_dashboard', $label, $label, 'manage_options', $menu_slug );
 	}
+}
+
+/* ==================================================================
+   FRONTEND CLEANUP — Quitar assets y clases de WoodMart/Elementor que
+   no usamos en nuestros templates custom (.murg-*).
+   Mantenemos woodmart-style (parent) + jQuery + WC essentials para
+   que header/footer administrativos, carrito y login sigan funcionando.
+   ================================================================== */
+
+/**
+ * Detecta si el request actual usa uno de nuestros templates custom.
+ * Se usa para aplicar cleanup solo en esas páginas.
+ */
+function murguia_is_custom_template() {
+	// Home custom
+	if ( is_front_page() ) {
+		return true;
+	}
+	// Mi Cuenta (WooCommerce)
+	if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+		return true;
+	}
+	// Shop y archivos de productos
+	if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {
+		return true;
+	}
+	// Producto individual (tenemos single-product.php)
+	if ( function_exists( 'is_product' ) && is_product() ) {
+		return true;
+	}
+	// Página con plantilla "Contacto" (page-contact.php)
+	if ( is_page() && 'page-contact.php' === get_page_template_slug() ) {
+		return true;
+	}
+	// Página de contacto por slug, si no se asignó la plantilla
+	if ( is_page( 'contacto' ) ) {
+		return true;
+	}
+	// Página con plantilla "Alta Joyería"
+	if ( is_page() && 'page-alta-joyeria.php' === get_page_template_slug() ) {
+		return true;
+	}
+	if ( is_page( 'alta-joyeria' ) ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Dequeue selectivo de CSS/JS innecesarios en páginas custom.
+ * Priority 9999 para correr después de todos los enqueue.
+ */
+function murguia_dequeue_unused_assets() {
+	if ( ! murguia_is_custom_template() ) {
+		return;
+	}
+
+	// Handles de estilos de WoodMart que no usamos (shop widgets, Elementor, etc).
+	$styles_to_drop = [
+		// Shop widgets / layouts de WoodMart — tenemos nuestro propio shop layout
+		'wd-widget-active-filters',
+		'wd-woo-shop-predefined',
+		'wd-shop-title-categories',
+		'wd-woo-categories-loop-nav-mobile-accordion',
+		'wd-woo-shop-el-products-per-page',
+		'wd-woo-shop-page-title',
+		'wd-woo-mod-shop-loop-head',
+		'wd-woo-shop-el-order-by',
+		'wd-woo-shop-el-products-view',
+		'wd-woo-mod-shop-attributes',
+		'wd-woo-opt-coming-soon',
+
+		// Header / toolbar de WoodMart — tenemos nuestro nav custom
+		'wd-bottom-toolbar',
+		'wd-mod-sticky-sidebar-opener',
+		'wd-mod-tools',
+		'wd-header-elements-base',
+		'wd-shop-off-canvas-sidebar',
+		'wd-header-cart-side',
+		'wd-header-cart',
+		'wd-header-my-account',
+
+		// Integración con Elementor (no usamos Elementor en templates custom)
+		'wd-helpers-wpb-elem',
+		'wd-elementor-base',
+
+		// WordPress blocks (Gutenberg) — no hay bloques en nuestros templates PHP
+		'wd-wp-blocks',
+
+		// Star ratings — nuestros templates no muestran valoraciones
+		'wd-mod-star-rating',
+
+		// Fuentes de WoodMart (Lora, Marcellus SC) — usamos Cormorant+Inter
+		'xts-google-fonts',
+
+		// CSS dinámicos generados por WoodMart Options (header builder + theme settings)
+		'xts-style-header_562797',
+		'xts-style-theme_settings_default',
+
+		// WooCommerce blocks (Gutenberg) — no los usamos en estos templates
+		'wc-blocks-style',
+		'wc-blocks-vendors-style',
+		'wp-block-library',
+
+		// Elementor — nuestras páginas custom no usan Elementor
+		'elementor-frontend',
+		'elementor-icons',
+		'elementor-gallery',
+		'elementor-wp-admin-bar',
+		'elementor-post-8',
+		'elementor-post-2830',
+		'base-desktop', // Elementor kit base (wp-content/uploads/elementor/css/base-desktop.css)
+	];
+
+	foreach ( $styles_to_drop as $handle ) {
+		wp_dequeue_style( $handle );
+		wp_deregister_style( $handle );
+	}
+
+	// Dequeue por prefijo dinámico (xts-style-header_*, xts-style-theme_settings_*, elementor-post-*).
+	// Estos handles cambian de nombre según config/post, así que los buscamos.
+	global $wp_styles;
+	if ( isset( $wp_styles ) && is_object( $wp_styles ) ) {
+		foreach ( (array) $wp_styles->registered as $handle => $_ ) {
+			if ( 0 === strpos( $handle, 'xts-style-header_' )
+				|| 0 === strpos( $handle, 'xts-style-theme_settings_' )
+				|| preg_match( '/^elementor-post-\d+$/', $handle ) ) {
+				wp_dequeue_style( $handle );
+				wp_deregister_style( $handle );
+			}
+		}
+	}
+
+	// Scripts innecesarios
+	$scripts_to_drop = [
+		'elementor-frontend',
+		'elementor-frontend-modules',
+		'elementor-webpack-runtime',
+		'elementor-pro-frontend',
+		'elementor-waypoints',
+	];
+	foreach ( $scripts_to_drop as $handle ) {
+		wp_dequeue_script( $handle );
+		wp_deregister_script( $handle );
+	}
+}
+add_action( 'wp_enqueue_scripts', 'murguia_dequeue_unused_assets', 99999 );
+
+/**
+ * Filtrar body_class para quitar ruido de WoodMart/Elementor en nuestros
+ * templates custom. Preserva woocommerce* porque WC depende de ellas para
+ * AJAX de carrito. También preserva logged-in/admin-bar para coherencia.
+ */
+function murguia_filter_body_class( $classes ) {
+	if ( ! murguia_is_custom_template() ) {
+		return $classes;
+	}
+
+	$drop_prefixes = [ 'elementor-', 'wd-', 'xts-', 'woodmart-ajax-shop-', 'categories-accordion-', 'sticky-toolbar-' ];
+	$drop_exact    = [
+		'woodmart-archive-shop',
+		'wrapper-full-width',
+		'woocommerce-no-js', // WC añade 'woocommerce-js' si hay JS, no nos sirve la negación
+		'theme-woodmart',    // nos quedamos con 'wp-theme-woodmart' que es la canónica de WP
+	];
+
+	$classes = array_filter( $classes, function ( $class ) use ( $drop_prefixes, $drop_exact ) {
+		if ( in_array( $class, $drop_exact, true ) ) {
+			return false;
+		}
+		foreach ( $drop_prefixes as $prefix ) {
+			if ( 0 === strpos( $class, $prefix ) ) {
+				return false;
+			}
+		}
+		return true;
+	} );
+
+	return array_values( $classes );
+}
+add_filter( 'body_class', 'murguia_filter_body_class', 9999 );
+
+/**
+ * Remover hooks de wp_body_open y wp_footer de WoodMart en nuestras
+ * páginas custom (skip-links, sticky toolbar móvil con Shop/Cart/Account,
+ * toolbar bottom, etc). Mantenemos wp_body_open() y wp_footer() en los
+ * templates para compatibilidad con otros plugins (admin bar, WC scripts).
+ */
+function murguia_clean_wp_hooks() {
+	if ( ! murguia_is_custom_template() ) {
+		return;
+	}
+
+	// Toolbar sticky inferior móvil (wd-toolbar con Shop/Cart/My account)
+	remove_action( 'wp_footer', 'woodmart_sticky_toolbar_template' );
+
+	// Acciones propias del header de WoodMart
+	remove_all_actions( 'woodmart_before_header_action' );
+	remove_all_actions( 'woodmart_after_header_action' );
+
+	// Barrido de callbacks de WoodMart/XTS enganchados a wp_body_open y wp_footer.
+	// Preservamos los de WP core y WooCommerce para que AJAX de carrito, admin
+	// bar y demás plugins sigan funcionando.
+	global $wp_filter;
+	$hooks_to_clean = [ 'wp_body_open', 'wp_footer' ];
+
+	foreach ( $hooks_to_clean as $hook_name ) {
+		if ( ! isset( $wp_filter[ $hook_name ] ) ) {
+			continue;
+		}
+		foreach ( $wp_filter[ $hook_name ]->callbacks as $priority => $callbacks ) {
+			foreach ( $callbacks as $id => $cb ) {
+				// Conservar core de WP (admin bar, scripts, pingbacks, etc.)
+				if ( false !== strpos( $id, 'wp_admin_bar_render' )
+				  || false !== strpos( $id, 'wp_print_footer_scripts' )
+				  || false !== strpos( $id, '_wp_footer_scripts' )
+				  || false !== strpos( $id, 'wp_maybe_inline_styles' )
+				  || false !== strpos( $id, 'wp_auth_check_html' ) ) {
+					continue;
+				}
+
+				$target = $cb['function'];
+
+				// Callback tipo [objeto, método]
+				if ( is_array( $target ) && is_object( $target[0] ) ) {
+					$class = get_class( $target[0] );
+					if ( false !== stripos( $class, 'woodmart' ) || false !== stripos( $class, 'XTS' ) ) {
+						remove_action( $hook_name, $target, $priority );
+					}
+				// Callback tipo "nombre_funcion"
+				} elseif ( is_string( $target )
+					&& ( 0 === stripos( $target, 'woodmart_' )
+					  || 0 === stripos( $target, 'xts_' )
+					  || 0 === stripos( $target, 'wd_' ) ) ) {
+					remove_action( $hook_name, $target, $priority );
+				}
+			}
+		}
+	}
+}
+add_action( 'wp', 'murguia_clean_wp_hooks', 99 );
+
+/* ------------------------------------------------------------------
+   ACF FIELD GROUP — Alta Joyería (página de experiencia)
+   Prefijo: aj_   |   Ajuste slug: alta-joyeria-page
+   ------------------------------------------------------------------ */
+add_action( 'acf/init', 'murguia_register_altajoyeria_fields' );
+
+function murguia_register_altajoyeria_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+	$id = murguia_ajuste_id( 'alta-joyeria-page' );
+	if ( ! $id ) return;
+
+	acf_add_local_field_group( [
+		'key'      => 'group_murg_altajoyeria',
+		'title'    => 'Alta Joyería — Contenido',
+		'location' => [ [ [ 'param' => 'post', 'operator' => '==', 'value' => $id ] ] ],
+		'menu_order' => 0,
+		'fields'   => [
+
+			// ── Tab Hero ────────────────────────────────────────
+			[
+				'key'   => 'field_aj_tab_hero',
+				'label' => '🎬 Hero',
+				'name'  => '',
+				'type'  => 'tab',
+			],
+			[
+				'key'          => 'field_aj_hero_imagen',
+				'label'        => 'Imagen de fondo',
+				'name'         => 'aj_hero_imagen',
+				'type'         => 'image',
+				'return_format' => 'array',
+				'instructions' => 'Formato: WebP/JPG. Mínimo 1920×1080px. Peso máx. 400KB.',
+			],
+			[
+				'key'          => 'field_aj_hero_eyebrow',
+				'label'        => 'Eyebrow',
+				'name'         => 'aj_hero_eyebrow',
+				'type'         => 'text',
+				'default_value' => 'Desde 1962',
+			],
+			[
+				'key'          => 'field_aj_hero_titulo',
+				'label'        => 'Título (acepta <em>)',
+				'name'         => 'aj_hero_titulo',
+				'type'         => 'text',
+				'default_value' => 'Alta <em>Joyería</em>',
+			],
+			[
+				'key'          => 'field_aj_hero_sub',
+				'label'        => 'Subtítulo',
+				'name'         => 'aj_hero_sub',
+				'type'         => 'textarea',
+				'rows'         => 3,
+			],
+
+			// ── Tab Intro ────────────────────────────────────────
+			[
+				'key'   => 'field_aj_tab_intro',
+				'label' => '📖 Intro editorial',
+				'name'  => '',
+				'type'  => 'tab',
+			],
+			[
+				'key'          => 'field_aj_intro_titulo',
+				'label'        => 'Título intro (acepta <em>)',
+				'name'         => 'aj_intro_titulo',
+				'type'         => 'text',
+				'default_value' => 'Cada piedra, <em>una historia</em>',
+			],
+			[
+				'key'          => 'field_aj_intro_texto',
+				'label'        => 'Texto editorial',
+				'name'         => 'aj_intro_texto',
+				'type'         => 'textarea',
+				'rows'         => 5,
+			],
+			[
+				'key'          => 'field_aj_intro_imagen',
+				'label'        => 'Imagen del atelier',
+				'name'         => 'aj_intro_imagen',
+				'type'         => 'image',
+				'return_format' => 'array',
+				'instructions' => 'Formato: WebP/JPG. Ratio 3:4 (vertical). Mínimo 800×1067px.',
+			],
+
+			// ── Tab Contacto ─────────────────────────────────────
+			[
+				'key'   => 'field_aj_tab_contacto',
+				'label' => '📞 Contacto',
+				'name'  => '',
+				'type'  => 'tab',
+			],
+			[
+				'key'          => 'field_aj_whatsapp',
+				'label'        => 'Número WhatsApp',
+				'name'         => 'aj_whatsapp',
+				'type'         => 'text',
+				'instructions' => 'Solo números con código de país. Ej: 51934413662',
+				'placeholder'  => '51934413662',
+			],
+			[
+				'key'          => 'field_aj_email',
+				'label'        => 'Email de consultas',
+				'name'         => 'aj_email',
+				'type'         => 'email',
+			],
+			[
+				'key'          => 'field_aj_cita_url',
+				'label'        => 'URL de agendar cita',
+				'name'         => 'aj_cita_url',
+				'type'         => 'url',
+				'default_value' => '/contact-us/',
+			],
+		],
+	] );
 }

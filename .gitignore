@@ -7,6 +7,7 @@ wp-config.php
 local-xdebuginfo.php
 .env
 *.log
+*.bak
 
 # WordPress core (se instala via composer/zip, no se versiona)
 /wp-admin/
