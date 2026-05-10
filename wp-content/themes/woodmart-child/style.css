@@ -4029,3 +4029,134 @@ body.murg-search-open { overflow: hidden; }
   .murg-rc-shape { padding: 4px; }
   .murg-rc-metal { width: 36px; height: 36px; }
 }
+
+/* ============================================================
+   CARRITO — Página de carrito WooCommerce
+   ============================================================ */
+.murg-cart {
+  min-height: 60vh;
+  padding: 120px 0 80px;
+  background: var(--murg-cream);
+}
+.murg-cart__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+/* Títulos dentro del carrito */
+.murg-cart-page .cart_totals h2,
+.murg-cart-page .woocommerce-cart-form table th {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  color: var(--murg-ink);
+  letter-spacing: 0.01em;
+}
+/* Botones del carrito con estilo Murguía */
+.murg-cart-page .woocommerce .button,
+.murg-cart-page .woocommerce a.button,
+.murg-cart-page .checkout-button {
+  background: var(--murg-ink) !important;
+  color: var(--murg-cream) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  padding: 14px 32px !important;
+  transition: opacity 0.2s !important;
+}
+.murg-cart-page .woocommerce .button:hover,
+.murg-cart-page .checkout-button:hover {
+  opacity: 0.85 !important;
+}
+/* Quitar doble header/footer de WoodMart si quedara algún residuo */
+.murg-cart-page .whb-header,
+.murg-cart-page .whb-sticky-header,
+.murg-cart-page .wd-prefooter,
+.murg-cart-page .footer-container,
+.murg-cart-page .copyrights-wrapper {
+  display: none !important;
+}
+/* Links de producto en carrito */
+.murg-cart-page .woocommerce-cart-form .product-name a {
+  color: var(--murg-ink);
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  text-decoration: none;
+}
+.murg-cart-page .woocommerce-cart-form .product-name a:hover {
+  color: var(--murg-gold);
+}
+/* Tabla del carrito */
+.murg-cart-page .woocommerce table.cart {
+  border-color: var(--murg-line);
+}
+.murg-cart-page .woocommerce table.cart td {
+  border-bottom: 1px solid var(--murg-line);
+}
+/* Carrito vacío */
+.murg-cart-page .cart-empty {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  color: var(--murg-ink);
+  text-align: center;
+}
+.murg-cart-page .return-to-shop a {
+  background: var(--murg-ink) !important;
+  color: var(--murg-cream) !important;
+}
+@media (max-width: 768px) {
+  .murg-cart { padding: 100px 0 60px; }
+  .murg-cart__container { padding: 0 16px; }
+}
+
+/* ============================================================
+   CHECKOUT — Página de checkout WooCommerce
+   ============================================================ */
+.murg-checkout {
+  min-height: 60vh;
+  padding: 120px 0 80px;
+  background: var(--murg-cream);
+}
+.murg-checkout__container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.murg-checkout-page .woocommerce .button,
+.murg-checkout-page #place_order {
+  background: var(--murg-ink) !important;
+  color: var(--murg-cream) !important;
+  border: none !important;
+  border-radius: 0 !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.12em !important;
+  text-transform: uppercase !important;
+  padding: 14px 32px !important;
+  transition: opacity 0.2s !important;
+}
+.murg-checkout-page .woocommerce .button:hover,
+.murg-checkout-page #place_order:hover {
+  opacity: 0.85 !important;
+}
+.murg-checkout-page .whb-header,
+.murg-checkout-page .whb-sticky-header,
+.murg-checkout-page .wd-prefooter,
+.murg-checkout-page .footer-container,
+.murg-checkout-page .copyrights-wrapper {
+  display: none !important;
+}
+.murg-checkout-page h3,
+.murg-checkout-page .woocommerce-checkout h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  color: var(--murg-ink);
+}
+@media (max-width: 768px) {
+  .murg-checkout { padding: 100px 0 60px; }
+  .murg-checkout__container { padding: 0 16px; }
+}
