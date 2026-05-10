@@ -2304,6 +2304,17 @@
   min-height: 52px;
 }
 .murg-product-detail__atc .single_add_to_cart_button:hover { background: var(--murg-gold); }
+.murg-product-detail__atc .single_add_to_cart_button.murg-atc--added {
+  background: #2e7d32 !important;
+  color: #fff !important;
+  pointer-events: none;
+  transition: background 0.3s;
+}
+.murg-product-detail__atc .single_add_to_cart_button.murg-atc--loading {
+  background: var(--murg-muted) !important;
+  color: var(--murg-cream) !important;
+  pointer-events: none;
+}
 
 /* -------- Trust bar -------- */
 .murg-trust {
