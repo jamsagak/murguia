@@ -297,8 +297,13 @@ function murg_prod_trust_icon( $name ) {
 		<?php endif; ?>
 
 		<!-- Ring Configurator (solo anillos de compromiso) -->
-		<?php get_template_part( 'template-parts/murg-ring-configurator' ); ?>
+		<?php
+		get_template_part( 'template-parts/murg-ring-configurator' );
+		$cat_slugs_check = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'slugs' ] );
+		$is_engagement   = is_array( $cat_slugs_check ) && in_array( 'anillos-de-compromiso', $cat_slugs_check, true );
+		?>
 
+		<?php if ( ! $is_engagement ) : ?>
 		<!-- Specs table -->
 		<?php
 		// Construir la lista completa (atributos + SKU + disponibilidad)
@@ -326,6 +331,7 @@ function murg_prod_trust_icon( $name ) {
 			<?php endforeach; ?>
 		</dl>
 		<?php endif; ?>
+		<?php endif; /* ! $is_engagement */ ?>
 
 		<div class="murg-product-detail__divider" aria-hidden="true"></div>
 

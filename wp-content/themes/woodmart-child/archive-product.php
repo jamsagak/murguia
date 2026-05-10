@@ -95,21 +95,62 @@ $categories = get_terms( [
 ] );
 $categories = is_wp_error( $categories ) ? [] : $categories;
 
-// Solo categorías principales de joyería (excluir marcas, ruido de importación, etc.)
-$main_cat_slugs = [
-	'anillos', 'anillos-de-compromiso', 'aretes', 'collares', 'collares-y-dijes',
-	'pulseras', 'dijes', 'relojes', 'alta-joyeria', 'permanent-jewelry',
-	'hogar', 'bebes', 'bautizo-y-confirmacion',
+// Categorías con orden manual: joyas primero, hogar/bautizo/bebés al final.
+$ordered_cat_slugs = [
+	'anillos-de-compromiso',
+	'anillos',
+	'aretes',
+	'collares-y-dijes',
+	'collares',
+	'dijes',
+	'pulseras',
+	'alta-joyeria',
+	'permanent-jewelry',
+	'relojes',
+	// --- No-joyería (al final) ---
+	'hogar',
+	'bautizo-y-confirmacion',
+	'bebes',
 ];
-$categories = array_filter( $categories, function( $c ) use ( $main_cat_slugs ) {
-	return in_array( $c->slug, $main_cat_slugs, true );
+$cat_index = array_flip( $ordered_cat_slugs );
+$categories = array_filter( $categories, function( $c ) use ( $cat_index ) {
+	return isset( $cat_index[ $c->slug ] );
+} );
+usort( $categories, function( $a, $b ) use ( $cat_index ) {
+	return ( $cat_index[ $a->slug ] ?? 999 ) - ( $cat_index[ $b->slug ] ?? 999 );
 } );
 
-$piedras = get_terms( [ 'taxonomy' => 'pa_piedra', 'hide_empty' => true, 'orderby' => 'count', 'order' => 'DESC' ] );
-$piedras = is_wp_error( $piedras ) ? [] : $piedras;
+// Categorías que NO son joyería (no muestran filtro de piedra ni metal).
+$non_jewelry_cats = [ 'hogar', 'bautizo-y-confirmacion', 'bebes', 'relojes' ];
+$show_jewelry_filters = ! $f_cat || ! in_array( $f_cat, $non_jewelry_cats, true );
 
-$colores_oro = get_terms( [ 'taxonomy' => 'pa_color-de-oro', 'hide_empty' => true, 'orderby' => 'count', 'order' => 'DESC' ] );
-$colores_oro = is_wp_error( $colores_oro ) ? [] : $colores_oro;
+// Conteos contextuales: contar atributos solo dentro de los productos filtrados.
+// Así al seleccionar una categoría, los conteos de piedra/metal reflejan esa selección.
+function murg_contextual_terms( $taxonomy, $product_ids ) {
+	if ( empty( $product_ids ) ) return [];
+	global $wpdb;
+	$ids_str = implode( ',', array_map( 'intval', $product_ids ) );
+	$rows = $wpdb->get_results( $wpdb->prepare(
+		"SELECT t.term_id, t.name, t.slug, COUNT(DISTINCT tr.object_id) AS count
+		 FROM {$wpdb->term_relationships} tr
+		 JOIN {$wpdb->term_taxonomy} tt ON tr.term_taxonomy_id = tt.term_taxonomy_id
+		 JOIN {$wpdb->terms} t ON tt.term_id = t.term_id
+		 WHERE tt.taxonomy = %s
+		   AND tr.object_id IN ({$ids_str})
+		 GROUP BY t.term_id
+		 ORDER BY count DESC",
+		$taxonomy
+	) );
+	// Convertir a objetos con ->count int para compatibilidad con el template
+	foreach ( $rows as &$r ) {
+		$r->count    = (int) $r->count;
+		$r->term_id  = (int) $r->term_id;
+	}
+	return $rows ?: [];
+}
+
+$piedras     = murg_contextual_terms( 'pa_piedra', $all_ids );
+$colores_oro = murg_contextual_terms( 'pa_color-de-oro', $all_ids );
 
 // Price range for slider
 $price_min = 0;
@@ -197,27 +238,6 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 		</div>
 		<?php endif; ?>
 
-		<!-- Categoría -->
-		<?php if ( ! empty( $categories ) ) : ?>
-		<details class="murg-filter-group" open>
-			<summary class="murg-filter-group__title">Categoría</summary>
-			<div class="murg-filter-group__body">
-				<?php foreach ( $categories as $cat ) : ?>
-				<label class="murg-filter-check">
-					<input type="checkbox"
-					       name="cat"
-					       value="<?php echo esc_attr( $cat->slug ); ?>"
-					       <?php checked( $f_cat, $cat->slug ); ?>
-					       onchange="murgApplyFilter('cat', this.checked ? this.value : '')">
-					<span class="murg-filter-check__box"></span>
-					<span class="murg-filter-check__label"><?php echo esc_html( $cat->name ); ?></span>
-					<span class="murg-filter-check__count"><?php echo (int) $cat->count; ?></span>
-				</label>
-				<?php endforeach; ?>
-			</div>
-		</details>
-		<?php endif; ?>
-
 		<!-- Precio -->
 		<div class="murg-filter-group murg-filter-group--static">
 			<h3 class="murg-filter-group__title">Precio</h3>
@@ -242,8 +262,29 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			</div>
 		</div>
 
-		<!-- Piedra -->
-		<?php if ( ! empty( $piedras ) ) : ?>
+		<!-- Categoría -->
+		<?php if ( ! empty( $categories ) ) : ?>
+		<details class="murg-filter-group" open>
+			<summary class="murg-filter-group__title">Categoría</summary>
+			<div class="murg-filter-group__body">
+				<?php foreach ( $categories as $cat ) : ?>
+				<label class="murg-filter-check">
+					<input type="checkbox"
+					       name="cat"
+					       value="<?php echo esc_attr( $cat->slug ); ?>"
+					       <?php checked( $f_cat, $cat->slug ); ?>
+					       onchange="murgApplyFilter('cat', this.checked ? this.value : '')">
+					<span class="murg-filter-check__box"></span>
+					<span class="murg-filter-check__label"><?php echo esc_html( $cat->name ); ?></span>
+					<span class="murg-filter-check__count"><?php echo (int) $cat->count; ?></span>
+				</label>
+				<?php endforeach; ?>
+			</div>
+		</details>
+		<?php endif; ?>
+
+		<!-- Piedra (solo si la categoría es joyería o no hay categoría) -->
+		<?php if ( ! empty( $piedras ) && $show_jewelry_filters ) : ?>
 		<details class="murg-filter-group" <?php echo $f_piedra ? 'open' : ''; ?>>
 			<summary class="murg-filter-group__title">Piedra</summary>
 			<div class="murg-filter-group__body murg-filter-group__body--scroll">
@@ -263,8 +304,8 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 		</details>
 		<?php endif; ?>
 
-		<!-- Color de Oro -->
-		<?php if ( ! empty( $colores_oro ) ) : ?>
+		<!-- Color de Oro (solo si la categoría es joyería) -->
+		<?php if ( ! empty( $colores_oro ) && $show_jewelry_filters ) : ?>
 		<details class="murg-filter-group" <?php echo $f_color ? 'open' : ''; ?>>
 			<summary class="murg-filter-group__title">Metal</summary>
 			<div class="murg-filter-group__body">
