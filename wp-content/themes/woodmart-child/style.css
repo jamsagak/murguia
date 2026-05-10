@@ -2070,6 +2070,42 @@
   max-width: 1440px;
   margin: 0 auto;
 }
+/* WooCommerce notices (añadido al carrito, errores) */
+.murg-product-detail .woocommerce-message,
+.murg-product-detail .woocommerce-info,
+.murg-product-detail .woocommerce-error {
+  grid-column: 1 / -1;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  padding: 14px 20px;
+  margin: 0 0 16px;
+  border-radius: 4px;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.murg-product-detail .woocommerce-message {
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid var(--murg-gold);
+  color: var(--murg-ink);
+}
+.murg-product-detail .woocommerce-message a {
+  color: var(--murg-gold);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.murg-product-detail .woocommerce-error {
+  background: rgba(180, 40, 40, 0.08);
+  border: 1px solid #b42828;
+  color: #7a1a1a;
+}
+.murg-product-detail .woocommerce-info {
+  background: rgba(10, 10, 10, 0.04);
+  border: 1px solid var(--murg-line);
+  color: var(--murg-ink);
+}
 
 /* -------- Gallery (thumbs izquierda, main derecha) -------- */
 .murg-pdgallery {

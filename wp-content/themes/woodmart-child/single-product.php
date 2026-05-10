@@ -213,6 +213,8 @@ function murg_prod_trust_icon( $name ) {
      ============================================================ -->
 <main class="murg-product-detail" id="main" itemscope itemtype="https://schema.org/Product">
 
+	<?php wc_print_notices(); ?>
+
 	<!-- ==== GALERÍA ==== -->
 	<div class="murg-product-detail__gallery">
 		<div class="murg-pdgallery <?php echo count( $all_img_ids ) <= 1 ? 'murg-pdgallery--single' : ''; ?>" data-total="<?php echo (int) count( $all_img_ids ); ?>">
