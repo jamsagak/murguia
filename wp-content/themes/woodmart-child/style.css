@@ -6692,9 +6692,15 @@ body.murg-search-open { overflow: hidden; }
   margin: 0 auto clamp(30px, 3.47vw, 60px);
 }
 
-.murg-ac-ring-tabs a {
+.murg-ac-ring-tabs button {
+  appearance: none;
+  background: transparent;
   border-bottom: 2px solid transparent;
+  border-left: 0;
+  border-right: 0;
+  border-top: 0;
   color: #000;
+  cursor: pointer;
   font-family: 'Vesper Libre', Georgia, serif;
   font-size: clamp(16px, 1.1vw, 19px);
   font-weight: 700;
@@ -6703,9 +6709,14 @@ body.murg-search-open { overflow: hidden; }
   text-decoration: none;
 }
 
-.murg-ac-ring-tabs a:hover,
-.murg-ac-ring-tabs a.is-active {
+.murg-ac-ring-tabs button:hover,
+.murg-ac-ring-tabs button.is-active {
   border-color: currentColor;
+}
+
+.murg-ac-ring-tabs button:focus-visible {
+  outline: 1px solid currentColor;
+  outline-offset: 4px;
 }
 
 .murg-ac-ring-showcase {
@@ -6721,6 +6732,10 @@ body.murg-search-open { overflow: hidden; }
   display: block;
   text-align: center;
   text-decoration: none;
+}
+
+.murg-ac-ring-card.is-hidden {
+  display: none;
 }
 
 .murg-ac-ring-card__media {
@@ -6765,6 +6780,15 @@ body.murg-search-open { overflow: hidden; }
 
 .murg-ac-ring-card__price ins {
   text-decoration: none;
+}
+
+.murg-ac-ring-empty {
+  color: var(--murg-muted);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 28px auto 0;
+  max-width: 520px;
+  text-align: center;
 }
 
 .murg-ac-categories .murg-ac-center {
@@ -7137,7 +7161,7 @@ body.murg-search-open { overflow: hidden; }
     scroll-snap-type: x proximity;
   }
 
-  .murg-ac-ring-tabs a {
+  .murg-ac-ring-tabs button {
     flex: 0 0 auto;
     scroll-snap-align: start;
   }

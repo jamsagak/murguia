@@ -38,6 +38,36 @@ function murg_ac_link_title( $link, $fallback = '' ) {
 	return $fallback;
 }
 
+function murg_ac_product_ring_style( $product, $index = 0 ) {
+	$text = $product ? $product->get_name() : '';
+	if ( $product ) {
+		$cats = wp_get_post_terms( $product->get_id(), 'product_cat', [ 'fields' => 'names' ] );
+		$tags = wp_get_post_terms( $product->get_id(), 'product_tag', [ 'fields' => 'names' ] );
+		$terms = array_merge(
+			is_array( $cats ) ? $cats : [],
+			is_array( $tags ) ? $tags : []
+		);
+		$text .= ' ' . implode( ' ', array_filter( $terms ) );
+	}
+
+	$text = strtolower( remove_accents( $text ) );
+	if ( false !== strpos( $text, 'halo' ) ) {
+		return 'halo';
+	}
+	if ( false !== strpos( $text, 'pave' ) || false !== strpos( $text, 'pav' ) ) {
+		return 'pave';
+	}
+	if ( false !== strpos( $text, 'tres' ) || false !== strpos( $text, 'three' ) || false !== strpos( $text, 'trilog' ) ) {
+		return 'tres-piedras';
+	}
+	if ( false !== strpos( $text, 'medida' ) || false !== strpos( $text, 'personaliz' ) ) {
+		return 'a-medida';
+	}
+
+	$fallback_styles = [ 'solitario', 'halo', 'pave', 'tres-piedras', 'a-medida' ];
+	return $fallback_styles[ $index % count( $fallback_styles ) ];
+}
+
 $img_base   = get_stylesheet_directory_uri() . '/assets/img/home/';
 $img_upload = content_url( 'uploads/2026/05/' );
 
@@ -69,7 +99,7 @@ $shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
 
 $prod_title = murg_ac( 'ac_productos_titulo', 'Anillos de compromiso destacados' );
 $prod_sub   = murg_ac( 'ac_productos_sub', 'Seleccionamos piezas listas para acompanar una propuesta inolvidable.' );
-$prod_qty   = max( 4, min( 8, (int) murg_ac( 'ac_productos_cantidad', 4 ) ) );
+$prod_qty   = max( 9, min( 12, (int) murg_ac( 'ac_productos_cantidad', 9 ) ) );
 $prod_cta_t = murg_ac( 'ac_productos_cta_texto', 'Ver tienda completa' );
 $prod_cta_u = murg_ac( 'ac_productos_cta_url', home_url( '/shop/?product_cat=anillos-de-compromiso' ) );
 
@@ -95,11 +125,12 @@ if ( function_exists( 'wc_get_products' ) ) {
 }
 
 $ring_tabs = [
-	[ 'label' => 'Solitarios', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=solitario' ) ],
-	[ 'label' => 'Halo', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=halo' ) ],
-	[ 'label' => 'Pave', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=pave' ) ],
-	[ 'label' => 'Tres piedras', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=tres-piedras' ) ],
-	[ 'label' => 'A medida', 'url' => home_url( '/contacto/' ) ],
+	[ 'label' => 'Todos', 'filter' => 'all' ],
+	[ 'label' => 'Solitarios', 'filter' => 'solitario' ],
+	[ 'label' => 'Halo', 'filter' => 'halo' ],
+	[ 'label' => 'Pave', 'filter' => 'pave' ],
+	[ 'label' => 'Tres piedras', 'filter' => 'tres-piedras' ],
+	[ 'label' => 'A medida', 'filter' => 'a-medida' ],
 ];
 
 $style_items = murg_ac( 'ac_estilos_items', [] );
@@ -186,18 +217,19 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 				<p>Una seleccion de compromiso: piezas listas, diamantes certificados y diseno a medida.</p>
 			</header>
 
-			<nav class="murg-ac-ring-tabs" aria-label="Estilos de anillos de compromiso" data-reveal>
+			<div class="murg-ac-ring-tabs" role="tablist" aria-label="Estilos de anillos de compromiso" data-reveal>
 				<?php foreach ( $ring_tabs as $idx => $tab ) : ?>
-				<a class="<?php echo 0 === $idx ? 'is-active' : ''; ?>" href="<?php echo esc_url( $tab['url'] ); ?>"><?php echo esc_html( $tab['label'] ); ?></a>
+				<button class="<?php echo 0 === $idx ? 'is-active' : ''; ?>" type="button" role="tab" aria-selected="<?php echo 0 === $idx ? 'true' : 'false'; ?>" data-ring-filter="<?php echo esc_attr( $tab['filter'] ); ?>"><?php echo esc_html( $tab['label'] ); ?></button>
 				<?php endforeach; ?>
-			</nav>
+			</div>
 
 			<?php if ( $products ) : ?>
 			<div class="murg-ac-ring-showcase">
-				<?php foreach ( array_slice( $products, 0, 3 ) as $idx => $product ) :
+				<?php foreach ( array_slice( $products, 0, 9 ) as $idx => $product ) :
 					$img_id = $product->get_image_id();
+					$ring_style = murg_ac_product_ring_style( $product, $idx );
 				?>
-				<a class="murg-ac-ring-card" href="<?php echo esc_url( $product->get_permalink() ); ?>" data-reveal>
+				<a class="murg-ac-ring-card" href="<?php echo esc_url( $product->get_permalink() ); ?>" data-ring-style="<?php echo esc_attr( $ring_style ); ?>" data-reveal>
 					<div class="murg-ac-ring-card__media">
 						<?php
 						if ( $img_id ) {
@@ -213,6 +245,7 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 				</a>
 				<?php endforeach; ?>
 			</div>
+			<p class="murg-ac-ring-empty" hidden>No hay piezas visibles para este estilo por ahora. Prueba con Todos o agenda una asesoria para disenar una a medida.</p>
 			<?php else : ?>
 			<div class="murg-ac-empty" data-reveal>
 				<p>La seleccion de anillos de compromiso estara disponible pronto.</p>

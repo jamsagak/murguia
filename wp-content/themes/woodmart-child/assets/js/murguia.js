@@ -67,6 +67,52 @@
 	} );
 
 	/* ------------------------------------------------------------------
+	   ANILLOS LANDING — filtros internos de la vitrina
+	   ------------------------------------------------------------------ */
+	document.querySelectorAll( '.murg-ac-ring-tabs' ).forEach( function ( tabs ) {
+		var section = tabs.closest( '.murg-ac-categories' );
+		if ( ! section ) return;
+
+		var buttons = Array.prototype.slice.call( tabs.querySelectorAll( '[data-ring-filter]' ) );
+		var cards   = Array.prototype.slice.call( section.querySelectorAll( '.murg-ac-ring-card' ) );
+		var empty   = section.querySelector( '.murg-ac-ring-empty' );
+
+		if ( ! buttons.length || ! cards.length ) return;
+
+		var applyFilter = function ( filter ) {
+			var visibleCount = 0;
+
+			cards.forEach( function ( card ) {
+				var cardStyle = card.getAttribute( 'data-ring-style' ) || '';
+				var isVisible = filter === 'all' || cardStyle === filter;
+				card.classList.toggle( 'is-hidden', ! isVisible );
+				card.setAttribute( 'aria-hidden', isVisible ? 'false' : 'true' );
+				if ( isVisible ) visibleCount += 1;
+			} );
+
+			if ( empty ) {
+				empty.hidden = visibleCount > 0;
+			}
+		};
+
+		buttons.forEach( function ( button ) {
+			button.addEventListener( 'click', function () {
+				var filter = button.getAttribute( 'data-ring-filter' ) || 'all';
+
+				buttons.forEach( function ( item ) {
+					var isActive = item === button;
+					item.classList.toggle( 'is-active', isActive );
+					item.setAttribute( 'aria-selected', isActive ? 'true' : 'false' );
+				} );
+
+				applyFilter( filter );
+			} );
+		} );
+
+		applyFilter( 'all' );
+	} );
+
+	/* ------------------------------------------------------------------
 	   HOME PIEZAS — product category tabs
 	   ------------------------------------------------------------------ */
 	var piezasTabs = Array.prototype.slice.call( document.querySelectorAll( '.murg-piezas__tab' ) );
