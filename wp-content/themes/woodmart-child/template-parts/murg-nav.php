@@ -1,20 +1,22 @@
 <?php
 /**
- * Template Part: Navegación principal (Figma v2)
+ * Template Part: Navegación principal
+ * Reads brand name from homepage ajustes (global branding values).
  *
- * Estructura:
- * 1. Barra verde: "DIAMANTES CERTIFICADOS GIA · HRD · IGI"
- * 2. Fila superior: ES.EN (izq) | Logo (centro) | iconos (der)
- * 3. Fila inferior: NOVIOS · CATÁLOGO · Marcas · Alta Joyería · Hogar
+ * Estructura (espejo de joyeriamurguia.com):
+ * Izquierda: Novios | Catálogo | Marcas
+ * Centro:    Logo
+ * Derecha:   Citas | Cuenta | Buscar | Bolsa
  */
-$_nav_marca   = murguia_ajuste( 'hp_foot_marca', 'Murguía' );
-$_nav_banner  = murguia_ajuste( 'hp_nav_banner', 'DIAMANTES CERTIFICADOS GIA · HRD · IGI' );
+$_nav_marca    = murguia_ajuste( 'hp_foot_marca',   'Murguía' );
+$_nav_logo_sub = murguia_ajuste( 'hp_nav_logo_sub', 'Joyería · Lima' );
 
 $_shop_url    = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/shop/' );
 $_account_url = function_exists( 'wc_get_page_id' ) ? get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) : home_url( '/mi-cuenta/' );
 $_cart_url    = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : home_url( '/carrito/' );
 $_cart_count  = ( function_exists( 'WC' ) && WC()->cart ) ? WC()->cart->get_cart_contents_count() : 0;
 
+// Subcategorías de Catálogo para el dropdown
 $_cat_links = [
 	[ 'label' => 'Anillos de Compromiso', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso' ) ],
 	[ 'label' => 'Anillos',               'url' => home_url( '/shop/?product_cat=anillos' ) ],
@@ -25,6 +27,8 @@ $_cat_links = [
 	[ 'label' => 'Bautizo y Confirmación','url' => home_url( '/shop/?product_cat=bautizo-y-confirmacion' ) ],
 	[ 'label' => 'Permanent Jewelry',     'url' => home_url( '/shop/?product_cat=permanent-jewelry' ) ],
 ];
+
+// Subcategorías de Marcas
 $_marca_links = [
 	[ 'label' => 'Ti Sento',   'url' => home_url( '/shop/?product_cat=ti-sento' ) ],
 	[ 'label' => 'Christofle', 'url' => home_url( '/shop/?product_cat=christofle' ) ],
@@ -35,70 +39,12 @@ $_marca_links = [
 	[ 'label' => 'Victorinox', 'url' => home_url( '/shop/?product_cat=victorinox' ) ],
 	[ 'label' => 'Djula',      'url' => home_url( '/shop/?product_cat=djula' ) ],
 ];
-?>
-<nav class="murg-nav" id="murg-nav" role="navigation" aria-label="Navegación principal">
+?><nav class="murg-nav" id="murg-nav" role="navigation" aria-label="Navegación principal">
 
-	<!-- ── Barra verde superior ────────────────────────────── -->
-	<div class="murg-topbar">
-		<span class="murg-topbar__text"><?php echo esc_html( $_nav_banner ); ?></span>
-	</div>
+	<!-- ── Izquierda ─────────────────────────────────────────── -->
+	<div class="murg-nav__left">
 
-	<!-- ── Fila 1: idioma · logo · iconos ──────────────────── -->
-	<div class="murg-nav__row murg-nav__row--top">
-
-		<div class="murg-nav__lang">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="murg-nav__lang-link is-active">ES</a>
-			<span class="murg-nav__lang-sep">.</span>
-			<a href="#" class="murg-nav__lang-link">EN</a>
-		</div>
-
-		<a class="murg-nav__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-			<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia-blanco.png' ); ?>"
-			     alt="<?php echo esc_attr( $_nav_marca ); ?>"
-			     class="murg-nav__logo-img murg-nav__logo-img--blanco"
-			     loading="eager" width="180" height="auto">
-			<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia.png' ); ?>"
-			     alt="<?php echo esc_attr( $_nav_marca ); ?>"
-			     class="murg-nav__logo-img murg-nav__logo-img--oscuro"
-			     loading="eager" width="180" height="auto">
-		</a>
-
-		<div class="murg-nav__icons">
-			<button type="button"
-			        class="murg-nav__icon-btn"
-			        id="murg-search-open"
-			        aria-haspopup="dialog"
-			        aria-controls="murg-search"
-			        aria-label="Buscar">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-					<circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/>
-				</svg>
-			</button>
-
-			<a href="<?php echo esc_url( $_account_url ); ?>" class="murg-nav__icon-btn" aria-label="Mi cuenta">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-					<path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-					<circle cx="12" cy="7" r="4"/>
-				</svg>
-			</a>
-
-			<a href="<?php echo esc_url( $_cart_url ); ?>" class="murg-nav__icon-btn murg-nav__cart" aria-label="Bolsa">
-				<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-					<path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-					<line x1="3" y1="6" x2="21" y2="6"/>
-					<path d="M16 10a4 4 0 0 1-8 0"/>
-				</svg>
-				<?php if ( $_cart_count > 0 ) : ?>
-				<span class="murg-nav__cart-count"><?php echo (int) $_cart_count; ?></span>
-				<?php endif; ?>
-			</a>
-		</div>
-
-	</div>
-
-	<!-- ── Fila 2: menú principal ──────────────────────────── -->
-	<div class="murg-nav__row murg-nav__row--menu">
-
+		<!-- Novios — dropdown -->
 		<div class="murg-nav__item murg-nav__item--drop">
 			<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso' ) ); ?>"
 			   class="murg-nav__link">Novios</a>
@@ -109,8 +55,10 @@ $_marca_links = [
 			</div>
 		</div>
 
+		<!-- Catálogo — dropdown -->
 		<div class="murg-nav__item murg-nav__item--drop">
-			<a href="<?php echo esc_url( $_shop_url ); ?>" class="murg-nav__link">Catálogo</a>
+			<a href="<?php echo esc_url( $_shop_url ); ?>"
+			   class="murg-nav__link">Catálogo</a>
 			<div class="murg-nav__dropdown">
 				<?php foreach ( $_cat_links as $cl ) : ?>
 				<a href="<?php echo esc_url( $cl['url'] ); ?>"><?php echo esc_html( $cl['label'] ); ?></a>
@@ -118,8 +66,10 @@ $_marca_links = [
 			</div>
 		</div>
 
+		<!-- Marcas — dropdown -->
 		<div class="murg-nav__item murg-nav__item--drop">
-			<a href="<?php echo esc_url( home_url( '/shop/?product_cat=marcas' ) ); ?>" class="murg-nav__link">Marcas</a>
+			<a href="<?php echo esc_url( home_url( '/shop/?product_cat=marcas' ) ); ?>"
+			   class="murg-nav__link">Marcas</a>
 			<div class="murg-nav__dropdown">
 				<?php foreach ( $_marca_links as $ml ) : ?>
 				<a href="<?php echo esc_url( $ml['url'] ); ?>"><?php echo esc_html( $ml['label'] ); ?></a>
@@ -127,12 +77,33 @@ $_marca_links = [
 			</div>
 		</div>
 
-		<a href="<?php echo esc_url( home_url( '/shop/?product_cat=alta-joyeria' ) ); ?>"
-		   class="murg-nav__link murg-nav__link--highlight">Alta Joyería</a>
+	</div>
 
-		<a href="<?php echo esc_url( home_url( '/shop/?product_cat=hogar' ) ); ?>"
-		   class="murg-nav__link">Hogar</a>
+	<!-- ── Logo central ──────────────────────────────────────── -->
+	<a class="murg-nav__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+		<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia-blanco.png' ); ?>"
+		     alt="<?php echo esc_attr( $_nav_marca ); ?>"
+		     class="murg-nav__logo-img murg-nav__logo-img--blanco"
+		     loading="eager" width="120" height="auto">
+		<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia.png' ); ?>"
+		     alt="<?php echo esc_attr( $_nav_marca ); ?>"
+		     class="murg-nav__logo-img murg-nav__logo-img--oscuro"
+		     loading="eager" width="120" height="auto">
+	</a>
 
+	<!-- ── Derecha ───────────────────────────────────────────── -->
+	<div class="murg-nav__right">
+		<a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>" class="murg-nav__link">Citas</a>
+		<a href="<?php echo esc_url( $_account_url ); ?>" class="murg-nav__link">Cuenta</a>
+		<button type="button"
+		        class="murg-nav__search-trigger murg-nav__link"
+		        id="murg-search-open"
+		        aria-haspopup="dialog"
+		        aria-controls="murg-search"
+		        aria-label="Abrir buscador">Buscar</button>
+		<a href="<?php echo esc_url( $_cart_url ); ?>" class="murg-nav__link murg-nav__cart">
+			Bolsa<?php if ( $_cart_count > 0 ) : ?> <span class="murg-nav__cart-count"><?php echo (int) $_cart_count; ?></span><?php endif; ?>
+		</a>
 	</div>
 
 </nav>
