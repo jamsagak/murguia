@@ -311,13 +311,28 @@ $icon_strip_items = [
 <section class="murg-icon-strip" aria-label="Categorías destacadas">
 	<div class="murg-icon-strip__inner">
 		<?php foreach ( $icon_strip_items as $item ) :
-			$att = get_posts( [
-				'post_type'   => 'attachment',
-				'name'        => $item['slug'],
-				'numberposts' => 1,
-				'post_status' => 'inherit',
-			] );
-			$svg_url = $att ? wp_get_attachment_url( $att[0]->ID ) : '';
+			$upload_dir = wp_upload_dir();
+			$svg_path   = trailingslashit( $upload_dir['basedir'] ) . '2026/05/' . $item['slug'] . '.svg';
+			$svg_url    = trailingslashit( $upload_dir['baseurl'] ) . '2026/05/' . $item['slug'] . '.svg';
+
+			if ( ! file_exists( $svg_path ) ) {
+				$att = get_posts( [
+					'post_type'      => 'attachment',
+					'name'           => $item['slug'],
+					'post_mime_type' => 'image/svg+xml',
+					'numberposts'    => 1,
+					'post_status'    => 'inherit',
+				] );
+				if ( ! $att ) {
+					$att = get_posts( [
+						'post_type'   => 'attachment',
+						'name'        => $item['slug'],
+						'numberposts' => 1,
+						'post_status' => 'inherit',
+					] );
+				}
+				$svg_url = $att ? wp_get_attachment_url( $att[0]->ID ) : '';
+			}
 		?>
 		<a href="<?php echo esc_url( $item['url'] ); ?>" class="murg-icon-strip__item">
 			<?php if ( $svg_url ) : ?>

@@ -3,10 +3,28 @@
  * Template Part: Footer
  * Reads footer content from homepage ajustes (global branding values).
  */
-$_foot_marca     = murguia_ajuste( 'hp_foot_marca',     'Murguía' );
-$_foot_marca_sub = murguia_ajuste( 'hp_foot_marca_sub', 'Joyería · Lima · MCMLXII' );
-$_foot_tagline   = murguia_ajuste( 'hp_foot_tagline',   'Tres generaciones de orfebres dedicados al diseño y manufactura de piezas únicas en oro y plata. Hecho en Perú.' );
-$_foot_copyright = murguia_ajuste( 'hp_foot_copyright', '© MMXXVI Joyería Murguía S.A.C.' );
+$_foot_marca     = murguia_ajuste( 'hp_foot_marca',     'Murguia' );
+$_foot_marca_sub = murguia_ajuste( 'hp_foot_marca_sub', 'Joyeria · Lima · Desde 1910' );
+$_foot_tagline   = murguia_ajuste( 'hp_foot_tagline',   '<strong>Desde 1910</strong> brindando momentos especiales representados en piezas unicas que adquieren sentimiento y valor en sus vidas.' );
+$_foot_copyright = murguia_ajuste( 'hp_foot_copyright', '© Novios Murguia S.A.C.' );
+
+$_shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/shop/' );
+$_uploads = wp_upload_dir();
+$_footer_asset_url = trailingslashit( $_uploads['baseurl'] ) . '2026/05/';
+
+$_payment_logos = [
+	[ 'file' => 'visa.svg',         'alt' => 'Visa' ],
+	[ 'file' => 'master.svg',       'alt' => 'Mastercard' ],
+	[ 'file' => 'america.svg',      'alt' => 'American Express' ],
+	[ 'file' => 'diners.svg',       'alt' => 'Diners Club' ],
+	[ 'file' => 'pagoefectivo.svg', 'alt' => 'PagoEfectivo' ],
+];
+
+$_social_links = [
+	[ 'file' => 'IG.svg', 'alt' => 'Instagram', 'url' => 'https://www.instagram.com/' ],
+	[ 'file' => 'fb.svg', 'alt' => 'Facebook',  'url' => 'https://www.facebook.com/' ],
+	[ 'file' => 'yt.svg', 'alt' => 'YouTube',   'url' => home_url( '/contacto/' ) ],
+];
 
 $_foot_redes = [];
 if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajuste_id() ) ) {
@@ -21,71 +39,72 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajust
 ?>
 <footer class="murg-footer" role="contentinfo">
 	<div class="murg-footer__grid">
-		<div>
+		<div class="murg-footer__intro">
 			<div class="murg-footer__brand">
-				<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia-blanco.png' ); ?>"
+				<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia.png' ); ?>"
 					alt="<?php echo esc_attr( $_foot_marca ); ?>"
 					class="murg-footer__brand-img"
 					loading="lazy"
-					width="140"
-					height="auto">
+					width="207"
+					height="98">
 			</div>
 			<div class="murg-footer__brand-sub"><?php echo esc_html( $_foot_marca_sub ); ?></div>
 			<p class="murg-footer__tagline"><?php echo wp_kses_post( $_foot_tagline ); ?></p>
+		</div>
 
-			<?php if ( ! empty( $_foot_redes ) ) : ?>
-			<div class="murg-footer__redes" style="margin-top:24px; display:flex; gap:20px;">
-				<?php foreach ( $_foot_redes as $red ) : ?>
-					<a href="<?php echo esc_url( $red['url'] ); ?>"
-					   target="_blank" rel="noopener noreferrer"
-					   style="color:rgba(245,240,232,.7); font-size:11px; letter-spacing:.2em; text-transform:uppercase; text-decoration:none; transition:color .3s;"
-					   onmouseover="this.style.color='var(--murg-gold)'"
-					   onmouseout="this.style.color='rgba(245,240,232,.7)'">
-						<?php echo esc_html( $red['nombre'] ); ?>
+		<div class="murg-footer__col">
+			<h5>Nuestra Empresa</h5>
+			<ul>
+				<li><a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Politica de privacidad</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/politica-de-cookies/' ) ); ?>">Politica de cookies</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>">Terminos y condiciones</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/recojos-y-envios/' ) ); ?>">Recojos y envios</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/libro-de-reclamaciones/' ) ); ?>">Libro de reclamaciones</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Contacte con nosotros</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a></li>
+			</ul>
+		</div>
+
+		<div class="murg-footer__col">
+			<h5>Tiendas</h5>
+			<ul>
+				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">San Isidro</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Miraflores</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Surco · Jockey Plaza</a></li>
+			</ul>
+			<p class="murg-footer__legal">Novios Murguia S.A.C<br>20605052194</p>
+		</div>
+
+		<div class="murg-footer__col">
+			<h5>Medios de Pago</h5>
+			<div class="murg-footer__payments" aria-label="Medios de pago">
+				<?php foreach ( $_payment_logos as $logo ) : ?>
+					<img src="<?php echo esc_url( $_footer_asset_url . $logo['file'] ); ?>"
+					     alt="<?php echo esc_attr( $logo['alt'] ); ?>"
+					     loading="eager">
+				<?php endforeach; ?>
+			</div>
+			<h5 class="murg-footer__social-title">Siguenos</h5>
+			<div class="murg-footer__social" aria-label="Redes sociales">
+				<?php foreach ( $_social_links as $link ) : ?>
+					<a href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( $link['alt'] ); ?>">
+						<img src="<?php echo esc_url( $_footer_asset_url . $link['file'] ); ?>"
+						     alt=""
+						     loading="eager">
 					</a>
 				<?php endforeach; ?>
 			</div>
-			<?php endif; ?>
-		</div>
-
-		<div class="murg-footer__col">
-			<h5>Tienda</h5>
-			<ul>
-				<li><a href="<?php echo esc_url( get_term_link( 'anillos', 'product_cat' ) ); ?>">Anillos</a></li>
-				<li><a href="<?php echo esc_url( get_term_link( 'collares', 'product_cat' ) ); ?>">Collares</a></li>
-				<li><a href="<?php echo esc_url( get_term_link( 'aretes', 'product_cat' ) ); ?>">Aretes</a></li>
-				<li><a href="<?php echo esc_url( get_term_link( 'pulseras', 'product_cat' ) ); ?>">Pulseras</a></li>
-				<li><a href="<?php echo esc_url( get_term_link( 'anillos-de-compromiso', 'product_cat' ) ); ?>">Compromiso</a></li>
-			</ul>
-		</div>
-
-		<div class="murg-footer__col">
-			<h5>Casa</h5>
-			<ul>
-				<li><a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/contactenos/' ) ); ?>">Contacto</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/libro-de-reclamaciones/' ) ); ?>">Libro de Reclamaciones</a></li>
-			</ul>
-		</div>
-
-		<div class="murg-footer__col">
-			<h5>Servicio</h5>
-			<ul>
-				<li><a href="<?php echo esc_url( home_url( '/recojos-y-envios/' ) ); ?>">Recojos y Envíos</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>">Términos y Condiciones</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/politica-de-privacidad/' ) ); ?>">Política de Privacidad</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/politica-de-cookies/' ) ); ?>">Política de Cookies</a></li>
-			</ul>
 		</div>
 	</div>
 
 	<div class="murg-footer__bottom">
 		<div><?php echo esc_html( $_foot_copyright ); ?></div>
-		<div>Lima · Perú</div>
+		<div>Lima · Peru</div>
 		<div>
-			<a href="<?php echo esc_url( home_url( '/politica-de-privacidad/' ) ); ?>" style="color:inherit;text-decoration:none;">Privacidad</a>
+			<a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>" style="color:inherit;text-decoration:none;">Privacidad</a>
 			·
-			<a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>" style="color:inherit;text-decoration:none;">Términos</a>
+			<a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>" style="color:inherit;text-decoration:none;">Terminos</a>
 		</div>
 	</div>
 </footer>
