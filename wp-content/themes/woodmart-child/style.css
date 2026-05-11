@@ -6964,7 +6964,7 @@ body.murg-search-open { overflow: hidden; }
   text-transform: uppercase;
 }
 
-.murg-ac-engagement__styles {
+.murg-ac-style-grid.murg-ac-engagement__styles {
   display: none;
 }
 
