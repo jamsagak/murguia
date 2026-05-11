@@ -6614,12 +6614,39 @@ body.murg-search-open { overflow: hidden; }
   padding: clamp(68px, 6.48vw, 112px) clamp(24px, 3.59vw, 62px);
 }
 
+.murg-ac-categories {
+  padding-bottom: clamp(54px, 5.56vw, 96px);
+  padding-top: clamp(54px, 5.56vw, 96px);
+}
+
+.murg-ac-categories__box {
+  border: 1px solid rgba(25, 46, 29, 0.82);
+  box-shadow: 6px 6px 0 rgba(25, 46, 29, 0.08);
+  margin: 0 auto;
+  max-width: 1180px;
+  padding: clamp(24px, 2.78vw, 48px) clamp(24px, 2.78vw, 48px) clamp(24px, 2.31vw, 40px);
+}
+
+.murg-ac-categories .murg-ac-section-head {
+  margin-bottom: clamp(24px, 2.31vw, 40px);
+  max-width: 620px;
+}
+
+.murg-ac-categories .murg-ac-section-head h2 {
+  font-size: clamp(30px, 2.5vw, 42px);
+  margin-bottom: 4px;
+}
+
+.murg-ac-categories .murg-ac-section-head p:last-child {
+  font-size: clamp(14px, 1vw, 17px);
+}
+
 .murg-ac-category-grid {
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   margin: 0 auto;
-  max-width: 1389px;
+  max-width: none;
 }
 
 .murg-ac-category {
@@ -6631,6 +6658,7 @@ body.murg-search-open { overflow: hidden; }
 
 .murg-ac-category img {
   aspect-ratio: 3 / 4;
+  border: 1px solid rgba(25, 46, 29, 0.68);
   display: block;
   height: auto;
   object-fit: cover;
@@ -6642,9 +6670,9 @@ body.murg-search-open { overflow: hidden; }
   border-bottom: 1px solid transparent;
   display: inline-block;
   font-family: 'Vesper Libre', Georgia, serif;
-  font-size: clamp(12px, 0.93vw, 16px);
-  letter-spacing: 0.14em;
-  margin-top: 14px;
+  font-size: clamp(10px, 0.76vw, 13px);
+  letter-spacing: 0.2em;
+  margin-top: 12px;
   padding-bottom: 6px;
   text-transform: uppercase;
 }
@@ -6992,8 +7020,17 @@ body.murg-search-open { overflow: hidden; }
 .murg-ac-newsletter { margin-top: 0; }
 
 @media (max-width: 1024px) {
+  .murg-ac-categories__box {
+    overflow: hidden;
+    padding: 28px 20px 30px;
+  }
+
+  .murg-ac-categories .murg-ac-section-head {
+    text-align: left;
+  }
+
   .murg-ac-category-grid {
-    grid-template-columns: repeat(5, minmax(170px, 1fr));
+    grid-template-columns: repeat(5, minmax(180px, 1fr));
     margin-left: -20px;
     margin-right: -20px;
     overflow-x: auto;
@@ -7026,6 +7063,16 @@ body.murg-search-open { overflow: hidden; }
   }
 
   .murg-ac-appointment__media { order: -1; }
+}
+
+@media (hover: none) {
+  .murg-ac-category:hover img {
+    transform: none;
+  }
+
+  .murg-ac-category:hover span {
+    border-color: transparent;
+  }
 }
 
 @media (max-width: 768px) {

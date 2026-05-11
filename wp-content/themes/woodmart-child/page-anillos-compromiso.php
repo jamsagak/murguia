@@ -179,18 +179,20 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 	</section>
 
 	<section class="murg-ac-categories" aria-label="Categorias destacadas">
-		<header class="murg-ac-section-head" data-reveal>
-			<p class="murg-ac-eyebrow">02 - Categorias destacadas</p>
-			<h2>Explora por categoria</h2>
-			<p>Cinco caminos. Una sola firma.</p>
-		</header>
-		<div class="murg-ac-category-grid">
-			<?php foreach ( $category_items as $item ) : ?>
-			<a class="murg-ac-category" href="<?php echo esc_url( $item['url'] ); ?>" data-reveal>
-				<img src="<?php echo esc_url( $item['img'] ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" loading="lazy">
-				<span><?php echo esc_html( $item['title'] ); ?></span>
-			</a>
-			<?php endforeach; ?>
+		<div class="murg-ac-categories__box">
+			<header class="murg-ac-section-head" data-reveal>
+				<p class="murg-ac-eyebrow">02 - Categorias destacadas</p>
+				<h2>Explora por categoria</h2>
+				<p>Cinco caminos. Una sola firma.</p>
+			</header>
+			<div class="murg-ac-category-grid">
+				<?php foreach ( $category_items as $item ) : ?>
+				<a class="murg-ac-category" href="<?php echo esc_url( $item['url'] ); ?>" data-reveal>
+					<img src="<?php echo esc_url( $item['img'] ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" loading="lazy">
+					<span><?php echo esc_html( $item['title'] ); ?></span>
+				</a>
+				<?php endforeach; ?>
+			</div>
 		</div>
 	</section>
 
