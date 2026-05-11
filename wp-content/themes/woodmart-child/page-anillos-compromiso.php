@@ -160,10 +160,15 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 <?php get_template_part( 'template-parts/murg-nav' ); ?>
 
 <main class="murg-ac" id="contenido">
-	<section class="murg-ac-hero" style="background-image:url('<?php echo esc_url( $hero_bg ); ?>')" aria-label="Anillos de compromiso">
-		<div class="murg-ac-hero__shade"></div>
+	<section class="murg-ac-hero" aria-label="Anillos de compromiso">
+		<div class="murg-ac-hero__media">
+			<img src="<?php echo esc_url( $hero_bg ); ?>"
+			     alt="<?php echo esc_attr( murg_ac_img_alt( $hero_img, 'Anillo de compromiso Murguia' ) ); ?>"
+			     loading="eager"
+			     fetchpriority="high">
+		</div>
 		<div class="murg-ac-hero__content" data-reveal>
-			<p class="murg-ac-eyebrow">Casa Murguia - Desde 1910</p>
+			<p class="murg-ac-eyebrow">Desde 1910</p>
 			<h1 class="murg-ac-hero__title"><?php echo esc_html( $hero_title ); ?></h1>
 			<p class="murg-ac-hero__sub"><?php echo esc_html( $hero_sub ); ?></p>
 			<div class="murg-ac-actions">
