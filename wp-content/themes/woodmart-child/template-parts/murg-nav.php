@@ -99,15 +99,8 @@ $_marca_links = [
 	<!-- ── Fila 2: menú principal ──────────────────────────── -->
 	<div class="murg-nav__row murg-nav__row--menu">
 
-		<div class="murg-nav__item murg-nav__item--drop">
-			<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso' ) ); ?>"
-			   class="murg-nav__link">Novios</a>
-			<div class="murg-nav__dropdown">
-				<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso' ) ); ?>">Anillos de Compromiso</a>
-				<a href="<?php echo esc_url( home_url( '/shop/?product_cat=aros' ) ); ?>">Aros de Matrimonio</a>
-				<a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Diseño a Medida</a>
-			</div>
-		</div>
+		<a href="<?php echo esc_url( home_url( '/anillos-compromiso/' ) ); ?>"
+		   class="murg-nav__link">Anillos de Compromiso</a>
 
 		<div class="murg-nav__item murg-nav__item--drop">
 			<a href="<?php echo esc_url( $_shop_url ); ?>" class="murg-nav__link">Catálogo</a>
