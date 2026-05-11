@@ -223,7 +223,12 @@ $shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
 		<div class="murg-diamonds__selector">
 			<div class="murg-diamonds__grid">
 				<?php foreach ( $diamond_shapes as $idx => $shape ) :
-					$icon_url = $shapes_dir . $shape['slug'] . '_new.png';
+					$icon_file = 'assets/img/diamond-shapes/' . $shape['slug'] . '_new.png';
+					$icon_path = get_stylesheet_directory() . '/' . $icon_file;
+					$icon_url  = get_stylesheet_directory_uri() . '/' . $icon_file;
+					if ( file_exists( $icon_path ) ) {
+						$icon_url = add_query_arg( 'v', filemtime( $icon_path ), $icon_url );
+					}
 				?>
 				<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso&forma=' . $shape['slug'] ) ); ?>"
 				   class="murg-diamonds__shape<?php echo $idx === 0 ? ' is-active' : ''; ?>"
