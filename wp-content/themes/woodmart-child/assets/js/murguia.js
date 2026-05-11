@@ -1050,7 +1050,7 @@
 		} );
 
 		// Fix #4: procesar bloques primero para que el guard closest funcione después
-		document.querySelectorAll( '.murg-bestsellers, .murg-certifications, .murg-diamonds__inner, .murg-novios__panel, .murg-featured__media, .murg-qantu__gallery, .murg-visita, .murg-newsletter, .murg-footer' ).forEach( function ( el ) {
+		document.querySelectorAll( '.murg-bestsellers, .murg-certifications, .murg-diamonds__inner, .murg-novios__panel, .murg-featured__media, .murg-qantu__gallery, .murg-visita, .murg-newsletter, .murg-footer, .murg-ac-story__media, .murg-ac-appointment__media' ).forEach( function ( el ) {
 			if ( el.closest( '[aria-hidden="true"]' ) ) return;
 			el.setAttribute( 'data-reveal-block', '' );
 			revealObs.observe( el );
@@ -1084,6 +1084,14 @@
 			'.murg-qantu__header > *',
 			'.murg-brands__track img',
 			'.murg-footer__col',
+			'.murg-ac-hero__content',
+			'.murg-ac-section-head',
+			'.murg-ac-product',
+			'.murg-ac-style',
+			'.murg-ac-benefit',
+			'.murg-ac-story__copy',
+			'.murg-ac-appointment__copy',
+			'.murg-ac-testimonial',
 			// .murg-product excluido — está dentro de .murg-bestsellers (data-reveal-block)
 		];
 
@@ -1099,7 +1107,7 @@
 					? Array.from( el.parentElement.querySelectorAll( sel ) )
 					: [];
 				var idx = siblings.indexOf( el );
-				var isIcon = el.matches( '.murg-icon-strip__item, .murg-diamonds__shape, .murg-brands__track img' );
+				var isIcon = el.matches( '.murg-icon-strip__item, .murg-diamonds__shape, .murg-brands__track img, .murg-ac-product' );
 				el.setAttribute( 'data-reveal', isIcon ? 'scale' : 'soft' );
 				el.style.transitionDelay = Math.max( 0, idx % 4 ) * 0.08 + 's';
 				revealObs.observe( el );

@@ -6472,3 +6472,597 @@ body.murg-search-open { overflow: hidden; }
   background: var(--murg-ink);
   color: var(--murg-cream);
 }
+
+/* ============================================================
+   LANDING ANILLOS DE COMPROMISO - estilo home
+   ============================================================ */
+.murg-ac {
+  background: var(--murg-parchment);
+  color: var(--murg-ink);
+  overflow: hidden;
+}
+
+.murg-ac-eyebrow {
+  color: var(--murg-gold-soft);
+  font-family: 'Vesper Libre', Georgia, serif;
+  font-size: clamp(11px, 0.81vw, 14px);
+  letter-spacing: 0.18em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.murg-ac-hero {
+  align-items: center;
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  min-height: clamp(620px, 54vw, 860px);
+  padding: 160px clamp(24px, 5.56vw, 96px) 96px;
+  position: relative;
+}
+
+.murg-ac-hero__shade {
+  background: linear-gradient(180deg, rgba(10,10,10,0.26), rgba(10,10,10,0.54));
+  inset: 0;
+  position: absolute;
+}
+
+.murg-ac-hero__content {
+  color: #fff;
+  margin: 0 auto;
+  max-width: 960px;
+  position: relative;
+  text-align: center;
+  width: 100%;
+}
+
+.murg-ac-hero__title {
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: clamp(42px, 5.2vw, 90px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.05;
+  margin: 18px 0;
+  text-transform: uppercase;
+}
+
+.murg-ac-hero__sub {
+  color: rgba(255,255,255,0.88);
+  font-size: clamp(17px, 1.35vw, 23px);
+  line-height: 1.55;
+  margin: 0 auto;
+  max-width: 700px;
+}
+
+.murg-ac-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 34px;
+}
+
+.murg-ac-hero .murg-ac-actions { justify-content: center; }
+
+.murg-ac .murg-ac-actions .murg-btn {
+  min-width: 220px;
+  text-align: center;
+  width: auto;
+}
+
+.murg-ac-link {
+  align-items: center;
+  color: var(--murg-forest);
+  display: inline-flex;
+  font-family: 'Vesper Libre', Georgia, serif;
+  font-size: clamp(13px, 0.93vw, 16px);
+  letter-spacing: 0.16em;
+  min-height: 48px;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.murg-ac-hero .murg-ac-link,
+.murg-ac-link--light { color: #fff; }
+
+.murg-ac-link::after {
+  background: currentColor;
+  content: "";
+  display: block;
+  height: 1px;
+  margin-left: 14px;
+  width: 56px;
+}
+
+.murg-ac-diamonds { padding-bottom: clamp(42px, 4vw, 70px); }
+
+.murg-ac-section-head {
+  margin: 0 auto clamp(34px, 3.7vw, 64px);
+  max-width: 780px;
+  text-align: center;
+}
+
+.murg-ac-section-head h2 {
+  color: var(--murg-forest);
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 2.78vw, 48px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.1;
+  margin: 10px 0 12px;
+  text-transform: uppercase;
+}
+
+.murg-ac-section-head p:last-child {
+  color: var(--murg-muted);
+  font-size: clamp(15px, 1.1vw, 19px);
+  line-height: 1.6;
+  margin: 0 auto;
+  max-width: 640px;
+}
+
+.murg-ac-section-head--dark h2,
+.murg-ac-section-head--dark p:last-child { color: var(--murg-cream); }
+
+.murg-ac-categories,
+.murg-ac-products,
+.murg-ac-testimonials {
+  padding: clamp(68px, 6.48vw, 112px) clamp(24px, 3.59vw, 62px);
+}
+
+.murg-ac-category-grid {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 1389px;
+}
+
+.murg-ac-category {
+  color: var(--murg-forest);
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.murg-ac-category img {
+  aspect-ratio: 3 / 4;
+  display: block;
+  height: auto;
+  object-fit: cover;
+  transition: transform 0.35s ease, opacity 0.25s ease;
+  width: 100%;
+}
+
+.murg-ac-category span {
+  border-bottom: 1px solid transparent;
+  display: inline-block;
+  font-family: 'Vesper Libre', Georgia, serif;
+  font-size: clamp(12px, 0.93vw, 16px);
+  letter-spacing: 0.14em;
+  margin-top: 14px;
+  padding-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.murg-ac-category:hover img {
+  transform: translateY(-4px);
+}
+
+.murg-ac-category:hover span {
+  border-color: var(--murg-gold);
+}
+
+.murg-ac-engagement {
+  display: grid;
+  gap: clamp(30px, 4.63vw, 80px);
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  padding: clamp(72px, 6.94vw, 120px) clamp(24px, 5.56vw, 96px);
+}
+
+.murg-ac-engagement__media {
+  min-height: clamp(420px, 48vw, 760px);
+  overflow: hidden;
+}
+
+.murg-ac-engagement__media img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.murg-ac-engagement__copy {
+  align-self: center;
+}
+
+.murg-ac-engagement__copy h2 {
+  color: var(--murg-forest);
+  font-family: var(--font-heading);
+  font-size: clamp(40px, 4.05vw, 70px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.02;
+  margin: 14px 0 22px;
+  text-transform: uppercase;
+}
+
+.murg-ac-engagement__copy p {
+  color: var(--murg-muted);
+  font-size: clamp(16px, 1.16vw, 20px);
+  line-height: 1.7;
+  margin: 0;
+  max-width: 620px;
+}
+
+.murg-ac-trust {
+  border-top: 1px solid rgba(25,46,29,0.16);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+  margin-top: 30px;
+  padding-top: 22px;
+}
+
+.murg-ac-trust span {
+  color: var(--murg-forest);
+  font-family: 'Vesper Libre', Georgia, serif;
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.murg-ac-engagement__styles {
+  grid-column: 1 / -1;
+  margin-top: -28px;
+}
+
+.murg-ac-product-grid {
+  display: grid;
+  gap: clamp(18px, 2.31vw, 40px);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 1389px;
+}
+
+.murg-ac-product,
+.murg-ac-style,
+.murg-ac-testimonial {
+  color: var(--murg-ink);
+  text-decoration: none;
+}
+
+.murg-ac-product__media {
+  aspect-ratio: 1 / 1;
+  background: #f8f5f0;
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.murg-ac-product__media img,
+.murg-ac-style img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease, opacity 0.25s ease;
+  width: 100%;
+}
+
+.murg-ac-product:hover img,
+.murg-ac-style:hover img { transform: scale(1.04); }
+
+.murg-ac-product h3 {
+  font-family: 'Vesper Libre', Georgia, serif;
+  font-size: clamp(16px, 1.16vw, 20px);
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 0 0 8px;
+  text-align: center;
+}
+
+.murg-ac-product__price {
+  color: #000;
+  font-family: 'Tiro Bangla', Georgia, serif;
+  font-size: clamp(18px, 1.39vw, 24px);
+  font-weight: 700;
+  text-align: center;
+}
+
+.murg-ac-center {
+  margin-top: clamp(34px, 3.47vw, 60px);
+  text-align: center;
+}
+
+.murg-ac-empty {
+  border: 1px solid rgba(25,46,29,0.16);
+  margin: 0 auto;
+  max-width: 760px;
+  padding: 42px;
+  text-align: center;
+}
+
+.murg-ac-style-grid {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 1389px;
+}
+
+.murg-ac-style {
+  background: #f8f5f0;
+  min-height: 360px;
+  overflow: hidden;
+  padding: 0 0 26px;
+}
+
+.murg-ac-style img {
+  aspect-ratio: 3 / 4;
+  margin-bottom: 22px;
+}
+
+.murg-ac-style span {
+  color: var(--murg-forest);
+  display: block;
+  font-family: var(--font-heading);
+  font-size: clamp(17px, 1.27vw, 22px);
+  letter-spacing: 0.05em;
+  padding: 0 22px 8px;
+  text-transform: uppercase;
+}
+
+.murg-ac-style p {
+  color: var(--murg-muted);
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0;
+  padding: 0 22px;
+}
+
+.murg-ac-benefits {
+  background: var(--murg-forest);
+  color: var(--murg-cream);
+  padding: clamp(72px, 6.94vw, 120px) clamp(24px, 3.59vw, 62px);
+}
+
+.murg-ac-benefits__inner {
+  margin: 0 auto;
+  max-width: 1389px;
+}
+
+.murg-ac-benefit-grid {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.murg-ac-benefit {
+  border: 1px solid rgba(245,240,232,0.18);
+  min-height: 230px;
+  padding: clamp(28px, 2.78vw, 48px);
+}
+
+.murg-ac-benefit__icon {
+  align-items: center;
+  border: 1px solid rgba(201,168,76,0.38);
+  color: var(--murg-gold);
+  display: flex;
+  font-family: var(--font-heading);
+  height: 44px;
+  justify-content: center;
+  margin-bottom: 28px;
+  width: 44px;
+}
+
+.murg-ac-benefit__icon svg {
+  height: 24px;
+  width: 24px;
+}
+
+.murg-ac-benefit h3 {
+  color: var(--murg-cream);
+  font-family: var(--font-heading);
+  font-size: clamp(18px, 1.27vw, 22px);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  margin: 0 0 12px;
+  text-transform: uppercase;
+}
+
+.murg-ac-benefit p {
+  color: rgba(245,240,232,0.72);
+  font-size: 15px;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.murg-ac-story,
+.murg-ac-appointment {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: clamp(520px, 44vw, 760px);
+}
+
+.murg-ac-story { background: var(--murg-forest); }
+
+.murg-ac-story__media,
+.murg-ac-appointment__media {
+  min-height: 420px;
+  overflow: hidden;
+}
+
+.murg-ac-story__media img,
+.murg-ac-appointment__media img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.murg-ac-story__copy,
+.murg-ac-appointment__copy {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(48px, 6.37vw, 110px);
+}
+
+.murg-ac-story__copy { color: var(--murg-cream); }
+
+.murg-ac-story__copy h2,
+.murg-ac-appointment__copy h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(30px, 3.01vw, 52px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  line-height: 1.12;
+  margin: 14px 0 22px;
+  text-transform: uppercase;
+}
+
+.murg-ac-story__copy h2 { color: var(--murg-cream); }
+.murg-ac-appointment__copy h2 { color: var(--murg-forest); }
+
+.murg-ac-story__copy p,
+.murg-ac-appointment__copy p {
+  font-size: clamp(16px, 1.16vw, 20px);
+  line-height: 1.75;
+  margin: 0;
+}
+
+.murg-ac-story__copy p { color: rgba(245,240,232,0.78); }
+.murg-ac-appointment { background: var(--murg-parchment); }
+
+.murg-ac-appointment__facts {
+  border-bottom: 1px solid rgba(25,46,29,0.16);
+  border-top: 1px solid rgba(25,46,29,0.16);
+  display: grid;
+  gap: 14px;
+  margin-top: 30px;
+  padding: 22px 0;
+  width: 100%;
+}
+
+.murg-ac-appointment__facts span {
+  color: var(--murg-muted);
+  font-size: 15px;
+}
+
+.murg-ac-testimonial-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 1180px;
+}
+
+.murg-ac-testimonial {
+  background: #f8f5f0;
+  padding: clamp(30px, 3.01vw, 52px);
+}
+
+.murg-ac-testimonial span {
+  color: var(--murg-gold);
+  display: block;
+  font-family: Georgia, serif;
+  font-size: 72px;
+  line-height: 0.8;
+}
+
+.murg-ac-testimonial p {
+  color: var(--murg-ink);
+  font-size: clamp(17px, 1.16vw, 20px);
+  line-height: 1.55;
+  margin: 0 0 24px;
+}
+
+.murg-ac-testimonial cite {
+  color: var(--murg-muted);
+  display: block;
+  font-style: normal;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.murg-ac-newsletter { margin-top: 0; }
+
+@media (max-width: 1024px) {
+  .murg-ac-category-grid {
+    grid-template-columns: repeat(5, minmax(170px, 1fr));
+    margin-left: -20px;
+    margin-right: -20px;
+    overflow-x: auto;
+    padding: 0 20px 10px;
+    scroll-snap-type: x proximity;
+  }
+
+  .murg-ac-category {
+    scroll-snap-align: start;
+  }
+
+  .murg-ac-engagement {
+    grid-template-columns: 1fr;
+  }
+
+  .murg-ac-engagement__media {
+    min-height: 440px;
+  }
+
+  .murg-ac-product-grid,
+  .murg-ac-style-grid,
+  .murg-ac-benefit-grid,
+  .murg-ac-testimonial-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .murg-ac-story,
+  .murg-ac-appointment {
+    grid-template-columns: 1fr;
+  }
+
+  .murg-ac-appointment__media { order: -1; }
+}
+
+@media (max-width: 768px) {
+  .murg-ac-hero {
+    min-height: 620px;
+    padding: 140px 20px 72px;
+  }
+
+  .murg-ac-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .murg-ac-actions .murg-btn,
+  .murg-ac-actions .murg-ac-link {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .murg-ac-product-grid,
+  .murg-ac-style-grid,
+  .murg-ac-benefit-grid,
+  .murg-ac-testimonial-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .murg-ac-products,
+  .murg-ac-categories,
+  .murg-ac-testimonials,
+  .murg-ac-benefits {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .murg-ac-engagement {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .murg-ac-story__copy,
+  .murg-ac-appointment__copy {
+    padding: 44px 20px;
+  }
+}
