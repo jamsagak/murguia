@@ -1169,4 +1169,36 @@
 		} );
 	}
 
+	/* ------------------------------------------------------------------
+	   ADD TO CART — feedback visual en el botón
+	   ------------------------------------------------------------------ */
+	var atcWrap = document.querySelector( '.murg-product-detail__atc' );
+	if ( atcWrap ) {
+		var atcBtn = atcWrap.querySelector( '.single_add_to_cart_button' );
+		if ( atcBtn ) {
+			var atcOrigText = atcBtn.textContent;
+
+			// WooCommerce AJAX add-to-cart triggers jQuery events
+			if ( window.jQuery ) {
+				jQuery( document.body ).on( 'added_to_cart', function () {
+					atcBtn.classList.add( 'murg-atc--added' );
+					atcBtn.textContent = 'Producto añadido al carrito ✓';
+					setTimeout( function () {
+						atcBtn.classList.remove( 'murg-atc--added' );
+						atcBtn.textContent = atcOrigText;
+					}, 3000 );
+				} );
+			}
+
+			// Fallback: form submit (non-AJAX / variable products)
+			var atcForm = atcWrap.querySelector( 'form.cart' );
+			if ( atcForm ) {
+				atcForm.addEventListener( 'submit', function () {
+					atcBtn.classList.add( 'murg-atc--loading' );
+					atcBtn.textContent = 'Añadiendo...';
+				} );
+			}
+		}
+	}
+
 } )();

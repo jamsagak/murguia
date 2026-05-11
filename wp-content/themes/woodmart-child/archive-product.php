@@ -395,7 +395,7 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 				<a class="murg-product__link" href="<?php echo esc_url( $product->get_permalink() ); ?>">
 					<div class="murg-product__img">
 						<?php if ( $img_id ) :
-							echo wp_get_attachment_image( $img_id, 'large', false, [
+							echo wp_get_attachment_image( $img_id, 'full', false, [
 								'loading' => 'lazy',
 								'alt'     => $product->get_name(),
 								'sizes'   => '(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw',

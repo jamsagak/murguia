@@ -213,6 +213,8 @@ function murg_prod_trust_icon( $name ) {
      ============================================================ -->
 <main class="murg-product-detail" id="main" itemscope itemtype="https://schema.org/Product">
 
+	<?php wc_print_notices(); ?>
+
 	<!-- ==== GALERÍA ==== -->
 	<div class="murg-product-detail__gallery">
 		<div class="murg-pdgallery <?php echo count( $all_img_ids ) <= 1 ? 'murg-pdgallery--single' : ''; ?>" data-total="<?php echo (int) count( $all_img_ids ); ?>">
@@ -297,8 +299,13 @@ function murg_prod_trust_icon( $name ) {
 		<?php endif; ?>
 
 		<!-- Ring Configurator (solo anillos de compromiso) -->
-		<?php get_template_part( 'template-parts/murg-ring-configurator' ); ?>
+		<?php
+		get_template_part( 'template-parts/murg-ring-configurator' );
+		$cat_slugs_check = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'slugs' ] );
+		$is_engagement   = is_array( $cat_slugs_check ) && in_array( 'anillos-de-compromiso', $cat_slugs_check, true );
+		?>
 
+		<?php if ( ! $is_engagement ) : ?>
 		<!-- Specs table -->
 		<?php
 		// Construir la lista completa (atributos + SKU + disponibilidad)
@@ -326,6 +333,7 @@ function murg_prod_trust_icon( $name ) {
 			<?php endforeach; ?>
 		</dl>
 		<?php endif; ?>
+		<?php endif; /* ! $is_engagement */ ?>
 
 		<div class="murg-product-detail__divider" aria-hidden="true"></div>
 
@@ -441,7 +449,7 @@ function murg_prod_trust_icon( $name ) {
 				<a class="murg-product__link" href="<?php echo esc_url( $rel->get_permalink() ); ?>">
 					<div class="murg-product__img">
 						<?php if ( $rel_img ) :
-							echo wp_get_attachment_image( $rel_img, 'large', false, [
+							echo wp_get_attachment_image( $rel_img, 'full', false, [
 								'loading' => 'lazy',
 								'alt'     => $rel->get_name(),
 								'sizes'   => '(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw',

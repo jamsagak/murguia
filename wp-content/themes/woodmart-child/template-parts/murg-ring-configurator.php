@@ -4,7 +4,7 @@
  *
  * Solo se muestra si el producto pertenece a la categoría
  * "anillos-de-compromiso". Incluye selectores de:
- * - Forma del diamante (Diamond Shape)
+ * - Forma del diamante (Diamond Shape) — PNG images
  * - Quilates (Carat Size) — slider
  * - Metal — swatches con kilataje
  * - Origen del diamante (Natural / Lab Grown)
@@ -46,16 +46,9 @@ foreach ( $product->get_attributes() as $attr ) {
 	}
 }
 
-// Extraer quilates del título (ej: "0.75Ct", "1.64ct", "1ct")
-$current_carat = 0.5;
-if ( preg_match( '/(\d+\.?\d*)\s*[Cc]t/i', $product->get_name(), $m ) ) {
-	$current_carat = (float) $m[1];
-}
-
-// --- Contar productos disponibles por forma (para saber cuáles existen) ---
 $shop_url = get_permalink( wc_get_page_id( 'shop' ) );
 
-// Formas de diamante con SVG inline
+// Formas de diamante con labels
 $shapes = [
 	'redondo'   => 'Redondo',
 	'oval'      => 'Oval',
@@ -69,6 +62,21 @@ $shapes = [
 	'corazon'   => 'Corazón',
 ];
 
+// Slug → PNG filename mapping
+$shape_images = [
+	'redondo'   => 'round_new.png',
+	'oval'      => 'oval_new.png',
+	'esmeralda' => 'emerald_new.png',
+	'cojin'     => 'cushion_new.png',
+	'pera'      => 'pear_new.png',
+	'radiante'  => 'radiant_new.png',
+	'princesa'  => 'princess_new.png',
+	'marquesa'  => 'marquise_new.png',
+	'asscher'   => 'asscher_new.png',
+	'corazon'   => 'heart_new.png',
+];
+$img_base = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
+
 // Metales con swatches
 $metals = [
 	'amarillo' => [ 'label' => 'Oro Amarillo 18K', 'color' => '#D4A843' ],
@@ -76,24 +84,6 @@ $metals = [
 	'rosado'   => [ 'label' => 'Oro Rosado 18K',   'color' => '#E8B4A0' ],
 	'platino'  => [ 'label' => 'Platino',           'color' => '#C0C0C8' ],
 ];
-
-// SVG paths para cada forma
-function murg_diamond_svg( $shape ) {
-	$svgs = [
-		'redondo'   => '<circle cx="24" cy="24" r="18"/>',
-		'oval'      => '<ellipse cx="24" cy="24" rx="14" ry="20"/>',
-		'esmeralda' => '<path d="M12 6h24l4 4v28l-4 4H12l-4-4V10l4-4z"/>',
-		'cojin'     => '<rect x="6" y="6" width="36" height="36" rx="10"/>',
-		'pera'      => '<path d="M24 4C16 4 8 14 8 26c0 8 7 16 16 16s16-8 16-16C40 14 32 4 24 4z"/>',
-		'radiante'  => '<path d="M14 4h20l10 10v20l-10 10H14L4 34V14L14 4z"/>',
-		'princesa'  => '<rect x="6" y="6" width="36" height="36" rx="2"/>',
-		'marquesa'  => '<ellipse cx="24" cy="24" rx="12" ry="22" transform="rotate(0 24 24)"/>',
-		'asscher'   => '<path d="M14 4h20l10 10v20l-10 10H14L4 34V14L14 4z"/>',
-		'corazon'   => '<path d="M24 40S4 28 4 16C4 9 9 4 15 4c4 0 7 2 9 5 2-3 5-5 9-5 6 0 11 5 11 12C44 28 24 40 24 40z"/>',
-	];
-	$path = $svgs[ $shape ] ?? '<circle cx="24" cy="24" r="18"/>';
-	return '<svg class="murg-rc-shape__svg" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1">' . $path . '</svg>';
-}
 ?>
 
 <div class="murg-ring-config" id="murg-ring-config" data-product-id="<?php echo (int) $product_id; ?>">
@@ -113,33 +103,39 @@ function murg_diamond_svg( $shape ) {
 			        data-shape="<?php echo esc_attr( $slug ); ?>"
 			        aria-label="<?php echo esc_attr( $label ); ?>"
 			        title="<?php echo esc_attr( $label ); ?>">
-				<?php echo murg_diamond_svg( $slug ); ?>
+				<img src="<?php echo esc_url( $img_base . $shape_images[ $slug ] ); ?>"
+				     alt="<?php echo esc_attr( $label ); ?>"
+				     class="murg-rc-shape__img">
 			</button>
 			<?php endforeach; ?>
 		</div>
 	</div>
 
-	<!-- QUILATES / CARAT SIZE -->
+	<!-- TALLA / RING SIZE -->
 	<div class="murg-rc-section">
 		<div class="murg-rc-section__header">
-			<span class="murg-rc-section__label">Quilates:</span>
-			<span class="murg-rc-section__value" id="murg-rc-carat-val">
-				<?php echo number_format( $current_carat, 2 ); ?> Ct
+			<span class="murg-rc-section__label">
+				Talla:
+				<button type="button" class="murg-rc-sizeguide-link" id="murg-rc-sizeguide-open" aria-label="Ver guía de tallas">
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+					Guía de tallas
+				</button>
 			</span>
+			<span class="murg-rc-section__value" id="murg-rc-size-val">6</span>
 		</div>
 		<div class="murg-rc-carat">
-			<span class="murg-rc-carat__min">0.10 Ct</span>
+			<span class="murg-rc-carat__min">4</span>
 			<div class="murg-rc-carat__track">
-				<div class="murg-rc-carat__fill" id="murg-rc-carat-fill"></div>
+				<div class="murg-rc-carat__fill" id="murg-rc-size-fill"></div>
 				<input type="range"
 				       class="murg-rc-carat__input"
-				       id="murg-rc-carat"
-				       min="0.10"
-				       max="5"
-				       step="0.01"
-				       value="<?php echo esc_attr( $current_carat ); ?>">
+				       id="murg-rc-size"
+				       min="4"
+				       max="13"
+				       step="0.5"
+				       value="6">
 			</div>
-			<span class="murg-rc-carat__max">5 Ct</span>
+			<span class="murg-rc-carat__max">13</span>
 		</div>
 	</div>
 
@@ -187,4 +183,40 @@ function murg_diamond_svg( $shape ) {
 		</div>
 	</div>
 
+</div>
+
+<!-- MODAL: Guía de Tallas -->
+<div class="murg-sizeguide-modal" id="murg-sizeguide-modal" role="dialog" aria-modal="true" aria-label="Guía de tallas">
+	<div class="murg-sizeguide-modal__overlay" id="murg-sizeguide-close-overlay"></div>
+	<div class="murg-sizeguide-modal__panel">
+		<div class="murg-sizeguide-modal__header">
+			<h3 class="murg-sizeguide-modal__title">Guía de Tallas</h3>
+			<button type="button" class="murg-sizeguide-modal__close" id="murg-sizeguide-close" aria-label="Cerrar">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+			</button>
+		</div>
+		<p class="murg-sizeguide-modal__desc">Mida el diámetro interior de un anillo que le quede bien, o consulte con nuestro equipo para una medición presencial.</p>
+		<div class="murg-sizeguide-modal__grid">
+			<?php
+			$sizes = [
+				['3.5', '14.4'], ['4', '14.8'], ['4.5', '15.2'], ['5', '15.6'],
+				['5.5', '15.6'], ['6', '16.4'], ['6.5', '16.9'], ['7', '17.3'],
+				['7.5', '17.7'], ['8', '18.2'], ['8.5', '18.6'], ['9', '19.0'],
+				['9.5', '19.4'], ['10', '19.8'], ['10.5', '20.2'],
+				['11', '20.6'], ['11.5', '21.0'], ['12', '21.4'],
+			];
+			foreach ( $sizes as $s ) : ?>
+			<div class="murg-sizeguide-modal__item">
+				<div class="murg-sizeguide-modal__ring">
+					<span class="murg-sizeguide-modal__num"><?php echo $s[0]; ?></span>
+				</div>
+				<span class="murg-sizeguide-modal__mm"><?php echo $s[1]; ?> mm</span>
+			</div>
+			<?php endforeach; ?>
+		</div>
+		<div class="murg-sizeguide-modal__tip">
+			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--murg-gold)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+			<span>¿No está seguro de su talla? Escríbanos por WhatsApp y le ayudamos.</span>
+		</div>
+	</div>
 </div>
