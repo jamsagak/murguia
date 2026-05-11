@@ -922,11 +922,16 @@
 			if ( dmLabel ) dmLabel.textContent = label;
 		}
 
-		dmShapes.forEach( function ( shape ) {
-			shape.addEventListener( 'mouseenter', function () {
-				dmActivate( shape.dataset.shape, shape.dataset.label );
+		if ( window.matchMedia && window.matchMedia( '(hover: hover) and (pointer: fine)' ).matches ) {
+			dmShapes.forEach( function ( shape ) {
+				shape.addEventListener( 'mouseenter', function () {
+					dmActivate( shape.dataset.shape, shape.dataset.label );
+				} );
+				shape.addEventListener( 'focus', function () {
+					dmActivate( shape.dataset.shape, shape.dataset.label );
+				} );
 			} );
-		} );
+		}
 	}
 
 	/* ------------------------------------------------------------------

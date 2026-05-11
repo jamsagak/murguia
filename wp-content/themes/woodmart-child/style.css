@@ -4208,8 +4208,9 @@ body.murg-search-open { overflow: hidden; }
 
 /* Header — above the row */
 .murg-diamonds__header {
-  max-width: 960px;
+  max-width: 1389px;
   margin: 0 auto clamp(16px, 1.85vw, 32px);
+  padding-left: clamp(0px, 15vw, 260px);
 }
 .murg-diamonds__title {
   font-family: var(--font-heading);
@@ -4228,7 +4229,7 @@ body.murg-search-open { overflow: hidden; }
 }
 
 .murg-diamonds__inner {
-  max-width: 960px;
+  max-width: 1389px;
   margin: 0 auto;
   display: flex;
   align-items: stretch;
@@ -4238,7 +4239,7 @@ body.murg-search-open { overflow: hidden; }
 /* LEFT — visual: ring photo + label */
 .murg-diamonds__visual {
   flex: 0 0 auto;
-  width: clamp(140px, 15vw, 260px);
+  width: clamp(220px, 30vw, 520px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -4278,7 +4279,7 @@ body.murg-search-open { overflow: hidden; }
   width: 1px;
   align-self: stretch;
   background: rgba(25, 46, 29, 0.2);
-  margin: 0 clamp(16px, 2.08vw, 36px);
+  margin: 0 clamp(28px, 3.59vw, 62px);
 }
 
 /* RIGHT — selector */
@@ -4286,7 +4287,7 @@ body.murg-search-open { overflow: hidden; }
 .murg-diamonds__grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: clamp(6px, 0.81vw, 14px) clamp(2px, 0.35vw, 6px);
+  gap: clamp(18px, 2.31vw, 40px) clamp(20px, 3.01vw, 52px);
 }
 .murg-diamonds__shape {
   display: flex;
@@ -4320,16 +4321,73 @@ body.murg-search-open { overflow: hidden; }
 }
 
 @media (max-width: 1024px) {
+  .murg-diamonds__header { padding-left: clamp(160px, 22vw, 240px); }
   .murg-diamonds__divider { margin: 0 16px; }
   .murg-diamonds__visual { width: clamp(160px, 22vw, 240px); }
 }
+
+@media (hover: none), (pointer: coarse) {
+  .murg-diamonds__header {
+    padding-left: 0;
+  }
+
+  .murg-diamonds__inner {
+    display: block;
+  }
+
+  .murg-diamonds__visual,
+  .murg-diamonds__divider {
+    display: none;
+  }
+
+  .murg-diamonds__selector {
+    display: block;
+    width: 100%;
+  }
+
+  .murg-diamonds__grid {
+    gap: clamp(16px, 4.5vw, 28px) clamp(10px, 3.5vw, 22px);
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .murg-diamonds__shape {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+
+  .murg-diamonds__shape.is-active,
+  .murg-diamonds__shape:hover {
+    border-bottom-color: transparent;
+  }
+
+  .murg-diamonds__shape img,
+  .murg-diamonds__shape:hover img,
+  .murg-diamonds__shape.is-active img {
+    transform: none;
+  }
+}
+
 @media (max-width: 768px) {
   .murg-diamonds { padding: 40px 20px; }
-  .murg-diamonds__inner { flex-direction: column; align-items: flex-start; gap: 28px; }
-  .murg-diamonds__visual { width: 100%; max-width: 240px; flex-direction: row; align-items: flex-end; }
+  .murg-diamonds__header { padding-left: 0; }
+  .murg-diamonds__inner { display: block; }
+  .murg-diamonds__visual { display: none; }
   .murg-diamonds__ring-wrap { height: 200px; }
   .murg-diamonds__divider { display: none; }
   .murg-diamonds__grid { grid-template-columns: repeat(5, 1fr); }
+  .murg-diamonds__shape {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+  .murg-diamonds__shape.is-active,
+  .murg-diamonds__shape:hover {
+    border-bottom-color: transparent;
+  }
+  .murg-diamonds__shape img,
+  .murg-diamonds__shape:hover img,
+  .murg-diamonds__shape.is-active img {
+    transform: none;
+  }
 }
 @media (max-width: 480px) {
   .murg-diamonds__shape img { width: 32px; height: 32px; }
