@@ -1143,6 +1143,7 @@
 			'.murg-ac-product',
 			'.murg-ac-style',
 			'.murg-ac-benefit',
+			'.murg-ac-diamond-grid',
 			'.murg-ac-engagement__media',
 			'.murg-ac-engagement__copy',
 			'.murg-ac-story__copy',
