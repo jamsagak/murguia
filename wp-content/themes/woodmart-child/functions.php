@@ -1157,6 +1157,12 @@ function murguia_override_shop_template( $template ) {
 		if ( file_exists( $custom ) ) return $custom;
 	}
 
+	// Checkout — forzar nuestro template con murg-nav / murg-footer
+	if ( function_exists( 'is_checkout' ) && is_checkout() && ! is_wc_endpoint_url() ) {
+		$custom = get_stylesheet_directory() . '/page-checkout.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+
 	return $template;
 }
 
@@ -1230,6 +1236,14 @@ function murguia_is_custom_template() {
 		return true;
 	}
 	if ( is_page( 'anillos-compromiso' ) ) {
+		return true;
+	}
+	// Checkout
+	if ( function_exists( 'is_checkout' ) && is_checkout() ) {
+		return true;
+	}
+	// Carrito
+	if ( function_exists( 'is_cart' ) && is_cart() ) {
 		return true;
 	}
 	return false;

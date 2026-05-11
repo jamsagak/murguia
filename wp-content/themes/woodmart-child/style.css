@@ -1051,8 +1051,8 @@
    ============================================================ */
 .murg-btn {
   display: inline-block;
-  border: 1px solid var(--murg-ink);
-  color: var(--murg-ink);
+  border: 1px solid var(--murg-forest);
+  color: var(--murg-forest);
   padding: 14px 0;
   text-align: center;
   font-size: clamp(12px, 0.93vw, 16px);
@@ -1067,7 +1067,7 @@
 }
 
 .murg-btn:hover {
-  background: var(--murg-ink);
+  background: var(--murg-forest);
   color: var(--murg-cream);
 }
 
@@ -2385,7 +2385,7 @@
 .murg-product-detail__atc .qty::-webkit-outer-spin-button,
 .murg-product-detail__atc .qty::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .murg-product-detail__atc .single_add_to_cart_button {
-  background: var(--murg-ink);
+  background: var(--murg-forest);
   color: var(--murg-cream);
   border: none;
   padding: 16px 32px;
@@ -3041,7 +3041,7 @@
 }
 
 .murg-auth-col .woocommerce-Button {
-  background: var(--murg-ink);
+  background: var(--murg-forest);
   color: var(--murg-cream);
   border: none;
   padding: 14px 32px;
@@ -6057,7 +6057,7 @@ body.murg-search-open { overflow: hidden; }
 .murg-cart-page .woocommerce .button,
 .murg-cart-page .woocommerce a.button,
 .murg-cart-page .checkout-button {
-  background: var(--murg-ink) !important;
+  background: var(--murg-forest) !important;
   color: var(--murg-cream) !important;
   border: none !important;
   border-radius: 0 !important;
@@ -6106,7 +6106,7 @@ body.murg-search-open { overflow: hidden; }
   text-align: center;
 }
 .murg-cart-page .return-to-shop a {
-  background: var(--murg-ink) !important;
+  background: var(--murg-forest) !important;
   color: var(--murg-cream) !important;
 }
 @media (max-width: 768px) {
@@ -6129,7 +6129,7 @@ body.murg-search-open { overflow: hidden; }
 }
 .murg-checkout-page .woocommerce .button,
 .murg-checkout-page #place_order {
-  background: var(--murg-ink) !important;
+  background: var(--murg-forest) !important;
   color: var(--murg-cream) !important;
   border: none !important;
   border-radius: 0 !important;

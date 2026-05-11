@@ -124,7 +124,7 @@ $_marca_links = [
 		   class="murg-nav__link murg-nav__link--highlight">Alta Joyería</a>
 
 		<a href="<?php echo esc_url( home_url( '/shop/?product_cat=hogar' ) ); ?>"
-		   class="murg-nav__link">Hogar</a>
+		   class="murg-nav__link">Tiendas</a>
 
 	</div>
 
