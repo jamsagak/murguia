@@ -4365,3 +4365,300 @@ body.murg-search-open { overflow: hidden; }
   .murg-checkout { padding: 100px 0 60px; }
   .murg-checkout__container { padding: 0 16px; }
 }
+
+/* ============================================================
+   LEGAL — Páginas legales/institucionales
+   ============================================================ */
+.murg-legal {
+  min-height: 60vh;
+  padding: 140px 0 80px;
+  background: var(--murg-cream);
+}
+.murg-legal__container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.murg-legal__header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.murg-legal__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(32px, 5vw, 48px);
+  font-weight: 400;
+  color: var(--murg-ink);
+  margin: 8px 0 0;
+}
+.murg-legal__content {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--murg-ink);
+}
+.murg-legal__content h2,
+.murg-legal__content h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 400;
+  color: var(--murg-ink);
+  margin: 40px 0 16px;
+}
+.murg-legal__content h2 { font-size: 24px; }
+.murg-legal__content h3 { font-size: 20px; }
+.murg-legal__content p { margin: 0 0 16px; }
+.murg-legal__content ul,
+.murg-legal__content ol {
+  margin: 0 0 16px;
+  padding-left: 24px;
+}
+.murg-legal__content li { margin-bottom: 8px; }
+.murg-legal__content a {
+  color: var(--murg-gold);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.murg-legal__content strong { font-weight: 600; }
+.murg-legal-page .whb-header,
+.murg-legal-page .whb-sticky-header,
+.murg-legal-page .wd-prefooter,
+.murg-legal-page .footer-container,
+.murg-legal-page .copyrights-wrapper {
+  display: none !important;
+}
+@media (max-width: 768px) {
+  .murg-legal { padding: 110px 0 60px; }
+  .murg-legal__container { padding: 0 16px; }
+  .murg-legal__header { margin-bottom: 32px; }
+}
+
+/* ============================================================
+   NOSOTROS — Página About
+   ============================================================ */
+.murg-about__hero {
+  padding: 160px 24px 80px;
+  text-align: center;
+  background: var(--murg-ink);
+}
+.murg-about__hero .murg-eyebrow {
+  color: var(--murg-gold);
+}
+.murg-about__hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(36px, 6vw, 64px);
+  font-weight: 300;
+  color: var(--murg-cream);
+  margin: 12px 0 0;
+}
+.murg-about__hero-title em {
+  font-style: italic;
+  color: var(--murg-gold);
+}
+.murg-about__section {
+  padding: 64px 24px;
+  background: var(--murg-cream);
+}
+.murg-about__section--dark {
+  background: var(--murg-ink);
+}
+.murg-about__container {
+  max-width: 960px;
+  margin: 0 auto;
+}
+.murg-about__text-block {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--murg-ink);
+  max-width: 700px;
+  margin: 0 auto;
+}
+.murg-about__text-block p { margin: 0 0 20px; }
+.murg-about__section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 4vw, 40px);
+  font-weight: 400;
+  color: var(--murg-ink);
+  text-align: center;
+  margin: 8px 0 40px;
+}
+.murg-about__section-title em {
+  font-style: italic;
+  color: var(--murg-gold);
+}
+
+/* Misión / Visión grid */
+.murg-about__grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+.murg-about__card {
+  padding: 40px;
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  border-radius: 4px;
+}
+.murg-about__card-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 400;
+  color: var(--murg-gold);
+  margin: 0 0 16px;
+}
+.murg-about__card-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--murg-cream);
+  margin: 0;
+}
+
+/* Tiendas grid */
+.murg-about__grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.murg-about__store {
+  text-align: center;
+  padding: 32px 20px;
+  border: 1px solid var(--murg-line);
+  border-radius: 4px;
+}
+.murg-about__store-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--murg-ink);
+  margin: 0 0 12px;
+}
+.murg-about__store-addr,
+.murg-about__store-tel,
+.murg-about__store-hours {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--murg-muted);
+  margin: 0 0 8px;
+  line-height: 1.5;
+}
+.murg-about__store-tel {
+  color: var(--murg-gold);
+  font-weight: 500;
+}
+.murg-about-page .whb-header,
+.murg-about-page .whb-sticky-header,
+.murg-about-page .wd-prefooter,
+.murg-about-page .footer-container,
+.murg-about-page .copyrights-wrapper {
+  display: none !important;
+}
+@media (max-width: 768px) {
+  .murg-about__hero { padding: 120px 16px 60px; }
+  .murg-about__section { padding: 48px 16px; }
+  .murg-about__grid-2 { grid-template-columns: 1fr; gap: 24px; }
+  .murg-about__grid-3 { grid-template-columns: 1fr; gap: 20px; }
+  .murg-about__card { padding: 28px 20px; }
+}
+
+/* ============================================================
+   LIBRO DE RECLAMACIONES — Formulario
+   ============================================================ */
+.murg-reclamos__section {
+  border: none;
+  padding: 0;
+  margin: 0 0 36px;
+}
+.murg-reclamos__legend {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--murg-ink);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--murg-line);
+  width: 100%;
+}
+.murg-reclamos__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.murg-reclamos__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.murg-reclamos__field--full { grid-column: 1 / -1; }
+.murg-reclamos__field label {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--murg-ink);
+  letter-spacing: 0.02em;
+}
+.murg-reclamos__field input,
+.murg-reclamos__field select,
+.murg-reclamos__field textarea {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--murg-ink);
+  background: #fff;
+  border: 1px solid var(--murg-line);
+  border-radius: 4px;
+  padding: 10px 14px;
+  transition: border-color 0.2s;
+}
+.murg-reclamos__field input:focus,
+.murg-reclamos__field select:focus,
+.murg-reclamos__field textarea:focus {
+  outline: none;
+  border-color: var(--murg-gold);
+}
+.murg-reclamos__field textarea { resize: vertical; }
+.murg-reclamos__radios {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.murg-reclamos__radios label {
+  font-size: 13px;
+  font-weight: 400;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  cursor: pointer;
+}
+.murg-reclamos__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+  padding-top: 16px;
+  border-top: 1px solid var(--murg-line);
+}
+.murg-reclamos__check {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: var(--murg-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+.murg-reclamos__check a { color: var(--murg-gold); }
+.murg-reclamos__submit {
+  background: var(--murg-ink);
+  color: var(--murg-cream);
+  border: none;
+  padding: 14px 40px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.murg-reclamos__submit:hover { opacity: 0.85; }
+@media (max-width: 768px) {
+  .murg-reclamos__grid { grid-template-columns: 1fr; }
+}
