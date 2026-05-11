@@ -6685,6 +6685,94 @@ body.murg-search-open { overflow: hidden; }
   border-color: var(--murg-gold);
 }
 
+.murg-ac-ring-tabs {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(22px, 3.24vw, 56px);
+  justify-content: center;
+  margin: 0 auto clamp(30px, 3.47vw, 60px);
+}
+
+.murg-ac-ring-tabs a {
+  border-bottom: 2px solid transparent;
+  color: #000;
+  font-family: 'Vesper Libre', Georgia, serif;
+  font-size: clamp(16px, 1.1vw, 19px);
+  font-weight: 700;
+  line-height: 1.35;
+  padding-bottom: 12px;
+  text-decoration: none;
+}
+
+.murg-ac-ring-tabs a:hover,
+.murg-ac-ring-tabs a.is-active {
+  border-color: currentColor;
+}
+
+.murg-ac-ring-showcase {
+  display: grid;
+  gap: clamp(18px, 1.39vw, 24px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.murg-ac-ring-card {
+  color: #000;
+  display: block;
+  text-align: center;
+  text-decoration: none;
+}
+
+.murg-ac-ring-card__media {
+  aspect-ratio: 1 / 1.06;
+  background: #f8f5f0;
+  margin-bottom: 18px;
+  overflow: hidden;
+}
+
+.murg-ac-ring-card__media img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.45s ease;
+  width: 100%;
+}
+
+.murg-ac-ring-card:hover img {
+  transform: scale(1.035);
+}
+
+.murg-ac-ring-card h3 {
+  font-family: 'Vesper Libre', Georgia, serif;
+  font-size: clamp(17px, 1.16vw, 20px);
+  font-weight: 700;
+  line-height: 1.28;
+  margin: 0 auto 8px;
+  max-width: 92%;
+}
+
+.murg-ac-ring-card__price {
+  color: #000;
+  font-family: 'Tiro Bangla', Georgia, serif;
+  font-size: clamp(18px, 1.27vw, 22px);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.murg-ac-ring-card__price del {
+  opacity: 1;
+}
+
+.murg-ac-ring-card__price ins {
+  text-decoration: none;
+}
+
+.murg-ac-categories .murg-ac-center {
+  margin-top: clamp(30px, 3.24vw, 56px);
+}
+
 .murg-ac-engagement {
   display: grid;
   gap: clamp(30px, 4.63vw, 80px);
@@ -7042,6 +7130,33 @@ body.murg-search-open { overflow: hidden; }
     scroll-snap-align: start;
   }
 
+  .murg-ac-ring-tabs {
+    justify-content: flex-start;
+    margin-left: -20px;
+    margin-right: -20px;
+    overflow-x: auto;
+    padding: 0 20px 8px;
+    scroll-snap-type: x proximity;
+  }
+
+  .murg-ac-ring-tabs a {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .murg-ac-ring-showcase {
+    grid-template-columns: repeat(3, minmax(220px, 1fr));
+    margin-left: -20px;
+    margin-right: -20px;
+    overflow-x: auto;
+    padding: 0 20px 8px;
+    scroll-snap-type: x proximity;
+  }
+
+  .murg-ac-ring-card {
+    scroll-snap-align: start;
+  }
+
   .murg-ac-engagement {
     grid-template-columns: 1fr;
   }
@@ -7073,6 +7188,10 @@ body.murg-search-open { overflow: hidden; }
   .murg-ac-category:hover span {
     border-color: transparent;
   }
+
+  .murg-ac-ring-card:hover img {
+    transform: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -7095,6 +7214,10 @@ body.murg-search-open { overflow: hidden; }
   .murg-ac-benefit-grid,
   .murg-ac-testimonial-grid {
     grid-template-columns: 1fr;
+  }
+
+  .murg-ac-ring-showcase {
+    grid-template-columns: repeat(3, minmax(238px, 1fr));
   }
 
   .murg-ac-products,

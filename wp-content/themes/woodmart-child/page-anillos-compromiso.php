@@ -70,7 +70,7 @@ $shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
 $prod_title = murg_ac( 'ac_productos_titulo', 'Anillos de compromiso destacados' );
 $prod_sub   = murg_ac( 'ac_productos_sub', 'Seleccionamos piezas listas para acompanar una propuesta inolvidable.' );
 $prod_qty   = max( 4, min( 8, (int) murg_ac( 'ac_productos_cantidad', 4 ) ) );
-$prod_cta_t = murg_ac( 'ac_productos_cta_texto', 'Ver coleccion completa' );
+$prod_cta_t = murg_ac( 'ac_productos_cta_texto', 'Ver tienda completa' );
 $prod_cta_u = murg_ac( 'ac_productos_cta_url', home_url( '/shop/?product_cat=anillos-de-compromiso' ) );
 
 $prod_cat = murg_ac( 'ac_productos_categoria', 0 );
@@ -94,12 +94,12 @@ if ( function_exists( 'wc_get_products' ) ) {
 	] );
 }
 
-$category_items = [
-	[ 'title' => 'Anillos · Compromiso', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso' ), 'img' => $img_base . 'product-1.jpg', 'alt' => 'Anillos de compromiso Murguia' ],
-	[ 'title' => 'Argollas', 'url' => home_url( '/shop/?product_cat=aros' ), 'img' => $img_base . 'novios.jpg', 'alt' => 'Argollas matrimoniales Murguia' ],
-	[ 'title' => 'Alta Joyeria', 'url' => home_url( '/alta-joyeria/' ), 'img' => $img_base . 'qantu-1.jpg', 'alt' => 'Alta joyeria Murguia' ],
-	[ 'title' => 'Diamantes', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso' ), 'img' => $img_base . 'diamond-shapes.jpg', 'alt' => 'Diamantes certificados Murguia' ],
-	[ 'title' => 'Colecciones', 'url' => home_url( '/shop/' ), 'img' => $img_base . 'qantu-2.jpg', 'alt' => 'Colecciones Murguia' ],
+$ring_tabs = [
+	[ 'label' => 'Solitarios', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=solitario' ) ],
+	[ 'label' => 'Halo', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=halo' ) ],
+	[ 'label' => 'Pave', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=pave' ) ],
+	[ 'label' => 'Tres piedras', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=tres-piedras' ) ],
+	[ 'label' => 'A medida', 'url' => home_url( '/contacto/' ) ],
 ];
 
 $style_items = murg_ac( 'ac_estilos_items', [] );
@@ -181,17 +181,46 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 	<section class="murg-ac-categories" aria-label="Categorias destacadas">
 		<div class="murg-ac-categories__box">
 			<header class="murg-ac-section-head" data-reveal>
-				<p class="murg-ac-eyebrow">02 - Categorias destacadas</p>
-				<h2>Explora por categoria</h2>
-				<p>Cinco caminos. Una sola firma.</p>
+				<p class="murg-ac-eyebrow">02 - Explora por estilo</p>
+				<h2>Anillos para la propuesta</h2>
+				<p>Una seleccion de compromiso: piezas listas, diamantes certificados y diseno a medida.</p>
 			</header>
-			<div class="murg-ac-category-grid">
-				<?php foreach ( $category_items as $item ) : ?>
-				<a class="murg-ac-category" href="<?php echo esc_url( $item['url'] ); ?>" data-reveal>
-					<img src="<?php echo esc_url( $item['img'] ); ?>" alt="<?php echo esc_attr( $item['alt'] ); ?>" loading="lazy">
-					<span><?php echo esc_html( $item['title'] ); ?></span>
+
+			<nav class="murg-ac-ring-tabs" aria-label="Estilos de anillos de compromiso" data-reveal>
+				<?php foreach ( $ring_tabs as $idx => $tab ) : ?>
+				<a class="<?php echo 0 === $idx ? 'is-active' : ''; ?>" href="<?php echo esc_url( $tab['url'] ); ?>"><?php echo esc_html( $tab['label'] ); ?></a>
+				<?php endforeach; ?>
+			</nav>
+
+			<?php if ( $products ) : ?>
+			<div class="murg-ac-ring-showcase">
+				<?php foreach ( array_slice( $products, 0, 3 ) as $idx => $product ) :
+					$img_id = $product->get_image_id();
+				?>
+				<a class="murg-ac-ring-card" href="<?php echo esc_url( $product->get_permalink() ); ?>" data-reveal>
+					<div class="murg-ac-ring-card__media">
+						<?php
+						if ( $img_id ) {
+							echo wp_get_attachment_image( $img_id, 'large', false, [
+								'loading' => $idx === 0 ? 'eager' : 'lazy',
+								'alt'     => get_post_meta( $img_id, '_wp_attachment_image_alt', true ) ?: $product->get_name(),
+							] );
+						}
+						?>
+					</div>
+					<h3><?php echo esc_html( $product->get_name() ); ?></h3>
+					<div class="murg-ac-ring-card__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 				</a>
 				<?php endforeach; ?>
+			</div>
+			<?php else : ?>
+			<div class="murg-ac-empty" data-reveal>
+				<p>La seleccion de anillos de compromiso estara disponible pronto.</p>
+			</div>
+			<?php endif; ?>
+
+			<div class="murg-ac-center" data-reveal>
+				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $prod_cta_u ); ?>"><?php echo esc_html( $prod_cta_t ); ?></a>
 			</div>
 		</div>
 	</section>
