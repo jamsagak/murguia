@@ -6867,19 +6867,20 @@ body.murg-search-open { overflow: hidden; }
 }
 
 .murg-ac-ring-card h3 {
-  font-family: 'Vesper Libre', Georgia, serif;
-  font-size: clamp(17px, 1.16vw, 20px);
-  font-weight: 700;
-  line-height: 1.28;
-  margin: 0 auto 8px;
+  color: var(--murg-ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+  margin: 0 auto 6px;
   max-width: 92%;
 }
 
 .murg-ac-ring-card__price {
-  color: #000;
-  font-family: 'Tiro Bangla', Georgia, serif;
-  font-size: clamp(18px, 1.27vw, 22px);
-  font-weight: 700;
+  color: var(--murg-muted, #888);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
   line-height: 1.35;
 }
 
@@ -7003,19 +7004,20 @@ body.murg-search-open { overflow: hidden; }
 .murg-ac-style:hover img { transform: scale(1.04); }
 
 .murg-ac-product h3 {
-  font-family: 'Vesper Libre', Georgia, serif;
-  font-size: clamp(16px, 1.16vw, 20px);
-  font-weight: 700;
-  line-height: 1.25;
-  margin: 0 0 8px;
+  color: var(--murg-ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+  margin: 0 0 6px;
   text-align: center;
 }
 
 .murg-ac-product__price {
-  color: #000;
-  font-family: 'Tiro Bangla', Georgia, serif;
-  font-size: clamp(18px, 1.39vw, 24px);
-  font-weight: 700;
+  color: var(--murg-muted, #888);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
   text-align: center;
 }
 

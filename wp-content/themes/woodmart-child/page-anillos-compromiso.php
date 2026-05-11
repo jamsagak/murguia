@@ -423,7 +423,7 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 	</section>
 
 	<section class="murg-newsletter murg-ac-newsletter" aria-label="Newsletter">
-		<div class="murg-newsletter__inner" data-reveal>
+		<div class="murg-newsletter__inner">
 			<h2 class="murg-newsletter__title"><?php echo esc_html( $nl_title ); ?></h2>
 			<?php if ( $nl_sub ) : ?><p class="murg-newsletter__sub"><?php echo esc_html( $nl_sub ); ?></p><?php endif; ?>
 			<form class="murg-newsletter__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
