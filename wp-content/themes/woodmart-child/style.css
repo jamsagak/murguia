@@ -6923,6 +6923,7 @@ body.murg-search-open { overflow: hidden; }
   display: block;
   height: 100%;
   object-fit: cover;
+  object-position: right center;
   width: 100%;
 }
 
