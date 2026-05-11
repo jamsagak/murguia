@@ -6808,11 +6808,13 @@ body.murg-search-open { overflow: hidden; }
   border-left: 0;
   border-right: 0;
   border-top: 0;
-  color: #000;
+  color: var(--murg-ink);
   cursor: pointer;
-  font-family: 'Vesper Libre', Georgia, serif;
-  font-size: clamp(16px, 1.1vw, 19px);
-  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   line-height: 1.35;
   padding-bottom: 12px;
   text-decoration: none;
