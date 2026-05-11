@@ -115,13 +115,12 @@ $metals = [
 	<div class="murg-rc-section">
 		<div class="murg-rc-section__header">
 			<span class="murg-rc-section__label">
-				Talla:
+				Talla: <span class="murg-rc-section__value" id="murg-rc-size-val">6</span>
 				<button type="button" class="murg-rc-sizeguide-link" data-target="murg-sizeguide" aria-label="Ver guía de tallas">
 					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
 					Guía de tallas
 				</button>
 			</span>
-			<span class="murg-rc-section__value" id="murg-rc-size-val">6</span>
 		</div>
 		<div class="murg-rc-carat">
 			<span class="murg-rc-carat__min">4</span>

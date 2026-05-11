@@ -2501,6 +2501,21 @@
   border-top: 1px solid var(--murg-line);
   padding: 60px 80px 80px;
 }
+.murg-related .murg-section__title {
+  font-size: clamp(20px, 2vw, 28px);
+}
+.murg-related .murg-product__name {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--murg-ink);
+}
+.murg-related .murg-product__price {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--murg-muted);
+}
 .murg-related__header {
   display: flex;
   align-items: flex-end;
