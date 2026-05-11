@@ -1178,9 +1178,9 @@
 
 	if ( rcConfig ) {
 		var rcShapeVal  = document.getElementById( 'murg-rc-shape-val' );
-		var rcCaratVal  = document.getElementById( 'murg-rc-carat-val' );
-		var rcCaratIn   = document.getElementById( 'murg-rc-carat' );
-		var rcCaratFill = document.getElementById( 'murg-rc-carat-fill' );
+		var rcCaratVal  = document.getElementById( 'murg-rc-size-val' );
+		var rcCaratIn   = document.getElementById( 'murg-rc-size' );
+		var rcCaratFill = document.getElementById( 'murg-rc-size-fill' );
 		var rcMetalVal  = document.getElementById( 'murg-rc-metal-val' );
 		var rcOriginVal = document.getElementById( 'murg-rc-origin-val' );
 
@@ -1204,19 +1204,19 @@
 			} );
 		} );
 
-		// Carat slider
-		function rcUpdateCarat() {
+		// Size (talla) slider
+		function rcUpdateSize() {
 			if ( ! rcCaratIn ) return;
 			var val  = parseFloat( rcCaratIn.value );
 			var min  = parseFloat( rcCaratIn.min );
 			var max  = parseFloat( rcCaratIn.max );
 			var pct  = ( ( val - min ) / ( max - min ) ) * 100;
 			if ( rcCaratFill ) rcCaratFill.style.width = pct + '%';
-			if ( rcCaratVal )  rcCaratVal.textContent  = val.toFixed( 2 ) + ' Ct';
+			if ( rcCaratVal )  rcCaratVal.textContent  = val % 1 === 0 ? val.toFixed(0) : val.toFixed(1);
 		}
 		if ( rcCaratIn ) {
-			rcCaratIn.addEventListener( 'input', rcUpdateCarat );
-			rcUpdateCarat();
+			rcCaratIn.addEventListener( 'input', rcUpdateSize );
+			rcUpdateSize();
 		}
 
 		// Metal selector
