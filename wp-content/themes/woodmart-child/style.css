@@ -6965,8 +6965,7 @@ body.murg-search-open { overflow: hidden; }
 }
 
 .murg-ac-engagement__styles {
-  grid-column: 1 / -1;
-  margin-top: -28px;
+  display: none;
 }
 
 .murg-ac-product-grid {
