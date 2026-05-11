@@ -337,8 +337,8 @@ function murg_prod_trust_icon( $name ) {
 
 		<div class="murg-product-detail__divider" aria-hidden="true"></div>
 
-		<!-- Guía de tallas (solo si el producto tiene imagen cargada en ACF) -->
-		<?php if ( $has_guia_tallas ) : ?>
+		<!-- Guía de tallas (solo si tiene imagen ACF y NO es anillo de compromiso, porque esos usan el modal del ring configurator) -->
+		<?php if ( $has_guia_tallas && ! $is_engagement ) : ?>
 		<button class="murg-sizeguide-btn" type="button"
 		        data-target="murg-sizeguide"
 		        aria-haspopup="dialog"
@@ -503,9 +503,9 @@ function murg_prod_trust_icon( $name ) {
 <?php endif; ?>
 
 <!-- ============================================================
-     MODAL DE GUÍA DE TALLAS (solo si hay imagen ACF cargada)
+     MODAL DE GUÍA DE TALLAS (solo si hay imagen ACF y NO es anillo de compromiso)
      ============================================================ -->
-<?php if ( $has_guia_tallas ) : ?>
+<?php if ( $has_guia_tallas && ! $is_engagement ) : ?>
 <div class="murg-sizeguide"
      id="murg-sizeguide"
      role="dialog"

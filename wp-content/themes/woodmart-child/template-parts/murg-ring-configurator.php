@@ -116,7 +116,7 @@ $metals = [
 		<div class="murg-rc-section__header">
 			<span class="murg-rc-section__label">
 				Talla:
-				<button type="button" class="murg-rc-sizeguide-link" id="murg-rc-sizeguide-open" aria-label="Ver guía de tallas">
+				<button type="button" class="murg-rc-sizeguide-link" data-target="murg-sizeguide" aria-label="Ver guía de tallas">
 					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
 					Guía de tallas
 				</button>
@@ -185,38 +185,50 @@ $metals = [
 
 </div>
 
-<!-- MODAL: Guía de Tallas -->
-<div class="murg-sizeguide-modal" id="murg-sizeguide-modal" role="dialog" aria-modal="true" aria-label="Guía de tallas">
-	<div class="murg-sizeguide-modal__overlay" id="murg-sizeguide-close-overlay"></div>
-	<div class="murg-sizeguide-modal__panel">
-		<div class="murg-sizeguide-modal__header">
-			<h3 class="murg-sizeguide-modal__title">Guía de Tallas</h3>
-			<button type="button" class="murg-sizeguide-modal__close" id="murg-sizeguide-close" aria-label="Cerrar">
-				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+<!-- MODAL: Guía de Tallas (Ring Configurator) -->
+<div class="murg-sizeguide"
+     id="murg-sizeguide"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="murg-sizeguide-title"
+     aria-hidden="true">
+	<div class="murg-sizeguide__backdrop" data-close="murg-sizeguide" aria-hidden="true"></div>
+	<div class="murg-sizeguide__panel" role="document">
+		<header class="murg-sizeguide__header">
+			<h2 class="murg-sizeguide__title murg-serif" id="murg-sizeguide-title">Guía de Tallas</h2>
+			<button class="murg-sizeguide__close"
+			        type="button"
+			        data-close="murg-sizeguide"
+			        aria-label="Cerrar guía de tallas">
+				<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" aria-hidden="true">
+					<path d="M6 6l12 12M6 18L18 6"/>
+				</svg>
 			</button>
-		</div>
-		<p class="murg-sizeguide-modal__desc">Mida el diámetro interior de un anillo que le quede bien, o consulte con nuestro equipo para una medición presencial.</p>
-		<div class="murg-sizeguide-modal__grid">
-			<?php
-			$sizes = [
-				['3.5', '14.4'], ['4', '14.8'], ['4.5', '15.2'], ['5', '15.6'],
-				['5.5', '15.6'], ['6', '16.4'], ['6.5', '16.9'], ['7', '17.3'],
-				['7.5', '17.7'], ['8', '18.2'], ['8.5', '18.6'], ['9', '19.0'],
-				['9.5', '19.4'], ['10', '19.8'], ['10.5', '20.2'],
-				['11', '20.6'], ['11.5', '21.0'], ['12', '21.4'],
-			];
-			foreach ( $sizes as $s ) : ?>
-			<div class="murg-sizeguide-modal__item">
-				<div class="murg-sizeguide-modal__ring">
-					<span class="murg-sizeguide-modal__num"><?php echo $s[0]; ?></span>
+		</header>
+		<div class="murg-sizeguide__body">
+			<p style="margin:0 0 20px;font-family:'Inter',sans-serif;font-size:14px;color:#666;line-height:1.6;">Mida el diámetro interior de un anillo que le quede bien, o consulte con nuestro equipo para una medición presencial.</p>
+			<div class="murg-sizeguide-grid">
+				<?php
+				$sizes = [
+					['3.5', '14.4'], ['4', '14.8'], ['4.5', '15.2'], ['5', '15.6'],
+					['5.5', '15.6'], ['6', '16.4'], ['6.5', '16.9'], ['7', '17.3'],
+					['7.5', '17.7'], ['8', '18.2'], ['8.5', '18.6'], ['9', '19.0'],
+					['9.5', '19.4'], ['10', '19.8'], ['10.5', '20.2'],
+					['11', '20.6'], ['11.5', '21.0'], ['12', '21.4'],
+				];
+				foreach ( $sizes as $s ) : ?>
+				<div class="murg-sizeguide-grid__item">
+					<div class="murg-sizeguide-grid__ring">
+						<span class="murg-sizeguide-grid__num"><?php echo $s[0]; ?></span>
+					</div>
+					<span class="murg-sizeguide-grid__mm"><?php echo $s[1]; ?> mm</span>
 				</div>
-				<span class="murg-sizeguide-modal__mm"><?php echo $s[1]; ?> mm</span>
+				<?php endforeach; ?>
 			</div>
-			<?php endforeach; ?>
-		</div>
-		<div class="murg-sizeguide-modal__tip">
-			<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--murg-gold)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-			<span>¿No está seguro de su talla? Escríbanos por WhatsApp y le ayudamos.</span>
+			<div class="murg-sizeguide-grid__tip">
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--murg-gold)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+				<span>¿No está seguro de su talla? Escríbanos por WhatsApp y le ayudamos.</span>
+			</div>
 		</div>
 	</div>
 </div>

@@ -7260,3 +7260,57 @@ body.murg-search-open { overflow: hidden; }
     padding: 44px 20px;
   }
 }
+
+/* ============================================================
+   SIZEGUIDE GRID (tallas en ring configurator modal)
+   ============================================================ */
+.murg-sizeguide-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.murg-sizeguide-grid__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.murg-sizeguide-grid__ring {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--murg-gold, #C9A84C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+}
+.murg-sizeguide-grid__num {
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--murg-ink, #1a1a1a);
+}
+.murg-sizeguide-grid__mm {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  color: #888;
+}
+.murg-sizeguide-grid__tip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--murg-cream, #F5F0E8);
+  border-radius: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  color: #555;
+}
+@media (max-width: 767px) {
+  .murg-sizeguide-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 480px) {
+  .murg-sizeguide-grid { grid-template-columns: repeat(3, 1fr); }
+}
