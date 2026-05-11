@@ -6635,7 +6635,59 @@ body.murg-search-open { overflow: hidden; }
   width: 56px;
 }
 
-.murg-ac-diamonds { padding-bottom: clamp(42px, 4vw, 70px); }
+.murg-ac-diamonds {
+  padding: clamp(48px, 5vw, 80px) clamp(24px, 4vw, 80px);
+  text-align: center;
+}
+.murg-ac-diamond-grid {
+  display: flex;
+  justify-content: center;
+  gap: clamp(12px, 2vw, 28px);
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto;
+}
+.murg-ac-diamond {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--murg-ink);
+  transition: transform 0.3s;
+  width: 80px;
+}
+.murg-ac-diamond:hover {
+  transform: translateY(-4px);
+}
+.murg-ac-diamond__img {
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.murg-ac-diamond__img img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: 0.6;
+  transition: opacity 0.3s;
+}
+.murg-ac-diamond:hover .murg-ac-diamond__img img {
+  opacity: 1;
+}
+.murg-ac-diamond__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+  transition: color 0.3s;
+}
+.murg-ac-diamond:hover .murg-ac-diamond__label {
+  color: var(--murg-gold);
+}
 
 .murg-ac-section-head {
   margin: 0 auto clamp(34px, 3.7vw, 64px);

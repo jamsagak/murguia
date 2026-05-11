@@ -209,6 +209,30 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 		</div>
 	</section>
 
+	<!-- Formas de diamante -->
+	<section class="murg-ac-diamonds" aria-label="Formas de diamante">
+		<header class="murg-ac-section-head" data-reveal>
+			<p class="murg-ac-eyebrow">Formas del diamante</p>
+			<h2><?php echo esc_html( $formas_titulo ); ?></h2>
+			<p><?php echo esc_html( $formas_sub ); ?></p>
+		</header>
+		<div class="murg-ac-diamond-grid" data-reveal>
+			<?php foreach ( $diamond_shapes as $shape ) :
+				$shape_src = $shapes_dir . $shape['slug'] . '_new.png';
+			?>
+			<a class="murg-ac-diamond" href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso&forma=' . $shape['slug'] ) ); ?>">
+				<div class="murg-ac-diamond__img">
+					<img src="<?php echo esc_url( $shape_src ); ?>"
+					     alt="<?php echo esc_attr( $shape['label'] ); ?>"
+					     loading="lazy"
+					     width="80" height="80">
+				</div>
+				<span class="murg-ac-diamond__label"><?php echo esc_html( $shape['label'] ); ?></span>
+			</a>
+			<?php endforeach; ?>
+		</div>
+	</section>
+
 	<section class="murg-ac-categories" aria-label="Categorias destacadas">
 		<div class="murg-ac-categories__box">
 			<header class="murg-ac-section-head" data-reveal>
