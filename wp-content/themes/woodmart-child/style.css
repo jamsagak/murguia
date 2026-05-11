@@ -4203,7 +4203,7 @@ body.murg-search-open { overflow: hidden; }
    ============================================================ */
 .murg-diamonds {
   background: var(--murg-parchment);
-  padding: clamp(32px, 3.7vw, 64px) clamp(24px, 5.56vw, 96px);
+  padding: clamp(32px, 3.7vw, 64px) clamp(24px, 5.56vw, 96px) clamp(28px, 2.78vw, 48px);
 }
 
 /* Header — above the row */
@@ -4246,10 +4246,10 @@ body.murg-search-open { overflow: hidden; }
   gap: 8px;
 }
 .murg-diamonds__ring-wrap {
+  flex: 0 0 auto;
+  height: clamp(126px, 11.57vw, 200px);
   position: relative;
   width: 100%;
-  flex: 1;
-  min-height: 0;
 }
 .murg-diamonds__ring-img {
   position: absolute;
@@ -4326,7 +4326,7 @@ body.murg-search-open { overflow: hidden; }
   .murg-diamonds__visual { width: clamp(160px, 22vw, 240px); }
 }
 
-@media (hover: none), (pointer: coarse) {
+@media (hover: none) and (max-width: 1024px), (pointer: coarse) and (max-width: 1024px) {
   .murg-diamonds__header {
     padding-left: 0;
   }
@@ -4368,7 +4368,7 @@ body.murg-search-open { overflow: hidden; }
 }
 
 @media (max-width: 768px) {
-  .murg-diamonds { padding: 40px 20px; }
+  .murg-diamonds { padding: 40px 20px 28px; }
   .murg-diamonds__header { padding-left: 0; }
   .murg-diamonds__inner { display: block; }
   .murg-diamonds__visual { display: none; }
