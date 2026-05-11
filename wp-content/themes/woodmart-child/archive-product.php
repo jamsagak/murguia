@@ -10,7 +10,7 @@ $shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id(
 
 // --- Leer filtros desde GET ---
 $paged        = max( 1, (int) ( get_query_var( 'paged' ) ?: get_query_var( 'page' ) ?: 1 ) );
-$f_cat        = isset( $_GET['cat'] )      ? sanitize_key( $_GET['cat'] )      : '';
+$f_cat        = isset( $_GET['cat'] ) ? sanitize_key( $_GET['cat'] ) : ( isset( $_GET['product_cat'] ) ? sanitize_key( $_GET['product_cat'] ) : '' );
 $f_piedra     = isset( $_GET['piedra'] )   ? sanitize_key( $_GET['piedra'] )   : '';
 $f_color      = isset( $_GET['color'] )    ? sanitize_key( $_GET['color'] )    : '';
 $f_min        = isset( $_GET['min'] )      ? (float) $_GET['min']              : '';

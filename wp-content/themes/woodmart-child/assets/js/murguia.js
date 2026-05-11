@@ -479,6 +479,11 @@
 	// Global filter function
 	window.murgApplyFilter = function ( param, value ) {
 		var ps = new URLSearchParams( window.location.search );
+		// Normalizar: WooCommerce usa product_cat, nosotros cat
+		if ( ps.has( 'product_cat' ) ) {
+			if ( param !== 'cat' ) ps.set( 'cat', ps.get( 'product_cat' ) );
+			ps.delete( 'product_cat' );
+		}
 		if ( value ) {
 			ps.set( param, value );
 		} else {
