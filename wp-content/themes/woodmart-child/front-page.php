@@ -1,17 +1,17 @@
-﻿<?php
+<?php
 /**
- * Front Page — Joyería Murguía
+ * Front Page — Joyería Murguía (v2 · Figma Joyeria Murquia)
  *
- * Todo el contenido editable se lee desde el post "Página de Inicio"
- * (slug: pagina-de-inicio) del CPT murguia_ajustes.
+ * Contenido editable via CPT murguia_ajustes (slug: pagina-de-inicio).
  * Función de acceso: murguia_ajuste( 'campo', 'fallback' )
- * Repeaters:        have_rows( 'campo', murguia_ajuste_id() )
  */
 
-// Atajo local: lee un campo del ajuste de la homepage.
 function murg_f( $key, $fallback = '' ) {
 	return murguia_ajuste( $key, $fallback );
 }
+
+$img_base   = get_stylesheet_directory_uri() . '/assets/img/home/';
+$img_upload = content_url( 'uploads/2026/05/' );
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -32,29 +32,24 @@ function murg_f( $key, $fallback = '' ) {
      01 HERO
      ============================================================ -->
 <?php
-$hero_eyebrow = murg_f( 'hp_hero_eyebrow',   'Colecci\xc3\xb3n Oto\xc3\xb1o \xc2\xb7 MMXXVI' );
-$hero_titulo  = murg_f( 'hp_hero_titulo',     'Joyer\xc3\xada <em>Murgu\xc3\xada</em>' );
-$hero_sub     = murg_f( 'hp_hero_subtitulo',  'Orfebrería peruana desde 1962' );
-$hero_cta_txt = murg_f( 'hp_hero_cta_texto',  'Ver Colección' );
-$hero_cta_url = murg_f( 'hp_hero_cta_link',   home_url( '/shop/' ) );
+$hero_eyebrow = '';
+$hero_titulo  = 'El detalle es nuestra herencia. Tu historia, nuestro oficio.';
+$hero_sub     = '';
+$hero_cta_txt = 'Descubrir Colección';
+$hero_cta_url = home_url( '/shop/' );
 
-// Slider del hero — imágenes y/o videos
 $hero_slides = [];
 if ( function_exists( 'have_rows' ) && have_rows( 'hp_hero_slides', murguia_ajuste_id() ) ) {
 	while ( have_rows( 'hp_hero_slides', murguia_ajuste_id() ) ) {
 		the_row();
-		$tipo        = get_sub_field( 'tipo' ) ?: 'imagen';
-		$img         = get_sub_field( 'imagen' );
-		$video_url   = trim( (string) get_sub_field( 'video_url' ) );
-		$vid_inicio  = (int) ( get_sub_field( 'video_inicio' ) ?: 0 );
-		$vid_fin_raw = get_sub_field( 'video_fin' );
-		$vid_fin     = ( $vid_fin_raw !== '' && $vid_fin_raw !== null && $vid_fin_raw !== false )
-		                ? (int) $vid_fin_raw : 15;
+		$tipo       = get_sub_field( 'tipo' ) ?: 'imagen';
+		$img        = get_sub_field( 'imagen' );
+		$video_url  = trim( (string) get_sub_field( 'video_url' ) );
+		$vid_inicio = (int) ( get_sub_field( 'video_inicio' ) ?: 0 );
+		$vid_fin    = (int) ( get_sub_field( 'video_fin' ) ?: 15 );
 
-		// Descartar solo videos sin URL — las imagenes pueden estar vacias (placeholder)
 		if ( $tipo === 'video' && empty( $video_url ) ) continue;
 
-		// Parsear video: detectar YouTube, Vimeo o mp4 directo
 		$video_embed = '';
 		$video_mp4   = '';
 		if ( $tipo === 'video' ) {
@@ -62,7 +57,7 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_hero_slides', murguia_ajus
 				$vid = $m[1];
 				$video_embed = 'https://www.youtube.com/embed/' . $vid
 					. '?autoplay=1&mute=1&loop=1&playlist=' . $vid
-					. '&controls=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1'
+					. '&controls=0&playsinline=1&rel=0&enablejsapi=1'
 					. ( $vid_inicio > 0 ? '&start=' . $vid_inicio : '' );
 			} elseif ( preg_match( '/vimeo\.com\/(\d+)/', $video_url, $m ) ) {
 				$vid = $m[1];
@@ -74,23 +69,15 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_hero_slides', murguia_ajus
 			}
 		}
 
-		// Duración en ms para el autoplay del slider
-		$duracion_ms = $tipo === 'video' ? ( ( $vid_fin - $vid_inicio ) * 1000 ) : 5000;
-
 		$hero_slides[] = [
 			'tipo'        => $tipo,
-			// Imagen
-			'url'         => $img['url'] ?? '',
-			'alt'         => $img['alt'] ?? '',
-			// Video
+			'url'         => ! empty( $img['url'] ) ? $img['url'] : $img_upload . 'hero.jpg',
+			'alt'         => $img['alt'] ?? 'Joyería Murguía',
 			'video_embed' => $video_embed,
 			'video_mp4'   => $video_mp4,
-			'video_url'   => $video_url,
 			'video_inicio'=> $vid_inicio,
 			'video_fin'   => $vid_fin,
-			// Timing
-			'intervalo'   => $tipo === 'video' ? max( $duracion_ms, 2000 ) : 5000,
-			// Contenido
+			'intervalo'   => $tipo === 'video' ? max( ( $vid_fin - $vid_inicio ) * 1000, 2000 ) : 5000,
 			'eyebrow'     => (string) get_sub_field( 'eyebrow' ),
 			'titulo'      => (string) get_sub_field( 'titulo' ),
 			'subtitulo'   => (string) get_sub_field( 'subtitulo' ),
@@ -99,584 +86,644 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_hero_slides', murguia_ajus
 		];
 	}
 }
-// Fallback: campo legado hp_hero_imagen
 if ( empty( $hero_slides ) ) {
-	$legacy = murg_f( 'hp_hero_imagen', [] );
-	if ( ! empty( $legacy['url'] ) ) {
-		$hero_slides[] = [
-			'tipo' => 'imagen', 'url' => $legacy['url'], 'alt' => $legacy['alt'] ?? '',
-			'video_embed' => '', 'video_mp4' => '', 'video_url' => '', 'intervalo' => 5000,
-			'eyebrow' => '', 'titulo' => '', 'subtitulo' => '', 'cta_texto' => '', 'cta_link' => '',
-		];
-	}
+	$hero_slides[] = [
+		'tipo'        => 'imagen',
+		'url'         => $img_upload . 'hero.jpg',
+		'alt'         => 'Joyeria Murguia',
+		'video_embed' => '', 'video_mp4' => '', 'video_inicio' => 0, 'video_fin' => 15,
+		'intervalo'   => 5000,
+		'eyebrow' => '', 'titulo' => '', 'subtitulo' => '', 'cta_texto' => '', 'cta_link' => '',
+	];
 }
 ?>
 <section class="murg-hero" id="murg-hero-slider" aria-label="Hero">
 
-	<?php foreach ( $hero_slides as $idx => $slide ) :
-		// Contenido: usa el del slide si existe, si no el global
-		$s_eyebrow   = $slide['eyebrow']   ?: $hero_eyebrow;
-		$s_titulo    = $slide['titulo']    ?: $hero_titulo;
-		$s_subtitulo = $slide['subtitulo'] ?: $hero_sub;
-		$s_cta_txt   = $slide['cta_texto'] ?: $hero_cta_txt;
-		$s_cta_url   = $slide['cta_link']  ?: $hero_cta_url;
-	?>
+	<!-- ── Slides: capas de fondo puras ─────────────────────── -->
+	<?php foreach ( $hero_slides as $idx => $slide ) : ?>
 	<div class="murg-hero__slide<?php echo $idx === 0 ? ' is-active' : ''; ?>"
 	     data-intervalo="<?php echo (int) $slide['intervalo']; ?>"
+	     data-titulo="<?php echo esc_attr( $slide['titulo'] ?: $hero_titulo ); ?>"
+	     data-cta-texto="<?php echo esc_attr( $slide['cta_texto'] ?: $hero_cta_txt ); ?>"
+	     data-cta-url="<?php echo esc_attr( $slide['cta_link'] ?: $hero_cta_url ); ?>"
 	     <?php if ( $slide['tipo'] === 'video' ) : ?>
 	     data-video-inicio="<?php echo (int) $slide['video_inicio']; ?>"
 	     data-video-fin="<?php echo (int) $slide['video_fin']; ?>"
 	     <?php endif; ?>
 	     aria-hidden="<?php echo $idx === 0 ? 'false' : 'true'; ?>">
 
-		<!-- Fondo -->
 		<div class="murg-hero__bg">
-			<?php if ( $slide['tipo'] === 'video' ) : ?>
-
-				<?php if ( $slide['video_embed'] ) : ?>
-				<div class="murg-hero__video-wrap">
-					<iframe class="murg-hero__video-iframe"
-					        src="<?php echo esc_url( $slide['video_embed'] ); ?>"
-					        frameborder="0"
-					        allow="autoplay; fullscreen"
-					        allowfullscreen
-					        loading="<?php echo $idx === 0 ? 'eager' : 'lazy'; ?>"
-					        data-video-iframe></iframe>
-				</div>
-				<?php elseif ( $slide['video_mp4'] ) : ?>
-				<video class="murg-hero__video-mp4"
-				       src="<?php echo esc_url( $slide['video_mp4'] ); ?>"
-				       autoplay muted playsinline
-				       data-video-mp4
-				       data-inicio="<?php echo (int) $slide['video_inicio']; ?>"
-				       data-fin="<?php echo (int) $slide['video_fin']; ?>"></video>
-				<?php endif; ?>
-
+			<?php if ( $slide['tipo'] === 'video' && $slide['video_embed'] ) : ?>
+			<div class="murg-hero__video-wrap">
+				<iframe class="murg-hero__video-iframe"
+				        src="<?php echo esc_url( $slide['video_embed'] ); ?>"
+				        frameborder="0" allow="autoplay; fullscreen" allowfullscreen
+				        loading="<?php echo $idx === 0 ? 'eager' : 'lazy'; ?>"
+				        data-video-iframe></iframe>
+			</div>
+			<?php elseif ( $slide['tipo'] === 'video' && $slide['video_mp4'] ) : ?>
+			<video class="murg-hero__video-mp4"
+			       src="<?php echo esc_url( $slide['video_mp4'] ); ?>"
+			       autoplay muted playsinline data-video-mp4
+			       data-inicio="<?php echo (int) $slide['video_inicio']; ?>"
+			       data-fin="<?php echo (int) $slide['video_fin']; ?>"></video>
 			<?php else : ?>
-				<img class="murg-hero__img"
-				     src="<?php echo esc_url( $slide['url'] ); ?>"
-				     alt="<?php echo esc_attr( $slide['alt'] ); ?>"
-				     <?php echo $idx > 0 ? 'loading="lazy"' : ''; ?>>
+			<img class="murg-hero__img"
+			     src="<?php echo esc_url( $slide['url'] ); ?>"
+			     alt="<?php echo esc_attr( $slide['alt'] ); ?>"
+			     <?php echo $idx > 0 ? 'loading="lazy"' : 'loading="eager"'; ?>>
 			<?php endif; ?>
-			<div class="murg-hero__vignette"></div>
 		</div>
-
-		<!-- Contenido -->
-		<div class="murg-hero__content">
-			<div class="murg-eyebrow murg-hero__eyebrow"><?php echo esc_html( $s_eyebrow ); ?></div>
-			<h1 class="murg-serif murg-hero__title"><?php echo wp_kses( $s_titulo, [ 'em' => [] ] ); ?></h1>
-			<p class="murg-hero__sub"><?php echo esc_html( $s_subtitulo ); ?></p>
-			<div class="murg-hero__divider" aria-hidden="true"></div>
-			<a href="<?php echo esc_url( $s_cta_url ); ?>" class="murg-hero__cta">
-				<?php echo esc_html( $s_cta_txt ); ?>
-			</a>
-		</div>
+		<div class="murg-hero__vignette"></div>
 
 	</div>
 	<?php endforeach; ?>
 
-	<?php if ( empty( $hero_slides ) ) : ?>
-	<div class="murg-hero__slide is-active" data-intervalo="5000" aria-hidden="false">
-		<div class="murg-hero__bg"></div>
-		<div class="murg-hero__content">
-			<div class="murg-eyebrow murg-hero__eyebrow"><?php echo esc_html( $hero_eyebrow ); ?></div>
-			<h1 class="murg-serif murg-hero__title"><?php echo wp_kses( $hero_titulo, [ 'em' => [] ] ); ?></h1>
-			<p class="murg-hero__sub"><?php echo esc_html( $hero_sub ); ?></p>
-			<div class="murg-hero__divider" aria-hidden="true"></div>
-			<a href="<?php echo esc_url( $hero_cta_url ); ?>" class="murg-hero__cta">
-				<?php echo esc_html( $hero_cta_txt ); ?>
-			</a>
-		</div>
-	</div>
-	<?php endif; ?>
+	<!-- ── Overlay de contenido: directo en el section ──────── -->
+	<?php
+	$first     = $hero_slides[0];
+	$s_titulo  = $first['titulo']    ?: $hero_titulo;
+	$s_cta_txt = $first['cta_texto'] ?: $hero_cta_txt;
+	$s_cta_url = $first['cta_link']  ?: $hero_cta_url;
+	$n_slides  = count( $hero_slides );
+	?>
+	<div class="murg-hero__content" aria-live="polite">
+		<h1 class="murg-hero__title"><?php echo esc_html( $s_titulo ); ?></h1>
 
-	<!-- Dots y progreso (fuera de los slides, siempre encima) -->
-	<?php if ( count( $hero_slides ) > 1 ) : ?>
-	<div class="murg-hero__dots" aria-label="Navegación de slides" role="tablist">
-		<?php foreach ( $hero_slides as $idx => $slide ) : ?>
-		<button class="murg-hero__dot<?php echo $idx === 0 ? ' is-active' : ''; ?>"
-		        data-index="<?php echo $idx; ?>"
-		        role="tab"
-		        aria-selected="<?php echo $idx === 0 ? 'true' : 'false'; ?>"
-		        aria-label="Slide <?php echo $idx + 1; ?> de <?php echo count( $hero_slides ); ?>">
-			<span class="murg-hero__dot-line"></span>
-		</button>
-		<?php endforeach; ?>
+		<div class="murg-hero__dots-inline" role="tablist" aria-label="Slides">
+			<?php for ( $d = 0; $d < $n_slides; $d++ ) : ?>
+			<button class="murg-hero__dot-circle<?php echo $d === 0 ? ' is-active' : ''; ?>"
+			        data-index="<?php echo $d; ?>"
+			        role="tab"
+			        aria-selected="<?php echo $d === 0 ? 'true' : 'false'; ?>"
+			        aria-label="Slide <?php echo $d + 1; ?>"></button>
+			<?php endfor; ?>
+		</div>
+
+		<a href="<?php echo esc_url( $s_cta_url ); ?>" class="murg-hero__cta">
+			<?php echo esc_html( $s_cta_txt ); ?>
+		</a>
+		<span class="murg-hero__cta-line" aria-hidden="true"></span>
 	</div>
+
 	<div class="murg-hero__progress" aria-hidden="true">
 		<div class="murg-hero__progress-bar"></div>
 	</div>
-	<?php endif; ?>
 
-	<div class="murg-hero__foot" aria-hidden="true">
-		<div>Lima &middot; Perú</div>
+</section>
+
+<!-- ============================================================
+     02 ANILLOS DE COMPROMISO — formas de diamante
+     ============================================================ -->
+<?php
+$diamond_titulo = murg_f( 'hp_diamond_titulo', 'Anillos de compromiso' );
+$diamond_sub    = murg_f( 'hp_diamond_sub',    'forjada a mano por orfebres' );
+
+$diamond_shapes = [
+	[ 'slug' => 'oval',               'ext' => 'webp', 'label' => 'Oval' ],
+	[ 'slug' => 'round',              'ext' => 'webp', 'label' => 'Round' ],
+	[ 'slug' => 'emerald',            'ext' => 'webp', 'label' => 'Emerald' ],
+	[ 'slug' => 'marquise',           'ext' => 'webp', 'label' => 'Marquise' ],
+	[ 'slug' => 'radiant',            'ext' => 'webp', 'label' => 'Radiant' ],
+	[ 'slug' => 'pear',               'ext' => 'webp', 'label' => 'Pear' ],
+	[ 'slug' => 'elongated-cushion',  'ext' => 'webp', 'label' => 'Elongated Cushion' ],
+	[ 'slug' => 'cushion',            'ext' => 'webp', 'label' => 'Cushion' ],
+	[ 'slug' => 'princess',           'ext' => 'webp', 'label' => 'Princess' ],
+	[ 'slug' => 'asscher',            'ext' => 'webp', 'label' => 'Asscher' ],
+];
+$shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
+?>
+<section class="murg-diamonds" aria-label="<?php echo esc_attr( $diamond_titulo ); ?>">
+
+	<header class="murg-diamonds__header">
+		<h2 class="murg-diamonds__title"><?php echo esc_html( $diamond_titulo ); ?></h2>
+		<p class="murg-diamonds__sub"><?php echo esc_html( $diamond_sub ); ?></p>
+	</header>
+
+	<div class="murg-diamonds__inner">
+
+		<!-- LEFT: ring photo -->
+		<div class="murg-diamonds__visual">
+			<div class="murg-diamonds__ring-wrap">
+				<?php foreach ( $diamond_shapes as $idx => $shape ) : ?>
+				<img class="murg-diamonds__ring-img<?php echo $idx === 0 ? ' is-active' : ''; ?>"
+				     src="<?php echo esc_url( $img_upload . 'ring-' . $shape['slug'] . '.' . $shape['ext'] ); ?>"
+				     alt="<?php echo esc_attr( $shape['label'] ); ?>"
+				     loading="<?php echo $idx === 0 ? 'eager' : 'lazy'; ?>"
+				     data-shape="<?php echo esc_attr( $shape['slug'] ); ?>">
+				<?php endforeach; ?>
+			</div>
+			<p class="murg-diamonds__active-label"><?php echo esc_html( $diamond_shapes[0]['label'] ); ?></p>
+		</div>
+
+		<!-- Divider -->
+		<div class="murg-diamonds__divider" aria-hidden="true"></div>
+
+		<!-- RIGHT: grid -->
+		<div class="murg-diamonds__selector">
+			<div class="murg-diamonds__grid">
+				<?php foreach ( $diamond_shapes as $idx => $shape ) :
+					$icon_url = $shapes_dir . $shape['slug'] . '_new.png';
+				?>
+				<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso&forma=' . $shape['slug'] ) ); ?>"
+				   class="murg-diamonds__shape<?php echo $idx === 0 ? ' is-active' : ''; ?>"
+				   data-shape="<?php echo esc_attr( $shape['slug'] ); ?>"
+				   data-label="<?php echo esc_attr( $shape['label'] ); ?>">
+					<img src="<?php echo esc_url( $icon_url ); ?>"
+					     alt="<?php echo esc_attr( $shape['label'] ); ?>"
+					     loading="lazy">
+					<span><?php echo esc_html( $shape['label'] ); ?></span>
+				</a>
+				<?php endforeach; ?>
+			</div>
+		</div>
+
 	</div>
 </section>
 
 <!-- ============================================================
-     02 COLECCIONES
+     03 NOVIOS — imagen + texto + logos marcas
      ============================================================ -->
 <?php
-$col_eyebrow = murg_f( 'hp_col_eyebrow', 'Colecciones Destacadas' );
-$col_titulo  = murg_f( 'hp_col_titulo',  'Piezas que <em>perduran</em>' );
+$novios_titulo  = murg_f( 'hp_novios_titulo', 'Novios' );
+$novios_sub     = murg_f( 'hp_novios_sub',    'Anillos de Compromiso / Anillos de Matrimonio / Las 4Cs' );
+$novios_cta_txt = murg_f( 'hp_novios_cta_texto', 'Ver Colecciónes' );
+$novios_cta_url = murg_f( 'hp_novios_cta_url', home_url( '/shop/?product_cat=novios' ) );
+$novios_imagen  = murg_f( 'hp_novios_imagen', [] );
+$novios_img_url = ! empty( $novios_imagen['url'] ) ? $novios_imagen['url'] : $img_upload .'novios.jpg';
 
-$colecciones = [];
-if ( function_exists( 'have_rows' ) && have_rows( 'hp_col_items', murguia_ajuste_id() ) ) {
-	while ( have_rows( 'hp_col_items', murguia_ajuste_id() ) ) {
+$novios_logos = [];
+if ( function_exists( 'have_rows' ) && have_rows( 'hp_novios_logos', murguia_ajuste_id() ) ) {
+	while ( have_rows( 'hp_novios_logos', murguia_ajuste_id() ) ) {
 		the_row();
-		$colecciones[] = [
-			'nombre'      => get_sub_field( 'nombre' )      ?: '',
-			'descripcion' => get_sub_field( 'descripcion' ) ?: '',
-			'numero'      => get_sub_field( 'numero' )      ?: '',
-			'link'        => get_sub_field( 'link' )        ?: '#',
-			'imagen'      => get_sub_field( 'imagen' )      ?: [],
+		$novios_logos[] = [
+			'imagen' => get_sub_field( 'imagen' ),
 		];
 	}
 }
-
-// Demos predefinidos (se usan completos si ACF está vacío, o como relleno si ACF tiene menos de 3).
-$demo_colecciones = [
-	[ 'nombre' => 'Aurea',     'descripcion' => 'Anillos en oro 18k con incrustaciones',         'numero' => 'N° I',   'link' => '#', 'imagen' => [] ],
-	[ 'nombre' => 'Pacha',     'descripcion' => 'Collares y gargantillas de inspiración andina', 'numero' => 'N° II',  'link' => '#', 'imagen' => [] ],
-	[ 'nombre' => 'Solsticio', 'descripcion' => 'Brazaletes y pulseras de edición limitada',     'numero' => 'N° III', 'link' => '#', 'imagen' => [] ],
-];
-
-if ( empty( $colecciones ) ) {
-	$colecciones = $demo_colecciones;
-} else {
-	// Completa hasta 3 con demos para que la sección nunca se vea incompleta.
-	while ( count( $colecciones ) < 3 ) {
-		$colecciones[] = $demo_colecciones[ count( $colecciones ) ];
-	}
-}
-
-// Asigna un shape rotativo a cualquier colección sin imagen real.
-$shape_cycle = [ 'ring', 'necklace', 'bracelet' ];
-$label_cycle = [ 'Anillo · cierre macro', 'Collar · estudio', 'Brazalete · detalle' ];
-foreach ( $colecciones as $i => &$col ) {
-	if ( empty( $col['imagen']['url'] ) ) {
-		if ( empty( $col['shape'] ) ) $col['shape'] = $shape_cycle[ $i % 3 ];
-		if ( empty( $col['label'] ) ) $col['label'] = $label_cycle[ $i % 3 ];
-	}
-}
-unset( $col );
 ?>
-<section class="murg-section" id="colecciones" aria-label="Colecciones destacadas">
-	<header class="murg-section__header">
-		<div class="murg-eyebrow"><?php echo esc_html( $col_eyebrow ); ?></div>
-		<h2 class="murg-section__title murg-serif"><?php echo wp_kses( $col_titulo, [ 'em' => [] ] ); ?></h2>
-		<div class="murg-section__meta">
-			<a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Ver Todas →</a>
-		</div>
-	</header>
+<section class="murg-novios" aria-label="<?php echo esc_attr( $novios_titulo ); ?>">
 
-	<div class="murg-collections">
-		<?php foreach ( $colecciones as $col ) :
-			$shape = isset( $col['shape'] ) ? $col['shape'] : '';
-			$label = isset( $col['label'] ) ? $col['label'] : '';
+	<div class="murg-novios__panel">
+		<img src="<?php echo esc_url( $novios_img_url ); ?>"
+		     alt="<?php echo esc_attr( $novios_titulo ); ?>"
+		     loading="lazy"
+		     class="murg-novios__img">
+
+		<div class="murg-novios__content">
+			<h2 class="murg-novios__title"><?php echo esc_html( $novios_titulo ); ?></h2>
+			<p class="murg-novios__sub"><?php echo esc_html( $novios_sub ); ?></p>
+
+			<a href="<?php echo esc_url( $novios_cta_url ); ?>"
+			   class="murg-btn murg-btn--dark">
+				<?php echo esc_html( $novios_cta_txt ); ?>
+			</a>
+
+			<?php if ( ! empty( $novios_logos ) ) : ?>
+			<div class="murg-novios__logos" aria-label="Certificaciones">
+				<?php foreach ( $novios_logos as $logo ) :
+					if ( empty( $logo['imagen']['url'] ) ) continue;
+				?>
+					<img src="<?php echo esc_url( $logo['imagen']['url'] ); ?>"
+					     alt="<?php echo esc_attr( $logo['imagen']['alt'] ?? '' ); ?>"
+					     loading="lazy">
+				<?php endforeach; ?>
+			</div>
+			<?php endif; ?>
+		</div>
+	</div>
+
+</section>
+
+<!-- ============================================================
+     03B ICONOS CATEGORIAS
+     ============================================================ -->
+<?php
+$icon_strip_items = [
+	[ 'slug' => 'diamate', 'label' => 'Diamantes', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso' ) ],
+	[ 'slug' => 'pulsera',  'label' => 'Pulseras',  'url' => home_url( '/shop/?product_cat=pulseras' ) ],
+	[ 'slug' => 'anillo',   'label' => 'Anillos',   'url' => home_url( '/shop/?product_cat=anillos' ) ],
+	[ 'slug' => 'arete',    'label' => 'Aretes',    'url' => home_url( '/shop/?product_cat=aretes' ) ],
+	[ 'slug' => 'collar',   'label' => 'Collares',  'url' => home_url( '/shop/?product_cat=collares-y-dijes' ) ],
+	[ 'slug' => 'hogar',    'label' => 'Hogar',     'url' => home_url( '/hogar/' ) ],
+];
+?>
+<section class="murg-icon-strip" aria-label="Categorías destacadas">
+	<div class="murg-icon-strip__inner">
+		<?php foreach ( $icon_strip_items as $item ) :
+			$att = get_posts( [
+				'post_type'   => 'attachment',
+				'name'        => $item['slug'],
+				'numberposts' => 1,
+				'post_status' => 'inherit',
+			] );
+			$svg_url = $att ? wp_get_attachment_url( $att[0]->ID ) : '';
 		?>
-		<a class="murg-collection" href="<?php echo esc_url( $col['link'] ); ?>">
-			<div class="murg-collection__img">
-				<?php if ( ! empty( $col['imagen']['url'] ) ) : ?>
-					<img src="<?php echo esc_url( $col['imagen']['url'] ); ?>"
-					     alt="<?php echo esc_attr( $col['imagen']['alt'] ?? $col['nombre'] ); ?>">
-				<?php elseif ( $shape ) : ?>
-					<div class="murg-collection__placeholder murg-collection__placeholder--<?php echo esc_attr( $shape ); ?>" aria-hidden="true">
-						<span class="murg-collection__shape"></span>
-					</div>
-					<?php if ( $label ) : ?>
-						<span class="murg-collection__placeholder-label">[ <?php echo esc_html( $label ); ?> ]</span>
-					<?php endif; ?>
-				<?php endif; ?>
-				<div class="murg-collection__num"><?php echo esc_html( $col['numero'] ); ?></div>
-			</div>
-			<div class="murg-collection__meta">
-				<span class="murg-collection__name murg-serif"><?php echo esc_html( $col['nombre'] ); ?></span>
-				<span class="murg-collection__arrow" aria-hidden="true">→</span>
-			</div>
-			<p class="murg-collection__desc"><?php echo esc_html( $col['descripcion'] ); ?></p>
+		<a href="<?php echo esc_url( $item['url'] ); ?>" class="murg-icon-strip__item">
+			<?php if ( $svg_url ) : ?>
+			<img src="<?php echo esc_url( $svg_url ); ?>"
+			     alt=""
+			     loading="lazy"
+			     class="murg-icon-strip__icon"
+			     aria-hidden="true">
+			<?php endif; ?>
+			<span class="murg-icon-strip__label"><?php echo esc_html( $item['label'] ); ?></span>
 		</a>
 		<?php endforeach; ?>
 	</div>
 </section>
 
 <!-- ============================================================
-     03 BESTSELLERS (WooCommerce)
+     04 PIEZAS QUE DESTACAN - tabs categoria + productos reales
      ============================================================ -->
 <?php
-$best_eyebrow  = murg_f( 'hp_best_eyebrow',   'Más Codiciados' );
-$best_titulo   = murg_f( 'hp_best_titulo',     'Los <em>esenciales</em>' );
-$best_temporada = murg_f( 'hp_best_temporada', 'Otoño MMXXVI' );
-$bestseller_ids = murg_f( 'hp_best_productos', [] );
+$piezas_titulo = murg_f( 'hp_piezas_titulo', 'Piezas que Destacan' );
+$piezas_cta_txt = murg_f( 'hp_piezas_cta_texto', 'Ver tienda completa' );
+$piezas_cta_url = murg_f( 'hp_piezas_cta_url', home_url( '/shop/' ) );
 
-// Fallback automático: un producto por categoría (el más vendido de cada una).
-if ( empty( $bestseller_ids ) && function_exists( 'wc_get_page_id' ) ) {
+$piezas_category_slugs = [ 'anillos', 'aretes', 'pulseras', 'collares-y-dijes', 'bebes' ];
+$tabs = [];
 
-	// Categorías a excluir: contenedores genéricos que no representan un tipo de pieza
-	$cats_excluir = [ 'uncategorized', 'catalogo', 'marcas', 'ofertas', 'ofertas-promociones',
-	                  'promociones', 'dscto-cyber', 'destacados', 'accessories' ];
-
-	$todas_cats = get_terms( [
-		'taxonomy'   => 'product_cat',
-		'hide_empty' => true,
-		'fields'     => 'id=>slug',
-	] );
-
-	$bestseller_ids = [];
-	$usados_ids     = []; // evitar duplicar el mismo producto en distintas categorías
-
-	if ( ! is_wp_error( $todas_cats ) ) {
-		// Ordenar aleatoriamente para variar la selección en cada visita
-		$slugs = array_values( $todas_cats );
-		$ids   = array_keys( $todas_cats );
-		array_multisort( array_map( fn() => mt_rand(), $slugs ), SORT_NUMERIC, $slugs, $ids );
-		$todas_cats = array_combine( $ids, $slugs );
-
-		foreach ( $todas_cats as $cat_id => $cat_slug ) {
-			if ( in_array( $cat_slug, $cats_excluir, true ) ) continue;
-
-			$cat_query = new WP_Query( [
-				'post_type'      => 'product',
-				'post_status'    => 'publish',
-				'posts_per_page' => 5,
-				'tax_query'      => [ [
-					'taxonomy' => 'product_cat',
-					'field'    => 'term_id',
-					'terms'    => $cat_id,
-				] ],
-				'meta_key'       => 'total_sales',
-				'orderby'        => 'meta_value_num',
-				'order'          => 'DESC',
-				'fields'         => 'ids',
-			] );
-
-			if ( $cat_query->have_posts() ) {
-				foreach ( $cat_query->posts as $pid ) {
-					if ( in_array( $pid, $usados_ids, true ) ) continue;
-					$p = wc_get_product( $pid );
-					if ( ! $p || ! $p->is_in_stock() || ! $p->is_visible() ) continue;
-					$bestseller_ids[] = $pid;
-					$usados_ids[]     = $pid;
-					break;
-				}
-			}
-			wp_reset_postdata();
-		}
+foreach ( $piezas_category_slugs as $slug ) {
+	$term = taxonomy_exists( 'product_cat' ) ? get_term_by( 'slug', $slug, 'product_cat' ) : false;
+	if ( ! $term || is_wp_error( $term ) ) {
+		continue;
 	}
 
-	// Si por alguna razón quedaron menos de 3, completar con los más vendidos globales
-	if ( count( $bestseller_ids ) < 3 ) {
-		$fill_query = new WP_Query( [
-			'post_type'      => 'product',
-			'post_status'    => 'publish',
-			'posts_per_page' => -1,
-			'meta_key'       => 'total_sales',
-			'orderby'        => 'meta_value_num',
-			'order'          => 'DESC',
-			'fields'         => 'ids',
-			'post__not_in'   => $bestseller_ids,
+	$products = [];
+	if ( function_exists( 'wc_get_products' ) ) {
+		$wc_piezas = wc_get_products( [
+			'limit'    => 3,
+			'status'   => 'publish',
+			'category' => [ $slug ],
+			'orderby'  => 'menu_order',
+			'order'    => 'ASC',
 		] );
-		foreach ( $fill_query->posts as $pid ) {
-			if ( in_array( $pid, $bestseller_ids, true ) ) continue;
-			$bestseller_ids[] = $pid;
+
+		foreach ( $wc_piezas as $p ) {
+			$img_id = $p->get_image_id();
+			$img    = $img_id ? wp_get_attachment_image_url( $img_id, 'large' ) : '';
+			$alt    = $img_id ? get_post_meta( $img_id, '_wp_attachment_image_alt', true ) : '';
+
+			$products[] = [
+				'name'  => $p->get_name(),
+				'price' => $p->get_price_html(),
+				'url'   => $p->get_permalink(),
+				'img'   => $img,
+				'alt'   => $alt ?: $p->get_name(),
+			];
 		}
-		wp_reset_postdata();
 	}
-}
 
-$size_classes    = [ 'murg-product--primary', 'murg-product--secondary', 'murg-product--tertiary' ];
-$per_slide       = 3;
-$all_product_ids = $bestseller_ids; // sin límite — todas las categorías disponibles
-
-// Construye un array unificado de items; usa demos si no hay productos WC.
-$items = [];
-foreach ( $all_product_ids as $pid ) {
-	$p = wc_get_product( $pid );
-	if ( ! $p ) continue;
-	$img_id  = $p->get_image_id();
-	$tags    = wc_get_product_terms( $pid, 'product_tag', [ 'fields' => 'names' ] );
-	$sku     = $p->get_sku();
-	$mat     = get_post_meta( $pid, '_murguia_material', true );
-	$ref_lin = array_filter( [ $sku ? 'Ref. ' . $sku : '', $mat ] );
-	$items[] = [
-		'name'  => $p->get_name(),
-		'price' => $p->get_price_html(),
-		'url'   => $p->get_permalink(),
-		'img'   => $img_id ? wp_get_attachment_image_url( $img_id, 'large' ) : '',
-		'alt'   => $img_id ? get_post_meta( $img_id, '_wp_attachment_image_alt', true ) : $p->get_name(),
-		'tag'   => ! empty( $tags ) ? $tags[0] : '',
-		'ref'   => $ref_lin ? implode( ' · ', $ref_lin ) : '',
-		'shape' => '',
+	$tabs[] = [
+		'slug'     => $slug,
+		'label'    => $term->name,
+		'url'      => get_term_link( $term ),
+		'products' => $products,
 	];
 }
-
-// Fallback demo: 6 piezas con placeholders geométricos.
-if ( empty( $items ) ) {
-	$items = [
-		[ 'name' => 'Aurea',     'price' => 'S/ 2,400', 'url' => '#', 'img' => '', 'alt' => '', 'tag' => 'Nuevo',   'ref' => 'Ref. MG-001 · Oro 18k',     'shape' => 'ring' ],
-		[ 'name' => 'Pacha',     'price' => 'S/ 3,800', 'url' => '#', 'img' => '', 'alt' => '', 'tag' => '',        'ref' => 'Ref. MG-014 · Oro · Spondylus', 'shape' => 'necklace' ],
-		[ 'name' => 'Solsticio', 'price' => 'S/ 1,950', 'url' => '#', 'img' => '', 'alt' => '', 'tag' => 'Edición', 'ref' => 'Ref. MG-022 · Plata 950',  'shape' => 'bracelet' ],
-		[ 'name' => 'Luna',      'price' => 'S/ 1,200', 'url' => '#', 'img' => '', 'alt' => '', 'tag' => '',        'ref' => 'Ref. MG-031 · Oro 18k',    'shape' => 'earring' ],
-		[ 'name' => 'Inca',      'price' => 'S/ 980',   'url' => '#', 'img' => '', 'alt' => '', 'tag' => '',        'ref' => 'Ref. MG-040 · Plata',      'shape' => 'cufflink' ],
-		[ 'name' => 'Ñusta',     'price' => 'S/ 2,100', 'url' => '#', 'img' => '', 'alt' => '', 'tag' => 'Bodas',   'ref' => 'Ref. MG-052 · Oro · Perla', 'shape' => 'pendant' ],
-	];
-}
-
-$total_products = count( $items );
-$total_slides   = max( 1, (int) ceil( $total_products / $per_slide ) );
 ?>
-<section class="murg-section murg-bestsellers" id="bestsellers" aria-label="Más vendidos">
-	<header class="murg-section__header">
-		<div class="murg-eyebrow"><?php echo esc_html( $best_eyebrow ); ?></div>
-		<h2 class="murg-section__title murg-serif"><?php echo wp_kses( $best_titulo, [ 'em' => [] ] ); ?></h2>
-		<div class="murg-section__meta">
-			<a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Toda la Tienda →</a>
-		</div>
-	</header>
+<section class="murg-piezas" aria-label="<?php echo esc_attr( $piezas_titulo ); ?>">
 
-	<div class="murg-products" data-slider="bestsellers">
-		<div class="murg-products__track" id="murg-bs-track" data-total="<?php echo (int) $total_products; ?>">
-			<?php
-			$slides = array_chunk( $items, $per_slide );
-			foreach ( $slides as $slide_idx => $slide_items ) :
-				$slide_variant = $slide_idx === 0 ? 'asymmetric' : 'uniform';
-			?>
-			<div class="murg-products__slide murg-products__slide--<?php echo esc_attr( $slide_variant ); ?>">
-				<?php foreach ( $slide_items as $pos => $it ) :
-					$size_class = $slide_idx === 0 ? ( $size_classes[ $pos ] ?? '' ) : '';
-				?>
-				<article class="murg-product <?php echo esc_attr( $size_class ); ?>">
-					<a href="<?php echo esc_url( $it['url'] ); ?>" class="murg-product__link">
-						<div class="murg-product__img">
-							<?php if ( $it['img'] ) : ?>
-								<img src="<?php echo esc_url( $it['img'] ); ?>" alt="<?php echo esc_attr( $it['alt'] ); ?>" loading="lazy" draggable="false">
-							<?php elseif ( ! empty( $it['shape'] ) ) : ?>
-								<div class="murg-product__placeholder murg-product__placeholder--<?php echo esc_attr( $it['shape'] ); ?>" aria-hidden="true">
-									<span class="murg-product__shape"></span>
-								</div>
-							<?php endif; ?>
-							<?php if ( $it['tag'] ) : ?>
-								<div class="murg-product__tag"><?php echo esc_html( $it['tag'] ); ?></div>
-							<?php endif; ?>
-						</div>
-						<div class="murg-product__meta">
-							<span class="murg-product__name murg-serif"><?php echo esc_html( $it['name'] ); ?></span>
-							<span class="murg-product__price"><?php echo wp_kses_post( $it['price'] ); ?></span>
-						</div>
-						<?php if ( $it['ref'] ) : ?>
-							<div class="murg-product__ref"><?php echo esc_html( $it['ref'] ); ?></div>
+	<nav class="murg-piezas__tabs" aria-label="Categorias">
+		<?php foreach ( $tabs as $i => $tab ) : ?>
+		<button type="button"
+		        class="murg-piezas__tab<?php echo $i === 0 ? ' is-active' : ''; ?>"
+		        data-target="murg-piezas-<?php echo esc_attr( $tab['slug'] ); ?>"
+		        aria-controls="murg-piezas-<?php echo esc_attr( $tab['slug'] ); ?>"
+		        aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>">
+			<?php echo esc_html( $tab['label'] ); ?>
+		</button>
+		<?php endforeach; ?>
+	</nav>
+
+	<?php foreach ( $tabs as $i => $tab ) : ?>
+	<div id="murg-piezas-<?php echo esc_attr( $tab['slug'] ); ?>"
+	     class="murg-piezas__panel<?php echo $i === 0 ? ' is-active' : ''; ?>"
+	     <?php echo $i === 0 ? '' : 'hidden'; ?>>
+		<?php if ( ! empty( $tab['products'] ) ) : ?>
+		<div class="murg-piezas__grid">
+			<?php foreach ( $tab['products'] as $it ) : ?>
+			<article class="murg-pieza">
+				<a href="<?php echo esc_url( $it['url'] ); ?>" class="murg-pieza__link">
+					<div class="murg-pieza__img">
+						<?php if ( $it['img'] ) : ?>
+						<img src="<?php echo esc_url( $it['img'] ); ?>"
+						     alt="<?php echo esc_attr( $it['alt'] ); ?>"
+						     loading="lazy">
+						<?php elseif ( function_exists( 'wc_placeholder_img' ) ) : ?>
+							<?php echo wc_placeholder_img( 'woocommerce_single' ); ?>
 						<?php endif; ?>
-					</a>
-				</article>
-				<?php endforeach; ?>
-			</div>
+					</div>
+					<div class="murg-pieza__meta">
+						<span class="murg-pieza__name"><?php echo esc_html( $it['name'] ); ?></span>
+						<span class="murg-pieza__price"><?php echo wp_kses_post( $it['price'] ); ?></span>
+					</div>
+				</a>
+			</article>
 			<?php endforeach; ?>
 		</div>
+		<?php else : ?>
+		<p class="murg-piezas__empty">No hay productos publicados en esta categoria.</p>
+		<?php endif; ?>
+	</div>
+	<?php endforeach; ?>
+
+	<div class="murg-piezas__cta-wrap">
+		<a href="<?php echo esc_url( $piezas_cta_url ); ?>" class="murg-btn murg-btn--dark">
+			<?php echo esc_html( $piezas_cta_txt ); ?>
+		</a>
 	</div>
 
-	<div class="murg-bestsellers__foot">
-		<div class="murg-eyebrow">
-			<span id="murg-bs-info">1–<?php echo min( $per_slide, $total_products ); ?> de <?php echo $total_products; ?></span>
-			piezas seleccionadas<?php if ( $best_temporada ) : ?> · <?php echo esc_html( $best_temporada ); ?><?php endif; ?>
-		</div>
-		<div class="murg-nav-arrows">
-			<button class="murg-arrow-btn" id="murg-bs-prev" aria-label="Anterior"
-			        <?php echo $total_slides <= 1 ? 'disabled' : ''; ?>>←</button>
-			<button class="murg-arrow-btn" id="murg-bs-next" aria-label="Siguiente"
-			        <?php echo $total_slides <= 1 ? 'disabled' : ''; ?>>→</button>
-		</div>
-	</div>
 </section>
-
 <!-- ============================================================
-     04 STATEMENT
+     05 PRODUCTO DESTACADO — galería de un solo producto
      ============================================================ -->
 <?php
-$stmt_eyebrow   = murg_f( 'hp_stmt_eyebrow',   'Nuestra Casa' );
-$stmt_texto     = murg_f( 'hp_stmt_texto',      '"Cada pieza nace en nuestro taller en Lima, forjada a mano por orfebres que han pasado el oficio <em>de padres a hijos</em> durante seis décadas."' );
-$stmt_atribucion = murg_f( 'hp_stmt_atribucion', '— Casa Murguía, Fundada en 1962' );
-$stmt_imagen    = murg_f( 'hp_stmt_imagen',     [] );
+$feat_product   = murg_f( 'hp_feat_producto', null );
+$feat_gallery   = murg_f( 'hp_feat_gallery', [] );
+$feat_title     = '';
+$feat_sub       = '';
+$feat_price_html = '';
+$feat_url       = '';
+$feat_images    = [];
+
+if ( $feat_product ) {
+	$wc = wc_get_product( $feat_product->ID );
+	if ( $wc ) {
+		$feat_title      = $wc->get_name();
+		$feat_sub        = wp_strip_all_tags( $wc->get_short_description() );
+		$feat_price_html = $wc->get_price_html();
+		$feat_url        = $wc->get_permalink();
+
+		// Si ACF tiene galería personalizada, úsala. Si no, usa la del producto.
+		if ( ! empty( $feat_gallery ) ) {
+			foreach ( $feat_gallery as $img ) {
+				if ( ! empty( $img['url'] ) ) $feat_images[] = $img['url'];
+			}
+		} else {
+			$main_id = $wc->get_image_id();
+			if ( $main_id ) $feat_images[] = wp_get_attachment_image_url( $main_id, 'full' );
+			foreach ( $wc->get_gallery_image_ids() as $gid ) {
+				$feat_images[] = wp_get_attachment_image_url( $gid, 'full' );
+			}
+		}
+	}
+}
+
+// Fallback estático
+if ( empty( $feat_images ) ) {
+	$feat_imagen = murg_f( 'hp_feat_imagen', [] );
+	$feat_title      = $feat_title      ?: murg_f( 'hp_feat_titulo', 'Collar con diamantes y ónix' );
+	$feat_sub        = $feat_sub        ?: murg_f( 'hp_feat_sub',    'COLLAR EN ORO BLANCO 18KT. CON DIAMANTES CORTE BRILLANTE 2.67CT.' );
+	$feat_price_html = $feat_price_html ?: murg_f( 'hp_feat_precio', 'USD 3,708.00' );
+	$feat_images[]   = ! empty( $feat_imagen['url'] ) ? $feat_imagen['url'] : $img_upload . 'featured-collar.jpg';
+}
+
+$n_feat = count( $feat_images );
 ?>
-<section class="murg-statement" aria-label="<?php echo esc_attr( $stmt_eyebrow ); ?>"
-	<?php if ( ! empty( $stmt_imagen['url'] ) ) : ?>
-	style="background-image: url('<?php echo esc_url( $stmt_imagen['url'] ); ?>'); background-size: cover; background-position: center;"
-	<?php endif; ?>
->
-	<div class="murg-gold-line" aria-hidden="true"></div>
-	<span class="murg-eyebrow"><?php echo esc_html( $stmt_eyebrow ); ?></span>
-	<p class="murg-statement__quote murg-serif">
-		<?php echo wp_kses( $stmt_texto, [ 'em' => [] ] ); ?>
-	</p>
-	<div class="murg-statement__attr"><?php echo esc_html( $stmt_atribucion ); ?></div>
-	<div class="murg-gold-line" aria-hidden="true"></div>
+<section class="murg-featured" id="murg-featured-slider" aria-label="<?php echo esc_attr( $feat_title ); ?>">
+
+	<h2 class="murg-featured__section-title"><?php echo esc_html( $piezas_titulo ); ?></h2>
+
+	<div class="murg-featured__text">
+		<div class="murg-featured__copy">
+			<h3 class="murg-featured__title"><?php echo esc_html( $feat_title ); ?></h3>
+			<p class="murg-featured__sub"><?php echo esc_html( $feat_sub ); ?></p>
+		</div>
+		<p class="murg-featured__price"><?php echo wp_kses_post( $feat_price_html ); ?></p>
+	</div>
+
+	<div class="murg-featured__img-wrap">
+		<a class="murg-featured__img-link" href="<?php echo $feat_url ? esc_url( $feat_url ) : '#'; ?>">
+			<?php foreach ( $feat_images as $idx => $img_src ) : ?>
+			<img class="murg-featured__gimg<?php echo $idx === 0 ? ' is-active' : ''; ?>"
+			     src="<?php echo esc_url( $img_src ); ?>"
+			     alt="<?php echo esc_attr( $feat_title ); ?>"
+			     loading="<?php echo $idx === 0 ? 'eager' : 'lazy'; ?>"
+			     data-index="<?php echo $idx; ?>">
+			<?php endforeach; ?>
+		</a>
+
+		<?php if ( $n_feat > 1 ) : ?>
+		<div class="murg-featured__dots" role="tablist" aria-label="Galería">
+			<?php for ( $i = 0; $i < $n_feat; $i++ ) : ?>
+			<button class="murg-featured__dot<?php echo $i === 0 ? ' is-active' : ''; ?>"
+			        data-index="<?php echo $i; ?>"
+			        role="tab"
+			        aria-selected="<?php echo $i === 0 ? 'true' : 'false'; ?>"
+			        aria-label="Imagen <?php echo $i + 1; ?>"></button>
+			<?php endfor; ?>
+		</div>
+		<?php else : ?>
+		<div class="murg-featured__dots" aria-hidden="true">
+			<?php for ( $i = 0; $i < 5; $i++ ) : ?>
+			<span class="murg-featured__dot<?php echo $i === 0 ? ' is-active' : ''; ?>"></span>
+			<?php endfor; ?>
+		</div>
+		<?php endif; ?>
+	</div>
+
 </section>
 
 <!-- ============================================================
-     04.5 CERTIFICACIONES
+     06 STATEMENT — cita + imagen (fondo oscuro)
      ============================================================ -->
 <?php
-$cert_titulo = murg_f( 'hp_cert_titulo', 'Certificados Internacionales' );
-$cert_logos = [];
-if ( function_exists( 'have_rows' ) && have_rows( 'hp_cert_logos', murguia_ajuste_id() ) ) {
-	while ( have_rows( 'hp_cert_logos', murguia_ajuste_id() ) ) {
+$stmt_texto     = murg_f( 'hp_stmt_texto',     '"Cada pieza nace en nuestro taller en Lima, forjada a mano por orfebres que han pasado el oficio de padres a hijos durante más de un siglo."' );
+$stmt_atribucion = murg_f( 'hp_stmt_atribucion', 'CASA MURGUÍA, FUNDADA EN 1910' );
+$stmt_imagen    = murg_f( 'hp_stmt_imagen', [] );
+$stmt_img_url   = ! empty( $stmt_imagen['url'] ) ? $stmt_imagen['url'] : $img_upload .'statement-bg.jpg';
+
+// Slider dots decorativos
+?>
+<section class="murg-statement-v2" aria-label="Nuestra historia">
+
+	<div class="murg-statement-v2__img-wrap">
+		<img src="<?php echo esc_url( $stmt_img_url ); ?>"
+		     alt="Taller Murguía"
+		     loading="lazy">
+
+		<div class="murg-statement-v2__dots" aria-hidden="true">
+			<?php for ( $i = 0; $i < 5; $i++ ) : ?>
+			<span class="murg-statement-v2__dot<?php echo $i === 0 ? ' is-active' : ''; ?>"></span>
+			<?php endfor; ?>
+		</div>
+	</div>
+
+	<div class="murg-statement-v2__content">
+		<blockquote class="murg-statement-v2__quote">
+			<?php echo esc_html( $stmt_texto ); ?>
+		</blockquote>
+		<p class="murg-statement-v2__attr"><?php echo esc_html( $stmt_atribucion ); ?></p>
+	</div>
+
+</section>
+
+<!-- ============================================================
+     07 COLECCIÓN QANTU — galería editorial
+     ============================================================ -->
+<?php
+$qantu_titulo  = murg_f( 'hp_qantu_titulo',   'Colección QANTU' );
+$qantu_sub     = murg_f( 'hp_qantu_sub',      'Donde florece el tiempo' );
+$qantu_cta_txt = murg_f( 'hp_qantu_cta_texto', 'Ver Colección' );
+$qantu_cta_url = murg_f( 'hp_qantu_cta_url',   home_url( '/shop/' ) );
+
+$qantu_imgs = [
+	murg_f( 'hp_qantu_imagen_1', [] ),
+	murg_f( 'hp_qantu_imagen_2', [] ),
+	murg_f( 'hp_qantu_imagen_3', [] ),
+];
+$qantu_fallbacks = [ 'qantu-left.jpg', 'qantu-1.jpg', 'qantu-right.jpg' ];
+?>
+<section class="murg-qantu" aria-label="<?php echo esc_attr( $qantu_titulo ); ?>">
+
+	<header class="murg-qantu__header">
+		<h2 class="murg-qantu__title"><?php echo esc_html( $qantu_titulo ); ?></h2>
+		<p class="murg-qantu__sub"><?php echo esc_html( $qantu_sub ); ?></p>
+	</header>
+
+	<div class="murg-qantu__gallery">
+		<?php foreach ( $qantu_imgs as $i => $img ) :
+			$url = ! empty( $img['url'] ) ? $img['url'] : $img_upload . $qantu_fallbacks[ $i ];
+			$alt = ! empty( $img['alt'] ) ? $img['alt'] : $qantu_titulo;
+		?>
+		<div class="murg-qantu__img">
+			<img src="<?php echo esc_url( $url ); ?>"
+			     alt="<?php echo esc_attr( $alt ); ?>"
+			     loading="lazy">
+		</div>
+		<?php endforeach; ?>
+	</div>
+
+	<div class="murg-qantu__cta-wrap">
+		<a href="<?php echo esc_url( $qantu_cta_url ); ?>" class="murg-btn murg-btn--dark">
+			<?php echo esc_html( $qantu_cta_txt ); ?>
+		</a>
+	</div>
+
+</section>
+
+<!-- ============================================================
+     09 MARCAS — logos
+     ============================================================ -->
+<?php
+$brands = [];
+if ( function_exists( 'have_rows' ) && have_rows( 'hp_brands_logos', murguia_ajuste_id() ) ) {
+	while ( have_rows( 'hp_brands_logos', murguia_ajuste_id() ) ) {
 		the_row();
-		$cert_logos[] = [
+		$brands[] = [
 			'imagen' => get_sub_field( 'imagen' ),
-			'link'   => get_sub_field( 'link' )
+			'link'   => get_sub_field( 'link' ) ?: '',
+			'alt'    => get_sub_field( 'alt' ) ?: '',
 		];
 	}
 }
 ?>
-<?php if ( ! empty( $cert_logos ) || current_user_can('edit_theme_options') ) : ?>
-<section class="murg-certifications" aria-label="<?php echo esc_attr( $cert_titulo ); ?>">
-	<h2 class="murg-certifications__title murg-serif"><?php echo esc_html( $cert_titulo ); ?></h2>
-	<div class="murg-certifications__carousel" id="cert-carousel">
-		<div class="murg-certifications__track">
-			<?php if ( ! empty( $cert_logos ) ) : ?>
-				<?php foreach ( $cert_logos as $logo ) : ?>
-					<?php if ( ! empty( $logo['imagen']['url'] ) ) : ?>
-						<?php if ( ! empty( $logo['link'] ) ) : ?>
-							<a href="<?php echo esc_url( $logo['link'] ); ?>" target="_blank" rel="noopener noreferrer" class="murg-certifications__logo">
-						<?php else : ?>
-							<div class="murg-certifications__logo">
-						<?php endif; ?>
-						
-						<img src="<?php echo esc_url( $logo['imagen']['url'] ); ?>" alt="<?php echo esc_attr( $logo['imagen']['alt'] ?? '' ); ?>" loading="lazy">
-						
-						<?php if ( ! empty( $logo['link'] ) ) : ?>
-							</a>
-						<?php else : ?>
-							</div>
-						<?php endif; ?>
-					<?php endif; ?>
-				<?php endforeach; ?>
-			<?php else : ?>
-				<div class="murg-certifications__placeholder">[ Agrega los logos desde Ajustes Murguía > Inicio ]</div>
-			<?php endif; ?>
-		</div>
+<section class="murg-brands" aria-label="Marcas">
+	<div class="murg-brands__track">
+		<?php if ( empty( $brands ) ) : ?>
+		<span class="murg-brands__wordmark">Djula</span>
+		<span class="murg-brands__wordmark">Ti Sento</span>
+		<span class="murg-brands__wordmark">Moraglione</span>
+		<span class="murg-brands__wordmark">Perrelet</span>
+		<span class="murg-brands__wordmark">Victorinox</span>
+		<span class="murg-brands__wordmark">Baccarat</span>
+		<?php else : ?>
+		<?php foreach ( $brands as $brand ) :
+			if ( empty( $brand['imagen']['url'] ) ) continue;
+		?>
+		<?php if ( $brand['link'] ) : ?>
+		<a href="<?php echo esc_url( $brand['link'] ); ?>" target="_blank" rel="noopener" class="murg-brands__logo">
+		<?php else : ?>
+		<div class="murg-brands__logo">
+		<?php endif; ?>
+			<img src="<?php echo esc_url( $brand['imagen']['url'] ); ?>"
+			     alt="<?php echo esc_attr( $brand['alt'] ?: ( $brand['imagen']['alt'] ?? '' ) ); ?>"
+			     loading="lazy">
+		<?php echo $brand['link'] ? '</a>' : '</div>'; ?>
+		<?php endforeach; ?>
+		<?php endif; ?>
 	</div>
 </section>
-<?php endif; ?>
 
 <!-- ============================================================
-     05 CONTACTO
+     08 AGENDA TU VISITA
      ============================================================ -->
 <?php
-$cont_eyebrow  = murg_f( 'hp_cont_eyebrow',  'Visite el Atelier' );
-$cont_titulo   = murg_f( 'hp_cont_titulo',   'Visítanos o<br/>agenda una <em>cita</em>' );
-$cont_texto    = murg_f( 'hp_cont_texto',    'Recibimos a nuestros clientes con cita previa para una experiencia íntima y personalizada en el corazón de San Isidro. Servicio de diseño a medida disponible.' );
-$cont_direccion = murg_f( 'hp_cont_direccion','Av. Camino Real 348<br/>San Isidro, Lima 27' );
-$cont_horario  = murg_f( 'hp_cont_horario',  'Lun – Sáb · 10:00 – 19:00' );
-$cont_telefono = murg_f( 'hp_cont_telefono', '+51 1 421 8800' );
-$cont_email    = murg_f( 'hp_cont_email',    'atelier@murguia.pe' );
-$cont_whatsapp = murg_f( 'hp_cont_whatsapp', 'https://wa.me/51114218800' );
-$cont_servicios = murg_f( 'hp_cont_servicios', "Diseño a medida\nRestauración" );
-$cont_serv_sub = murg_f( 'hp_cont_serv_sub', 'Presupuesto sin costo' );
-
-// Renderiza los servicios: un item por línea.
-$servicios_lines = array_filter( array_map( 'trim', explode( "\n", $cont_servicios ) ) );
-$servicios_html  = implode( '<br/>', array_map( 'esc_html', $servicios_lines ) );
+$visita_titulo   = murg_f( 'hp_visita_titulo',   'Agenda tu visita' );
+$visita_sub      = murg_f( 'hp_visita_sub',      'Una asesoría privada con nuestros especialistas.' );
+$visita_boutique = murg_f( 'hp_visita_boutique', 'En Boutique' );
+$visita_ubicacion = murg_f( 'hp_visita_ubicacion', 'San Isidro, Miraflores, Jockey Plaza' );
+$visita_virtual  = murg_f( 'hp_visita_virtual',  'Por Videollamada' );
+$visita_horario  = murg_f( 'hp_visita_horario',  'Lunes a Viernes  10:00 a 19:00' );
+$visita_cita_url = murg_f( 'hp_visita_cita_url', home_url( '/contacto/' ) );
+$visita_wa_url   = murg_f( 'hp_visita_wa_url',   'https://wa.me/51114218800' );
+$visita_imagen   = murg_f( 'hp_visita_imagen', [] );
+$visita_img_url  = ! empty( $visita_imagen['url'] ) ? $visita_imagen['url'] : $img_upload .'appointment.jpg';
 ?>
-<section class="murg-contact" id="contacto" aria-label="Contacto y citas">
-	<div class="murg-contact__grid">
+<section class="murg-visita" id="contacto" aria-label="<?php echo esc_attr( $visita_titulo ); ?>">
 
-		<!-- INFO -->
-		<div>
-			<div class="murg-eyebrow" style="color:var(--murg-gold-soft); margin-bottom:24px;">
-				<?php echo esc_html( $cont_eyebrow ); ?>
-			</div>
-			<h2 class="murg-contact__title murg-serif">
-				<?php echo wp_kses( $cont_titulo, [ 'em' => [], 'br' => [] ] ); ?>
-			</h2>
-			<p class="murg-contact__lede"><?php echo wp_kses_post( $cont_texto ); ?></p>
+	<div class="murg-visita__img-wrap">
+		<img src="<?php echo esc_url( $visita_img_url ); ?>"
+		     alt="Boutique Murguía"
+		     loading="lazy">
+	</div>
 
-			<div class="murg-contact__info">
-				<div class="murg-info-block">
-					<div class="murg-eyebrow">Dirección</div>
-					<div class="murg-info-block__text murg-serif">
-						<?php echo wp_kses( $cont_direccion, [ 'br' => [] ] ); ?>
-					</div>
-					<div class="murg-info-block__sub"><?php echo esc_html( $cont_horario ); ?></div>
-				</div>
-				<div class="murg-info-block">
-					<div class="murg-eyebrow">Contacto</div>
-					<div class="murg-info-block__text murg-serif">
-						<a href="tel:<?php echo esc_attr( preg_replace( '/[^+\d]/', '', $cont_telefono ) ); ?>" style="color:inherit;text-decoration:none;">
-							<?php echo esc_html( $cont_telefono ); ?>
-						</a><br/>
-						<a href="mailto:<?php echo esc_attr( $cont_email ); ?>" style="color:inherit;text-decoration:none;">
-							<?php echo esc_html( $cont_email ); ?>
-						</a>
-					</div>
-					<div class="murg-info-block__sub">Respondemos en 24h</div>
-				</div>
-				<?php if ( $servicios_html ) : ?>
-				<div class="murg-info-block">
-					<div class="murg-eyebrow">Servicios</div>
-					<div class="murg-info-block__text murg-serif"><?php echo $servicios_html; ?></div>
-					<?php if ( $cont_serv_sub ) : ?>
-						<div class="murg-info-block__sub"><?php echo esc_html( $cont_serv_sub ); ?></div>
-					<?php endif; ?>
-				</div>
-				<?php endif; ?>
-				<div class="murg-info-block">
-					<div class="murg-eyebrow">Newsletter</div>
-					<div class="murg-info-block__text murg-serif">Boletín trimestral<br/>de la Casa</div>
-					<div class="murg-info-block__sub">Próxima edición · Junio</div>
-				</div>
+	<div class="murg-visita__content">
+		<h2 class="murg-visita__title"><?php echo esc_html( $visita_titulo ); ?></h2>
+		<p class="murg-visita__sub"><?php echo esc_html( $visita_sub ); ?></p>
+
+		<div class="murg-visita__info">
+			<div class="murg-visita__row">
+				<span class="murg-visita__label"><?php echo esc_html( $visita_boutique ); ?></span>
+				<span class="murg-visita__value"><?php echo esc_html( $visita_ubicacion ); ?></span>
 			</div>
+			<div class="murg-visita__divider"></div>
+			<div class="murg-visita__row">
+				<span class="murg-visita__label"><?php echo esc_html( $visita_virtual ); ?></span>
+				<span class="murg-visita__value"><?php echo esc_html( $visita_horario ); ?></span>
+			</div>
+			<div class="murg-visita__divider"></div>
 		</div>
 
-		<!-- FORM -->
-		<form class="murg-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-			<?php wp_nonce_field( 'murg_cita', 'murg_nonce' ); ?>
-			<input type="hidden" name="action" value="murg_solicitar_cita">
+		<div class="murg-visita__btns">
+			<a href="<?php echo esc_url( $visita_cita_url ); ?>" class="murg-btn murg-btn--dark">
+				<?php echo esc_html( murg_f( 'hp_visita_cita_texto', 'Reservar cita' ) ); ?>
+			</a>
+			<a href="<?php echo esc_url( $visita_wa_url ); ?>"
+			   class="murg-btn murg-btn--dark"
+			   target="_blank" rel="noopener noreferrer">
+				WHATSAPP
+			</a>
+		</div>
+	</div>
 
-			<div class="murg-form__title murg-serif">Reserve su cita</div>
-			<div class="murg-form__sub">Le contactaremos para confirmar el día y hora.</div>
+</section>
 
-			<div class="murg-field">
-				<label for="murg-nombre">Nombre</label>
-				<input id="murg-nombre" type="text" name="nombre" placeholder="Su nombre completo" required>
-			</div>
-			<div class="murg-field">
-				<label for="murg-correo">Correo</label>
-				<input id="murg-correo" type="email" name="correo" placeholder="ejemplo@correo.com" required>
-			</div>
-			<div class="murg-field">
-				<label for="murg-telefono">Teléfono</label>
-				<input id="murg-telefono" type="tel" name="telefono" placeholder="+51 ___ ___ ___">
-			</div>
-			<div class="murg-field">
-				<label for="murg-interes">Interés</label>
-				<select id="murg-interes" name="interes">
-					<option>Asesoría general</option>
-					<option>Anillo de compromiso</option>
-					<option>Diseño a medida</option>
-					<option>Restauración</option>
-				</select>
-			</div>
-			<div class="murg-field" style="align-items:start;">
-				<label for="murg-mensaje" style="padding-top:6px;">Mensaje</label>
-				<textarea id="murg-mensaje" name="mensaje" rows="2"
-				          placeholder="Cuéntenos brevemente..."
-				          style="resize:none;padding-top:4px;"></textarea>
-			</div>
-
-			<div class="murg-form__actions">
-				<button type="submit" class="murg-btn">Solicitar Cita</button>
-				<?php if ( $cont_whatsapp ) : ?>
-				<a href="<?php echo esc_url( $cont_whatsapp ); ?>"
-				   class="murg-btn murg-btn--gold"
-				   target="_blank" rel="noopener noreferrer"
-				   style="display:flex;align-items:center;justify-content:center;">
-					<span class="murg-whatsapp-dot" aria-hidden="true"></span>
-					WhatsApp
-				</a>
-				<?php endif; ?>
+<!-- ============================================================
+     10 NEWSLETTER — -10% primera compra
+     ============================================================ -->
+<?php
+$nl_titulo = murg_f( 'hp_nl_titulo', '-10% en tu primera compra.' );
+$nl_sub    = murg_f( 'hp_nl_sub',   '' );
+?>
+<section class="murg-newsletter" aria-label="Newsletter">
+	<div class="murg-newsletter__inner">
+		<h2 class="murg-newsletter__title"><?php echo esc_html( $nl_titulo ); ?></h2>
+		<?php if ( $nl_sub ) : ?>
+		<p class="murg-newsletter__sub"><?php echo esc_html( $nl_sub ); ?></p>
+		<?php endif; ?>
+		<form class="murg-newsletter__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<?php wp_nonce_field( 'murg_newsletter', 'murg_nl_nonce' ); ?>
+			<input type="hidden" name="action" value="murg_newsletter_subscribe">
+			<div class="murg-newsletter__field">
+				<input type="email" name="email"
+				       placeholder="<?php esc_attr_e( 'Tu correo electrónico', 'woodmart-child' ); ?>"
+				       required>
+				<button type="submit"><?php esc_html_e( 'Suscribirme', 'woodmart-child' ); ?></button>
 			</div>
 		</form>
-
 	</div>
 </section>
 
