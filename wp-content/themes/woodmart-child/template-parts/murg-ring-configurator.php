@@ -208,6 +208,10 @@ $metals = [
 		<div class="murg-sizeguide__body">
 			<p style="margin:0 0 20px;font-family:'Inter',sans-serif;font-size:14px;color:#666;line-height:1.6;">Mida el diámetro interior de un anillo que le quede bien, o consulte con nuestro equipo para una medición presencial.</p>
 			<div class="murg-sizeguide-grid">
+				<div class="murg-sizeguide-grid__item" style="background:var(--murg-cream);font-weight:600;">
+					<span class="murg-sizeguide-grid__num">Talla</span>
+					<span class="murg-sizeguide-grid__mm">Diámetro (mm)</span>
+				</div>
 				<?php
 				$sizes = [
 					['3.5', '14.4'], ['4', '14.8'], ['4.5', '15.2'], ['5', '15.6'],
@@ -218,9 +222,7 @@ $metals = [
 				];
 				foreach ( $sizes as $s ) : ?>
 				<div class="murg-sizeguide-grid__item">
-					<div class="murg-sizeguide-grid__ring">
-						<span class="murg-sizeguide-grid__num"><?php echo $s[0]; ?></span>
-					</div>
+					<span class="murg-sizeguide-grid__num"><?php echo $s[0]; ?></span>
 					<span class="murg-sizeguide-grid__mm"><?php echo $s[1]; ?> mm</span>
 				</div>
 				<?php endforeach; ?>
