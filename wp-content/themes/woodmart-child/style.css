@@ -4662,3 +4662,73 @@ body.murg-search-open { overflow: hidden; }
 @media (max-width: 768px) {
   .murg-reclamos__grid { grid-template-columns: 1fr; }
 }
+
+/* ============================================================
+   404 PAGE
+   ============================================================ */
+.murg-404 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  background: var(--murg-cream);
+  text-align: center;
+  padding: 80px 24px;
+}
+.murg-404__container { max-width: 560px; }
+.murg-404__code {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(100px, 18vw, 180px);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--murg-gold);
+  opacity: 0.35;
+  margin-bottom: 8px;
+}
+.murg-404__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 4vw, 38px);
+  font-weight: 400;
+  color: var(--murg-ink);
+  margin: 0 0 16px;
+}
+.murg-404__text {
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: #666;
+  line-height: 1.7;
+  margin: 0 0 40px;
+}
+.murg-404__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.murg-404__btn {
+  display: inline-block;
+  padding: 14px 36px;
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s;
+  background: var(--murg-ink);
+  color: var(--murg-cream);
+}
+.murg-404__btn:hover {
+  background: var(--murg-gold);
+  color: #fff;
+}
+.murg-404__btn--outline {
+  background: transparent;
+  color: var(--murg-ink);
+  border: 1px solid var(--murg-ink);
+}
+.murg-404__btn--outline:hover {
+  background: var(--murg-ink);
+  color: var(--murg-cream);
+}
