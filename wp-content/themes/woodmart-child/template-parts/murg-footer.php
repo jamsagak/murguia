@@ -51,32 +51,30 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajust
 		<div class="murg-footer__col">
 			<h5>Tienda</h5>
 			<ul>
-				<li><a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Anillos</a></li>
-				<li><a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Collares</a></li>
-				<li><a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Aretes</a></li>
-				<li><a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Brazaletes</a></li>
-				<li><a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Compromiso</a></li>
+				<li><a href="<?php echo esc_url( get_term_link( 'anillos', 'product_cat' ) ); ?>">Anillos</a></li>
+				<li><a href="<?php echo esc_url( get_term_link( 'collares', 'product_cat' ) ); ?>">Collares</a></li>
+				<li><a href="<?php echo esc_url( get_term_link( 'aretes', 'product_cat' ) ); ?>">Aretes</a></li>
+				<li><a href="<?php echo esc_url( get_term_link( 'pulseras', 'product_cat' ) ); ?>">Pulseras</a></li>
+				<li><a href="<?php echo esc_url( get_term_link( 'anillos-de-compromiso', 'product_cat' ) ); ?>">Compromiso</a></li>
 			</ul>
 		</div>
 
 		<div class="murg-footer__col">
 			<h5>Casa</h5>
 			<ul>
-				<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Historia</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Atelier</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Sostenibilidad</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Prensa</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/contactenos/' ) ); ?>">Contacto</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/libro-de-reclamaciones/' ) ); ?>">Libro de Reclamaciones</a></li>
 			</ul>
 		</div>
 
 		<div class="murg-footer__col">
 			<h5>Servicio</h5>
 			<ul>
-				<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Citas</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Envíos</a></li>
-				<li><a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>">Cuidado</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Garantía</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>">Contacto</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/recojos-y-envios/' ) ); ?>">Recojos y Envíos</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>">Términos y Condiciones</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/politica-de-privacidad/' ) ); ?>">Política de Privacidad</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/politica-de-cookies/' ) ); ?>">Política de Cookies</a></li>
 			</ul>
 		</div>
 	</div>
@@ -85,9 +83,9 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajust
 		<div><?php echo esc_html( $_foot_copyright ); ?></div>
 		<div>Lima · Perú</div>
 		<div>
-			<a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>" style="color:inherit;text-decoration:none;">Privacidad</a>
+			<a href="<?php echo esc_url( home_url( '/politica-de-privacidad/' ) ); ?>" style="color:inherit;text-decoration:none;">Privacidad</a>
 			·
-			<a href="<?php echo esc_url( home_url( '/contact-us/' ) ); ?>" style="color:inherit;text-decoration:none;">Términos</a>
+			<a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>" style="color:inherit;text-decoration:none;">Términos</a>
 		</div>
 	</div>
 </footer>
