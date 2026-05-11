@@ -67,6 +67,79 @@
 	} );
 
 	/* ------------------------------------------------------------------
+	   HOME PIEZAS — product category tabs
+	   ------------------------------------------------------------------ */
+	var piezasTabs = Array.prototype.slice.call( document.querySelectorAll( '.murg-piezas__tab' ) );
+	var piezasPanels = Array.prototype.slice.call( document.querySelectorAll( '.murg-piezas__panel' ) );
+
+	if ( piezasTabs.length && piezasPanels.length ) {
+		piezasTabs.forEach( function ( tab ) {
+			tab.addEventListener( 'click', function () {
+				var target = tab.dataset.target;
+
+				piezasTabs.forEach( function ( item ) {
+					var isActive = item === tab;
+					item.classList.toggle( 'is-active', isActive );
+					item.setAttribute( 'aria-selected', isActive ? 'true' : 'false' );
+				} );
+
+				piezasPanels.forEach( function ( panel ) {
+					var isTarget = panel.id === target;
+					panel.classList.toggle( 'is-active', isTarget );
+					if ( isTarget ) {
+						panel.removeAttribute( 'hidden' );
+					} else {
+						panel.setAttribute( 'hidden', '' );
+					}
+				} );
+			} );
+		} );
+	}
+
+	/* ------------------------------------------------------------------
+	   HOME FEATURED — galería del producto destacado
+	   ------------------------------------------------------------------ */
+	var featSection = document.getElementById( 'murg-featured-slider' );
+	if ( featSection ) {
+		var featImgs    = Array.from( featSection.querySelectorAll( '.murg-featured__gimg' ) );
+		var featDots    = Array.from( featSection.querySelectorAll( '.murg-featured__dot[data-index]' ) );
+		var featCurrent = 0;
+
+		function featGoTo( idx ) {
+			if ( ! featImgs.length ) return;
+			featImgs[ featCurrent ].classList.remove( 'is-active' );
+			if ( featDots[ featCurrent ] ) {
+				featDots[ featCurrent ].classList.remove( 'is-active' );
+				featDots[ featCurrent ].setAttribute( 'aria-selected', 'false' );
+			}
+			featCurrent = ( idx + featImgs.length ) % featImgs.length;
+			featImgs[ featCurrent ].classList.add( 'is-active' );
+			if ( featDots[ featCurrent ] ) {
+				featDots[ featCurrent ].classList.add( 'is-active' );
+				featDots[ featCurrent ].setAttribute( 'aria-selected', 'true' );
+			}
+		}
+
+		featDots.forEach( function ( dot ) {
+			dot.addEventListener( 'click', function () {
+				featGoTo( parseInt( dot.dataset.index, 10 ) );
+			} );
+		} );
+
+		// Swipe táctil
+		if ( featImgs.length > 1 ) {
+			var fsStartX = 0;
+			featSection.addEventListener( 'touchstart', function ( e ) {
+				fsStartX = e.touches[ 0 ].clientX;
+			}, { passive: true } );
+			featSection.addEventListener( 'touchend', function ( e ) {
+				var diff = fsStartX - e.changedTouches[ 0 ].clientX;
+				if ( Math.abs( diff ) > 40 ) featGoTo( featCurrent + ( diff > 0 ? 1 : -1 ) );
+			} );
+		}
+	}
+
+	/* ------------------------------------------------------------------
 	   PRODUCT GALLERY — thumbnail switcher on single product
 	   ------------------------------------------------------------------ */
 	var pdMainImg = document.getElementById( 'murg-pdg-main-img' );
@@ -607,7 +680,7 @@
 	var heroSlider = document.getElementById( 'murg-hero-slider' );
 	if ( heroSlider ) {
 		var hsSlides  = Array.from( heroSlider.querySelectorAll( '.murg-hero__slide' ) );
-		var hsDots    = Array.from( heroSlider.querySelectorAll( '.murg-hero__dot' ) );
+		var hsDots    = Array.from( heroSlider.querySelectorAll( '.murg-hero__dot-circle' ) );
 		var hsBar     = heroSlider.querySelector( '.murg-hero__progress-bar' );
 		var hsCounter = document.getElementById( 'murg-hero-counter' );
 		var hsCurrent = 0;
@@ -718,6 +791,22 @@
 					hsDots[ hsCurrent ].setAttribute( 'aria-selected', 'true' );
 				}
 
+				// Sincronizar contenido del overlay con el slide activo
+				var activeSlide = hsSlides[ hsCurrent ];
+				var titleEl = heroSlider.querySelector( '.murg-hero__title' );
+				var ctaEl   = heroSlider.querySelector( '.murg-hero__cta' );
+				if ( titleEl && activeSlide.dataset.titulo ) {
+					titleEl.textContent = activeSlide.dataset.titulo;
+				}
+				if ( ctaEl ) {
+					if ( activeSlide.dataset.ctaTexto ) ctaEl.textContent = activeSlide.dataset.ctaTexto;
+					if ( activeSlide.dataset.ctaUrl )   ctaEl.href = activeSlide.dataset.ctaUrl;
+				}
+
+				// Sincronizar dots decorativos inline (bajo el título)
+				var inlineDots = heroSlider.querySelectorAll( '.murg-hero__dot-circle' );
+				inlineDots.forEach( function ( d, i ) { d.classList.toggle( 'is-active', i === hsCurrent ); } );
+
 				if ( hsCounter ) {
 					hsCounter.textContent = hsPad( hsCurrent + 1 ) + ' / ' + hsPad( hsTotal );
 				}
@@ -812,6 +901,32 @@
 			hsStartProgress();
 			hsScheduleNext( hsRemainingMs );
 		}
+	}
+
+	/* ------------------------------------------------------------------
+	   DIAMONDS SHAPE SELECTOR — cambia stone overlay al hacer hover
+	   ------------------------------------------------------------------ */
+	var dmSection = document.querySelector( '.murg-diamonds' );
+	if ( dmSection ) {
+		var dmShapes = Array.from( dmSection.querySelectorAll( '.murg-diamonds__shape' ) );
+		var dmStones = Array.from( dmSection.querySelectorAll( '.murg-diamonds__ring-img[data-shape]' ) );
+		var dmLabel  = dmSection.querySelector( '.murg-diamonds__active-label' );
+
+		function dmActivate( slug, label ) {
+			dmShapes.forEach( function ( s ) {
+				s.classList.toggle( 'is-active', s.dataset.shape === slug );
+			} );
+			dmStones.forEach( function ( s ) {
+				s.classList.toggle( 'is-active', s.dataset.shape === slug );
+			} );
+			if ( dmLabel ) dmLabel.textContent = label;
+		}
+
+		dmShapes.forEach( function ( shape ) {
+			shape.addEventListener( 'mouseenter', function () {
+				dmActivate( shape.dataset.shape, shape.dataset.label );
+			} );
+		} );
 	}
 
 	/* ------------------------------------------------------------------
