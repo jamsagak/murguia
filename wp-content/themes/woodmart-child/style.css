@@ -6620,11 +6620,9 @@ body.murg-search-open { overflow: hidden; }
 }
 
 .murg-ac-categories__box {
-  border: 1px solid rgba(25, 46, 29, 0.82);
-  box-shadow: 6px 6px 0 rgba(25, 46, 29, 0.08);
   margin: 0 auto;
-  max-width: 1180px;
-  padding: clamp(24px, 2.78vw, 48px) clamp(24px, 2.78vw, 48px) clamp(24px, 2.31vw, 40px);
+  max-width: 1389px;
+  padding: 0;
 }
 
 .murg-ac-categories .murg-ac-section-head {
@@ -7109,8 +7107,8 @@ body.murg-search-open { overflow: hidden; }
 
 @media (max-width: 1024px) {
   .murg-ac-categories__box {
-    overflow: hidden;
-    padding: 28px 20px 30px;
+    overflow: visible;
+    padding: 0;
   }
 
   .murg-ac-categories .murg-ac-section-head {
