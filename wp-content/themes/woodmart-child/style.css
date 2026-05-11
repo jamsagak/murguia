@@ -553,6 +553,14 @@
     transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+[data-reveal="soft"] {
+  transform: translateY(18px);
+}
+
+[data-reveal="scale"] {
+  transform: translateY(18px) scale(0.96);
+}
+
 /* Bloque completo — solo fade, sin translateY */
 [data-reveal-block] {
   opacity: 0;
@@ -564,6 +572,10 @@
 [data-reveal-block].is-revealed {
   opacity: 1;
   transform: translateY(0);
+}
+
+[data-reveal="scale"].is-revealed {
+  transform: translateY(0) scale(1);
 }
 
 /* El hero nunca se anima — ya tiene animación propia */
@@ -5566,10 +5578,12 @@ body.murg-search-open { overflow: hidden; }
 
 .murg-icon-strip__inner {
   display: grid;
-  gap: clamp(14px, 2.31vw, 40px);
+  column-gap: clamp(28px, 4.05vw, 70px);
+  row-gap: clamp(20px, 2.31vw, 40px);
   grid-template-columns: repeat(6, minmax(0, 1fr));
   margin: 0 auto;
   max-width: 1389px;
+  width: 100%;
 }
 
 .murg-icon-strip__item {
@@ -5578,18 +5592,19 @@ body.murg-search-open { overflow: hidden; }
   display: flex;
   flex-direction: column;
   gap: clamp(10px, 1.04vw, 18px);
+  min-width: 0;
   text-decoration: none;
 }
 
-.murg-icon-strip__item:hover .murg-icon-strip__icon { opacity: 0.6; }
+.murg-icon-strip__item:hover .murg-icon-strip__icon { opacity: 0.6; transform: translateY(-2px); }
 .murg-icon-strip__item:hover .murg-icon-strip__label { opacity: 0.6; }
 
 .murg-icon-strip__icon {
   display: block;
-  height: clamp(52px, 5.38vw, 93px);
+  height: clamp(58px, 5.38vw, 93px);
   object-fit: contain;
-  transition: opacity 0.2s;
-  width: auto;
+  transition: opacity 0.2s, transform 0.25s ease;
+  width: 100%;
 }
 
 .murg-icon-strip__label {
