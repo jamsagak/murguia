@@ -2757,11 +2757,10 @@
 }
 .murg-sizeguide__body {
   padding: 28px;
-  overflow: auto;
+  overflow-y: auto;
   background: var(--murg-cream);
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
 }
 .murg-sizeguide__img {
   max-width: 100%;
@@ -7307,48 +7306,60 @@ body.murg-search-open { overflow: hidden; }
 /* ============================================================
    SIZEGUIDE GRID (tallas en ring configurator modal)
    ============================================================ */
+/* ============================================================
+   SIZEGUIDE GRID — tallas en ring configurator modal
+   ============================================================ */
 .murg-sizeguide-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px 12px;
   margin-bottom: 24px;
-  border-top: 1px solid var(--murg-line, rgba(10,10,10,0.12));
+}
+.murg-sizeguide-grid__head {
+  display: none;
 }
 .murg-sizeguide-grid__item {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 10px 16px;
-  border-bottom: 1px solid var(--murg-line, rgba(10,10,10,0.12));
-}
-.murg-sizeguide-grid__item:nth-child(even) {
-  background: rgba(201,168,76,0.04);
+  gap: 6px;
 }
 .murg-sizeguide-grid__ring {
-  display: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 1.5px solid var(--murg-gold, #C9A84C);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
 }
 .murg-sizeguide-grid__num {
   font-family: 'Inter', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--murg-ink, #1a1a1a);
 }
 .murg-sizeguide-grid__mm {
   font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  color: var(--murg-muted, #6e6a62);
+  font-size: 11px;
+  color: #888;
 }
 .murg-sizeguide-grid__tip {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 14px 16px;
-  background: var(--murg-cream, #F5F0E8);
+  background: rgba(201,168,76,0.08);
   border-radius: 6px;
   font-family: 'Inter', sans-serif;
   font-size: 13px;
   color: #555;
 }
 @media (max-width: 767px) {
-  .murg-sizeguide-grid__item { padding: 8px 12px; }
+  .murg-sizeguide-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 480px) {
+  .murg-sizeguide-grid { grid-template-columns: repeat(3, 1fr); }
+  .murg-sizeguide-grid__ring { width: 40px; height: 40px; }
 }
