@@ -335,7 +335,7 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 		</header>
 		<?php if ( $products ) : ?>
 		<div class="murg-ac-product-grid">
-			<?php foreach ( $products as $idx => $product ) :
+			<?php foreach ( array_slice( $products, 0, 4 ) as $idx => $product ) :
 				$img_id = $product->get_image_id();
 			?>
 			<a class="murg-ac-product" href="<?php echo esc_url( $product->get_permalink() ); ?>" data-reveal="scale">
@@ -364,6 +364,7 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 		</div>
 	</section>
 
+	<?php /* Sección murg-ac-story oculta por decisión de diseño
 	<section class="murg-ac-story">
 		<div class="murg-ac-story__media" data-reveal>
 			<img src="<?php echo esc_url( murg_ac_img_url( $hist_img, $img_base . 'statement-bg.jpg' ) ); ?>" alt="<?php echo esc_attr( murg_ac_img_alt( $hist_img, 'Taller Murguia' ) ); ?>" loading="lazy">
@@ -377,6 +378,7 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 			<?php endif; ?>
 		</div>
 	</section>
+	*/ ?>
 
 	<section class="murg-ac-appointment">
 		<div class="murg-ac-appointment__media" data-reveal>
