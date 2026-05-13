@@ -986,6 +986,48 @@
 	}
 
 	/* ------------------------------------------------------------------
+	   BURGER MENU — menú lateral
+	   ------------------------------------------------------------------ */
+	var burgerBtn   = document.getElementById( 'murg-burger' );
+	var mobileMenu  = document.getElementById( 'murg-mobile-menu' );
+
+	function menuOpen() {
+		if ( ! mobileMenu ) return;
+		mobileMenu.classList.add( 'is-open' );
+		mobileMenu.setAttribute( 'aria-hidden', 'false' );
+		burgerBtn.classList.add( 'is-open' );
+		burgerBtn.setAttribute( 'aria-expanded', 'true' );
+		document.body.style.overflow = 'hidden';
+	}
+
+	function menuClose() {
+		if ( ! mobileMenu ) return;
+		mobileMenu.classList.remove( 'is-open' );
+		mobileMenu.setAttribute( 'aria-hidden', 'true' );
+		burgerBtn.classList.remove( 'is-open' );
+		burgerBtn.setAttribute( 'aria-expanded', 'false' );
+		document.body.style.overflow = '';
+	}
+
+	if ( burgerBtn ) {
+		burgerBtn.addEventListener( 'click', function () {
+			mobileMenu.classList.contains( 'is-open' ) ? menuClose() : menuOpen();
+		} );
+	}
+
+	if ( mobileMenu ) {
+		mobileMenu.querySelectorAll( '[data-close-menu]' ).forEach( function ( el ) {
+			el.addEventListener( 'click', menuClose );
+		} );
+		// Close on Escape
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && mobileMenu.classList.contains( 'is-open' ) ) {
+				menuClose();
+			}
+		} );
+	}
+
+	/* ------------------------------------------------------------------
 	   SEARCH OVERLAY — abre input full-screen al click en "Buscar"
 	   ------------------------------------------------------------------ */
 	var srcModal   = document.getElementById( 'murg-search' );

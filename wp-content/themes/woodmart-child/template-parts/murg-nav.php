@@ -46,7 +46,16 @@ $_marca_links = [
 	<!-- ── Fila 1: idioma · logo · iconos ──────────────────── -->
 	<div class="murg-nav__row murg-nav__row--top">
 
-		<div class="murg-nav__lang"></div>
+		<button type="button"
+		        class="murg-burger"
+		        id="murg-burger"
+		        aria-label="Abrir menú"
+		        aria-expanded="false"
+		        aria-controls="murg-mobile-menu">
+			<span class="murg-burger__line"></span>
+			<span class="murg-burger__line"></span>
+			<span class="murg-burger__line"></span>
+		</button>
 
 		<a class="murg-nav__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia-blanco.png' ); ?>"
@@ -126,6 +135,25 @@ $_marca_links = [
 	</div>
 
 </nav>
+
+<!-- ============================================================
+     MENU LATERAL (BURGER)
+     ============================================================ -->
+<div class="murg-mobile-menu" id="murg-mobile-menu" aria-hidden="true">
+	<div class="murg-mobile-menu__backdrop" data-close-menu aria-hidden="true"></div>
+	<div class="murg-mobile-menu__panel">
+		<button type="button" class="murg-mobile-menu__close" data-close-menu aria-label="Cerrar menú">
+			<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M6 6l12 12M6 18L18 6"/></svg>
+		</button>
+		<nav class="murg-mobile-menu__nav" aria-label="Menú principal">
+			<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Inicio</a>
+			<a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a>
+			<a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Contacto</a>
+			<a href="<?php echo esc_url( $_shop_url ); ?>">Tienda</a>
+			<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a>
+		</nav>
+	</div>
+</div>
 
 <!-- ============================================================
      OVERLAY BUSCADOR
