@@ -1445,18 +1445,20 @@
 }
 
 .murg-footer__brand-sub {
-  font-family: var(--font-body);
-  font-size: clamp(10px, 0.75vw, 13px);
-  letter-spacing: 0.22em;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: none;
   text-transform: uppercase;
   color: var(--murg-gold-soft);
   margin-bottom: 24px;
 }
 
 .murg-footer__tagline {
-  font-family: var(--font-body);
-  font-size: clamp(13px, 1.1vw, 19px);
-  line-height: 2.1;
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  text-transform: none;
   max-width: 310px;
   color: #b6b6b6;
 }
@@ -1466,9 +1468,10 @@
 }
 
 .murg-footer__col h5 {
-  font-family: var(--font-body);
-  font-size: clamp(14px, 1.1vw, 19px);
-  line-height: 2.1;
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  text-transform: none;
   letter-spacing: 0;
   text-transform: none;
   color: var(--murg-forest);
@@ -1479,9 +1482,10 @@
 .murg-footer__col ul { list-style: none; }
 .murg-footer__col li {
   margin-bottom: 0;
-  font-family: var(--font-body);
-  font-size: clamp(13px, 1.1vw, 19px);
-  line-height: 2.1;
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  text-transform: none;
 }
 .murg-footer__col a {
   color: var(--murg-muted);
@@ -1492,9 +1496,10 @@
 
 .murg-footer__legal {
   margin: 32px 0 0;
-  font-family: var(--font-body);
-  font-size: clamp(13px, 1.1vw, 19px);
-  line-height: 1.55;
+  font-family: 'Inter', sans-serif;
+  font-size: 17px;
+  line-height: 1.5;
+  text-transform: none;
   color: var(--murg-muted);
 }
 .murg-footer__social-title {
