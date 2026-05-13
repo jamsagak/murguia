@@ -1012,15 +1012,17 @@
 }
 
 .murg-product__name {
-  font-family: 'Vesper Libre', serif;
-  font-size: clamp(14px, 1.39vw, 24px);
-  font-weight: 700;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(13px, 1vw, 16px);
+  font-weight: 400;
+  color: var(--murg-forest);
 }
 
 .murg-product__price {
-  font-family: 'Tiro Bangla', serif;
-  font-size: clamp(17px, 1.68vw, 29px);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(14px, 1.1vw, 18px);
   font-weight: 400;
+  color: var(--murg-forest);
   letter-spacing: 0.06em;
 }
 
@@ -4299,7 +4301,7 @@ body.murg-search-open { overflow: hidden; }
   width: clamp(220px, 30vw, 520px);
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   gap: 8px;
 }
 .murg-diamonds__ring-wrap {
@@ -4311,7 +4313,8 @@ body.murg-search-open { overflow: hidden; }
 .murg-diamonds__ring-img {
   position: absolute;
   inset: 0;
-  width: 100%;
+  width: 80%;
+  margin-left: auto;
   height: 100%;
   object-fit: contain;
   mix-blend-mode: multiply;
@@ -7433,4 +7436,107 @@ body.murg-search-open { overflow: hidden; }
 @media (max-width: 480px) {
   .murg-sizeguide-grid { grid-template-columns: repeat(3, 1fr); }
   .murg-sizeguide-grid__ring { width: 40px; height: 40px; }
+}
+
+/* ============================================================
+   LAS 4Cs — Pagina educativa del diamante
+   ============================================================ */
+.murg-4cs__hero {
+  background: var(--murg-forest);
+  color: var(--murg-cream);
+  padding: clamp(120px, 12vw, 200px) clamp(24px, 5vw, 96px) clamp(72px, 7vw, 120px);
+  text-align: center;
+}
+.murg-4cs__hero-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.murg-4cs__hero h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(32px, 4vw, 64px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 14px 0 22px;
+  line-height: 1.1;
+}
+.murg-4cs__hero p {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.7;
+  color: rgba(245, 240, 232, 0.78);
+  margin: 0;
+}
+.murg-4cs__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--murg-line, #e5e0d8);
+  max-width: 1200px;
+  margin: clamp(48px, 5vw, 80px) auto;
+  padding: 0 clamp(24px, 4vw, 80px);
+}
+.murg-4cs__card {
+  background: var(--murg-cream);
+  padding: clamp(36px, 4vw, 64px);
+}
+.murg-4cs__card-letter {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(36px, 4vw, 60px);
+  font-weight: 400;
+  color: var(--murg-gold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+.murg-4cs__card-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(18px, 1.5vw, 24px);
+  font-weight: 400;
+  color: var(--murg-forest);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+.murg-4cs__card-text {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(14px, 1vw, 16px);
+  line-height: 1.7;
+  color: var(--murg-muted);
+  margin: 0;
+}
+.murg-4cs__cta {
+  text-align: center;
+  padding: clamp(48px, 5vw, 80px) clamp(24px, 4vw, 80px) clamp(72px, 7vw, 120px);
+}
+.murg-4cs__cta h2 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(24px, 2.5vw, 40px);
+  font-weight: 400;
+  color: var(--murg-forest);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+.murg-4cs__cta p {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(15px, 1.1vw, 18px);
+  line-height: 1.7;
+  color: var(--murg-muted);
+  margin: 0 auto 32px;
+  max-width: 560px;
+}
+.murg-4cs__actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+.murg-4cs__actions .murg-btn {
+  width: auto;
+  padding: 14px 36px;
+}
+@media (max-width: 768px) {
+  .murg-4cs__grid { grid-template-columns: 1fr; }
+  .murg-4cs__actions { flex-direction: column; align-items: center; }
+  .murg-4cs__actions .murg-btn { width: 100%; max-width: 300px; }
 }

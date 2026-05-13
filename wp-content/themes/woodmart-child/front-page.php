@@ -250,10 +250,10 @@ $shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
      03 NOVIOS — imagen + texto + logos marcas
      ============================================================ -->
 <?php
-$novios_titulo  = murg_f( 'hp_novios_titulo', 'Novios' );
-$novios_sub     = murg_f( 'hp_novios_sub',    'Anillos de Compromiso / Anillos de Matrimonio / Las 4Cs' );
-$novios_cta_txt = murg_f( 'hp_novios_cta_texto', 'Ver Colecciónes' );
-$novios_cta_url = murg_f( 'hp_novios_cta_url', home_url( '/shop/?product_cat=novios' ) );
+$novios_titulo  = murg_f( 'hp_novios_titulo', 'Anillos de compromiso' );
+$novios_sub     = murg_f( 'hp_novios_sub',    'Aros de Matrimonio / Anillo de Promesa' );
+$novios_cta_txt = murg_f( 'hp_novios_cta_texto', 'Las 4Cs' );
+$novios_cta_url = murg_f( 'hp_novios_cta_url', home_url( '/las-4cs/' ) );
 $novios_imagen  = murg_f( 'hp_novios_imagen', [] );
 $novios_img_url = ! empty( $novios_imagen['url'] ) ? $novios_imagen['url'] : $img_upload .'novios.jpg';
 
