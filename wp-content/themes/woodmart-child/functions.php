@@ -16,7 +16,7 @@ function murguia_enqueue() {
 
 	wp_enqueue_style(
 		'murguia-fonts',
-		'https://fonts.googleapis.com/css2?family=Vesper+Libre:wght@400;700&family=Tiro+Bangla&display=swap',
+		'https://fonts.googleapis.com/css2?family=Tiro+Bangla&display=swap',
 		[],
 		null
 	);

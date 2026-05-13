@@ -10,7 +10,7 @@ URL referencia: https://joyeriamurguia.com
 
 ## Estilo
 - Minimalista, elegante, dark/luxury
-- Tipografía: Cormorant Garamond (headings) + Inter (body/UI)
+- Tipografía: Cinzel (headings/labels/buttons) + Inter (body/UI)
 - Design tokens: --gold: #C9A84C | --cream: #F5F0E8 | --black: #0A0A0A
 - Sin page builders — todo PHP + ACF custom fields
 
