@@ -191,21 +191,37 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 <?php get_template_part( 'template-parts/murg-nav' ); ?>
 
 <main class="murg-ac" id="contenido">
-	<section class="murg-ac-hero" aria-label="Anillos de compromiso">
-		<div class="murg-ac-hero__media">
-			<img src="<?php echo esc_url( $hero_bg ); ?>"
-			     alt="<?php echo esc_attr( murg_ac_img_alt( $hero_img, 'Anillo de compromiso Murguia' ) ); ?>"
-			     loading="eager"
-			     fetchpriority="high">
+	<section class="murg-ac-engagement" id="ac-productos">
+		<div class="murg-ac-engagement__media" data-reveal>
+			<img src="<?php echo esc_url( $img_base . 'novios.jpg' ); ?>" alt="Anillos de compromiso Murguia" loading="eager" fetchpriority="high">
 		</div>
-		<div class="murg-ac-hero__content" data-reveal>
-			<p class="murg-ac-eyebrow">Desde 1910</p>
-			<h1 class="murg-ac-hero__title"><?php echo esc_html( $hero_title ); ?></h1>
-			<p class="murg-ac-hero__sub"><?php echo esc_html( $hero_sub ); ?></p>
+		<div class="murg-ac-engagement__copy" data-reveal>
+			<p class="murg-ac-eyebrow">Anillos de compromiso</p>
+			<h2>Anillos de<br>compromiso</h2>
+			<p>Disenados pieza por pieza en nuestro taller. Diamantes certificados por GIA, HRD e IGI. Acompanamiento personalizado de inicio a fin.</p>
 			<div class="murg-ac-actions">
-				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $hero_cta_u ); ?>"><?php echo esc_html( $hero_cta_t ); ?></a>
-				<a class="murg-ac-link" href="<?php echo esc_url( $hero_sec_u ); ?>"><?php echo esc_html( $hero_sec_t ); ?></a>
+				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $cita_url ); ?>">Disenar mi anillo</a>
+				<a class="murg-ac-link" href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso' ) ); ?>">Conocer las 4Cs</a>
 			</div>
+			<div class="murg-ac-trust">
+				<span>4,500+ parejas</span>
+				<span>Certificacion GIA</span>
+				<span>Garantia de por vida</span>
+			</div>
+		</div>
+		<div class="murg-ac-style-grid murg-ac-engagement__styles">
+			<?php foreach ( array_slice( $style_items, 0, 5 ) as $item ) :
+				$item_img = $item['imagen'] ?? [];
+				$item_url = $item['url'] ?? home_url( '/shop/?product_cat=anillos-de-compromiso' );
+			?>
+			<a class="murg-ac-style" href="<?php echo esc_url( $item_url ); ?>" data-reveal>
+				<?php if ( murg_ac_img_url( $item_img ) ) : ?>
+				<img src="<?php echo esc_url( murg_ac_img_url( $item_img ) ); ?>" alt="<?php echo esc_attr( murg_ac_img_alt( $item_img, $item['titulo'] ?? 'Estilo de anillo' ) ); ?>" loading="lazy">
+				<?php endif; ?>
+				<span><?php echo esc_html( $item['titulo'] ?? '' ); ?></span>
+				<p><?php echo esc_html( $item['texto'] ?? '' ); ?></p>
+			</a>
+			<?php endforeach; ?>
 		</div>
 	</section>
 
@@ -236,7 +252,7 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 	<section class="murg-ac-categories" aria-label="Categorias destacadas">
 		<div class="murg-ac-categories__box">
 			<header class="murg-ac-section-head" data-reveal>
-				<p class="murg-ac-eyebrow">02 - Explora por estilo</p>
+				<p class="murg-ac-eyebrow">Explora por estilo</p>
 				<h2>Anillos para la propuesta</h2>
 				<p>Una seleccion de compromiso: piezas listas, diamantes certificados y diseno a medida.</p>
 			</header>
@@ -282,40 +298,6 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 		</div>
 	</section>
 
-	<section class="murg-ac-engagement" id="ac-productos">
-		<div class="murg-ac-engagement__media" data-reveal>
-			<img src="<?php echo esc_url( $img_base . 'novios.jpg' ); ?>" alt="Anillos de compromiso Murguia" loading="lazy">
-		</div>
-		<div class="murg-ac-engagement__copy" data-reveal>
-			<p class="murg-ac-eyebrow">03 - Anillos de compromiso</p>
-			<h2>Anillos de<br>compromiso</h2>
-			<p>Disenados pieza por pieza en nuestro taller. Diamantes certificados por GIA, HRD e IGI. Acompanamiento personalizado de inicio a fin.</p>
-			<div class="murg-ac-actions">
-				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $cita_url ); ?>">Disenar mi anillo</a>
-				<a class="murg-ac-link" href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso' ) ); ?>">Conocer las 4Cs</a>
-			</div>
-			<div class="murg-ac-trust">
-				<span>4,500+ parejas</span>
-				<span>Certificacion GIA</span>
-				<span>Garantia de por vida</span>
-			</div>
-		</div>
-		<div class="murg-ac-style-grid murg-ac-engagement__styles">
-			<?php foreach ( array_slice( $style_items, 0, 5 ) as $item ) :
-				$item_img = $item['imagen'] ?? [];
-				$item_url = $item['url'] ?? home_url( '/shop/?product_cat=anillos-de-compromiso' );
-			?>
-			<a class="murg-ac-style" href="<?php echo esc_url( $item_url ); ?>" data-reveal>
-				<?php if ( murg_ac_img_url( $item_img ) ) : ?>
-				<img src="<?php echo esc_url( murg_ac_img_url( $item_img ) ); ?>" alt="<?php echo esc_attr( murg_ac_img_alt( $item_img, $item['titulo'] ?? 'Estilo de anillo' ) ); ?>" loading="lazy">
-				<?php endif; ?>
-				<span><?php echo esc_html( $item['titulo'] ?? '' ); ?></span>
-				<p><?php echo esc_html( $item['texto'] ?? '' ); ?></p>
-			</a>
-			<?php endforeach; ?>
-		</div>
-	</section>
-
 	<section class="murg-ac-benefits">
 		<div class="murg-ac-benefits__inner">
 			<header class="murg-ac-section-head murg-ac-section-head--dark" data-reveal>
@@ -338,7 +320,7 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 
 	<section class="murg-ac-products">
 		<header class="murg-ac-section-head" data-reveal>
-			<p class="murg-ac-eyebrow">05 - Productos destacados</p>
+			<p class="murg-ac-eyebrow">Productos destacados</p>
 			<h2><?php echo esc_html( $prod_title ); ?></h2>
 			<p><?php echo esc_html( $prod_sub ); ?></p>
 		</header>

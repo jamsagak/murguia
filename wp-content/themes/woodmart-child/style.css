@@ -6800,8 +6800,8 @@ button.murg-piezas__tab:hover {
   transform: translateY(-4px);
 }
 .murg-ac-diamond__img {
-  width: 64px;
-  height: 64px;
+  width: 80px;
+  height: 80px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -7008,8 +7008,8 @@ button.murg-piezas__tab:hover {
 }
 
 .murg-ac-ring-card h3 {
-  color: var(--murg-ink);
-  font-family: 'Inter', sans-serif;
+  color: var(--murg-forest);
+  font-family: 'Cinzel', serif;
   font-size: 13px;
   font-weight: 400;
   line-height: 1.35;
@@ -7018,10 +7018,10 @@ button.murg-piezas__tab:hover {
 }
 
 .murg-ac-ring-card__price {
-  color: var(--murg-muted, #888);
-  font-family: 'Inter', sans-serif;
+  color: var(--murg-forest);
+  font-family: 'Cinzel', serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.35;
 }
 
