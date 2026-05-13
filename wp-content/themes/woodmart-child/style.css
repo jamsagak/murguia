@@ -162,9 +162,7 @@
    TOP BAR — barra verde "Diamantes certificados…"
    ============================================================ */
 .murg-topbar {
-  background: var(--murg-forest);
-  text-align: center;
-  padding: 14px 24px;
+  display: none;
 }
 .murg-nav.is-scrolled .murg-topbar { display: none; }
 .murg-topbar__text {
