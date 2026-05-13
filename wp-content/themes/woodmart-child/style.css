@@ -6942,26 +6942,37 @@ button.murg-piezas__tab:hover {
 
 .murg-ac-ring-tabs button {
   appearance: none;
-  background: transparent;
+  background: transparent !important;
   border-bottom: 2px solid transparent;
   border-left: 0;
   border-right: 0;
   border-top: 0;
-  color: var(--murg-ink);
+  color: var(--murg-forest);
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  line-height: 1.35;
-  padding-bottom: 12px;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(14px, 1.1vw, 18px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  line-height: 1.25;
+  padding: 0 0 clamp(13px, 0.93vw, 16px);
   text-decoration: none;
+  transition: transform 0.25s ease, color 0.25s ease;
 }
 
 .murg-ac-ring-tabs button:hover,
+button.murg-ac-ring-tabs button:hover {
+  color: var(--murg-gold);
+  transform: translateY(-2px);
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
 .murg-ac-ring-tabs button.is-active {
-  border-color: currentColor;
+  color: var(--murg-forest);
+  border-bottom-color: var(--murg-forest);
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .murg-ac-ring-tabs button:focus-visible {

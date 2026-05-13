@@ -191,9 +191,18 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 <?php get_template_part( 'template-parts/murg-nav' ); ?>
 
 <main class="murg-ac" id="contenido">
+	<section class="murg-ac-hero" aria-label="Anillos de compromiso">
+		<div class="murg-ac-hero__media">
+			<img src="<?php echo esc_url( $hero_bg ); ?>"
+			     alt="<?php echo esc_attr( murg_ac_img_alt( $hero_img, 'Anillo de compromiso Murguia' ) ); ?>"
+			     loading="eager"
+			     fetchpriority="high">
+		</div>
+	</section>
+
 	<section class="murg-ac-engagement" id="ac-productos">
 		<div class="murg-ac-engagement__media" data-reveal>
-			<img src="<?php echo esc_url( $img_base . 'novios.jpg' ); ?>" alt="Anillos de compromiso Murguia" loading="eager" fetchpriority="high">
+			<img src="<?php echo esc_url( $img_base . 'novios.jpg' ); ?>" alt="Anillos de compromiso Murguia" loading="lazy">
 		</div>
 		<div class="murg-ac-engagement__copy" data-reveal>
 			<p class="murg-ac-eyebrow">Anillos de compromiso</p>
