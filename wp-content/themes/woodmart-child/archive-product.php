@@ -262,8 +262,8 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			</div>
 		</div>
 
-		<!-- Categoría -->
-		<?php if ( ! empty( $categories ) ) : ?>
+		<!-- Categoría: solo se muestra cuando NO hay categoría seleccionada -->
+		<?php if ( ! $f_cat && ! empty( $categories ) ) : ?>
 		<details class="murg-filter-group" open>
 			<summary class="murg-filter-group__title">Categoría</summary>
 			<div class="murg-filter-group__body">
@@ -282,6 +282,42 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			</div>
 		</details>
 		<?php endif; ?>
+
+		<?php
+		// Subcategorías: si hay categoría activa, mostrar sus hijas como filtro
+		if ( $f_cat ) :
+			$active_term = get_term_by( 'slug', $f_cat, 'product_cat' );
+			$subcategories = [];
+			if ( $active_term && ! is_wp_error( $active_term ) ) {
+				$subcategories = get_terms( [
+					'taxonomy'   => 'product_cat',
+					'hide_empty' => true,
+					'parent'     => $active_term->term_id,
+					'orderby'    => 'name',
+					'order'      => 'ASC',
+				] );
+				if ( is_wp_error( $subcategories ) ) $subcategories = [];
+			}
+			if ( ! empty( $subcategories ) ) :
+		?>
+		<details class="murg-filter-group" open>
+			<summary class="murg-filter-group__title"><?php echo esc_html( $active_term->name ); ?></summary>
+			<div class="murg-filter-group__body">
+				<?php foreach ( $subcategories as $subcat ) : ?>
+				<label class="murg-filter-check">
+					<input type="checkbox"
+					       name="cat"
+					       value="<?php echo esc_attr( $subcat->slug ); ?>"
+					       <?php checked( $f_cat, $subcat->slug ); ?>
+					       onchange="murgApplyFilter('cat', this.checked ? this.value : '')">
+					<span class="murg-filter-check__box"></span>
+					<span class="murg-filter-check__label"><?php echo esc_html( $subcat->name ); ?></span>
+					<span class="murg-filter-check__count"><?php echo (int) $subcat->count; ?></span>
+				</label>
+				<?php endforeach; ?>
+			</div>
+		</details>
+		<?php endif; endif; ?>
 
 		<!-- Piedra (solo si la categoría es joyería o no hay categoría) -->
 		<?php if ( ! empty( $piedras ) && $show_jewelry_filters ) : ?>
