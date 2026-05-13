@@ -95,32 +95,33 @@ $_marca_links = [
 	<!-- ── Fila 2: menú principal ──────────────────────────── -->
 	<div class="murg-nav__row murg-nav__row--menu">
 
-		<a href="<?php echo esc_url( home_url( '/anillos-compromiso/' ) ); ?>"
-		   class="murg-nav__link">Anillos de Compromiso</a>
+		<?php
+		$_current_url = home_url( $_SERVER['REQUEST_URI'] );
+		$_nav_items = [
+			[ 'label' => 'Anillos de Compromiso', 'url' => home_url( '/anillos-compromiso/' ), 'drop' => false ],
+			[ 'label' => 'Catálogo',              'url' => $_shop_url,                          'drop' => $_cat_links ],
+			[ 'label' => 'Marcas',                'url' => home_url( '/shop/?product_cat=marcas' ), 'drop' => $_marca_links ],
+			[ 'label' => 'Alta Joyería',          'url' => home_url( '/shop/?product_cat=alta-joyeria' ), 'drop' => false ],
+			[ 'label' => 'Tiendas',               'url' => home_url( '/shop/?product_cat=hogar' ), 'drop' => false ],
+		];
+		foreach ( $_nav_items as $_item ) :
+			$_is_active = ( rtrim( $_current_url, '/' ) === rtrim( $_item['url'], '/' ) );
+			$_active_class = $_is_active ? ' is-active' : '';
 
-		<div class="murg-nav__item murg-nav__item--drop">
-			<a href="<?php echo esc_url( $_shop_url ); ?>" class="murg-nav__link">Catálogo</a>
-			<div class="murg-nav__dropdown">
-				<?php foreach ( $_cat_links as $cl ) : ?>
-				<a href="<?php echo esc_url( $cl['url'] ); ?>"><?php echo esc_html( $cl['label'] ); ?></a>
-				<?php endforeach; ?>
+			if ( $_item['drop'] && is_array( $_item['drop'] ) ) : ?>
+			<div class="murg-nav__item murg-nav__item--drop">
+				<a href="<?php echo esc_url( $_item['url'] ); ?>" class="murg-nav__link<?php echo $_active_class; ?>"><?php echo esc_html( $_item['label'] ); ?></a>
+				<div class="murg-nav__dropdown">
+					<?php foreach ( $_item['drop'] as $_dl ) : ?>
+					<a href="<?php echo esc_url( $_dl['url'] ); ?>"><?php echo esc_html( $_dl['label'] ); ?></a>
+					<?php endforeach; ?>
+				</div>
 			</div>
-		</div>
-
-		<div class="murg-nav__item murg-nav__item--drop">
-			<a href="<?php echo esc_url( home_url( '/shop/?product_cat=marcas' ) ); ?>" class="murg-nav__link">Marcas</a>
-			<div class="murg-nav__dropdown">
-				<?php foreach ( $_marca_links as $ml ) : ?>
-				<a href="<?php echo esc_url( $ml['url'] ); ?>"><?php echo esc_html( $ml['label'] ); ?></a>
-				<?php endforeach; ?>
-			</div>
-		</div>
-
-		<a href="<?php echo esc_url( home_url( '/shop/?product_cat=alta-joyeria' ) ); ?>"
-		   class="murg-nav__link murg-nav__link--highlight">Alta Joyería</a>
-
-		<a href="<?php echo esc_url( home_url( '/shop/?product_cat=hogar' ) ); ?>"
-		   class="murg-nav__link">Tiendas</a>
+			<?php else : ?>
+			<a href="<?php echo esc_url( $_item['url'] ); ?>"
+			   class="murg-nav__link<?php echo $_active_class; ?>"><?php echo esc_html( $_item['label'] ); ?></a>
+			<?php endif;
+		endforeach; ?>
 
 	</div>
 

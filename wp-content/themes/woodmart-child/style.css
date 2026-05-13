@@ -298,10 +298,10 @@
   text-decoration: none;
   display: inline-block;
 }
-.murg-nav__link--highlight {
+.murg-nav__link.is-active {
   color: var(--murg-gold);
 }
-.murg-nav.is-scrolled .murg-nav__link--highlight {
+.murg-nav.is-scrolled .murg-nav__link.is-active {
   color: var(--murg-gold-soft);
 }
 
