@@ -218,6 +218,7 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			<button class="murg-sidebar__close" id="murg-sidebar-close" aria-label="Cerrar filtros">&times;</button>
 		</div>
 
+		<?php if ( ! $f_cat ) : ?>
 		<div class="murg-sidebar__count">
 			<?php echo (int) $total; ?> Resultado<?php echo $total !== 1 ? 's' : ''; ?>
 		</div>
@@ -236,6 +237,7 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			</a>
 			<?php endif; ?>
 		</div>
+		<?php endif; ?>
 		<?php endif; ?>
 
 		<!-- Precio -->
@@ -321,7 +323,7 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 
 		<!-- Piedra (solo si la categoría es joyería o no hay categoría) -->
 		<?php if ( ! empty( $piedras ) && $show_jewelry_filters ) : ?>
-		<details class="murg-filter-group" <?php echo $f_piedra ? 'open' : ''; ?>>
+		<details class="murg-filter-group" <?php echo ( $f_cat || $f_piedra ) ? 'open' : ''; ?>>
 			<summary class="murg-filter-group__title">Piedra</summary>
 			<div class="murg-filter-group__body murg-filter-group__body--scroll">
 				<?php foreach ( $piedras as $piedra ) : ?>
@@ -342,7 +344,7 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 
 		<!-- Color de Oro (solo si la categoría es joyería) -->
 		<?php if ( ! empty( $colores_oro ) && $show_jewelry_filters ) : ?>
-		<details class="murg-filter-group" <?php echo $f_color ? 'open' : ''; ?>>
+		<details class="murg-filter-group" <?php echo ( $f_cat || $f_color ) ? 'open' : ''; ?>>
 			<summary class="murg-filter-group__title">Metal</summary>
 			<div class="murg-filter-group__body">
 				<?php
@@ -374,7 +376,7 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 		<?php endif; ?>
 
 		<!-- Ordenar -->
-		<details class="murg-filter-group">
+		<details class="murg-filter-group" <?php echo $f_cat ? 'open' : ''; ?>>
 			<summary class="murg-filter-group__title">Ordenar por</summary>
 			<div class="murg-filter-group__body">
 				<?php
