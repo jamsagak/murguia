@@ -46,11 +46,7 @@ $_marca_links = [
 	<!-- ── Fila 1: idioma · logo · iconos ──────────────────── -->
 	<div class="murg-nav__row murg-nav__row--top">
 
-		<div class="murg-nav__lang">
-			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="murg-nav__lang-link is-active">ES</a>
-			<span class="murg-nav__lang-sep">.</span>
-			<a href="#" class="murg-nav__lang-link">EN</a>
-		</div>
+		<div class="murg-nav__lang"></div>
 
 		<a class="murg-nav__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 			<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/img/Logo-murguia-blanco.png' ); ?>"
