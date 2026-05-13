@@ -5817,7 +5817,7 @@ button.murg-piezas__tab:hover {
 }
 
 .murg-featured__price {
-  color: #000;
+  color: var(--murg-forest);
   font-family: 'Cinzel', serif;
   font-size: clamp(22px, 1.62vw, 28px);
   font-weight: 400;
@@ -5831,7 +5831,7 @@ button.murg-piezas__tab:hover {
 .murg-featured__price .woocommerce-Price-amount,
 .murg-featured__price bdi,
 .murg-featured__price ins,
-.murg-featured__price del { color: #000 !important; }
+.murg-featured__price del { color: var(--murg-forest) !important; }
 
 .murg-featured__img-wrap {
   height: clamp(520px, 44.44vw, 768px);
