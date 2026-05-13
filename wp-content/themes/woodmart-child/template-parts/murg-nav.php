@@ -102,7 +102,7 @@ $_marca_links = [
 			[ 'label' => 'Catálogo',              'url' => $_shop_url,                          'drop' => $_cat_links ],
 			[ 'label' => 'Marcas',                'url' => home_url( '/shop/?product_cat=marcas' ), 'drop' => $_marca_links ],
 			[ 'label' => 'Alta Joyería',          'url' => home_url( '/shop/?product_cat=alta-joyeria' ), 'drop' => false ],
-			[ 'label' => 'Tiendas',               'url' => home_url( '/shop/?product_cat=hogar' ), 'drop' => false ],
+			[ 'label' => 'Tiendas',               'url' => home_url( '/tiendas/' ), 'drop' => false ],
 		];
 		foreach ( $_nav_items as $_item ) :
 			$_is_active = ( rtrim( $_current_url, '/' ) === rtrim( $_item['url'], '/' ) );

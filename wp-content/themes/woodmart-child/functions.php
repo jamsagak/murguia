@@ -1167,6 +1167,16 @@ function murguia_override_shop_template( $template ) {
 		if ( file_exists( $custom ) ) return $custom;
 	}
 
+	// Tiendas
+	if ( is_page() && 'page-tiendas.php' === get_page_template_slug() ) {
+		$custom = get_stylesheet_directory() . '/page-tiendas.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+	if ( is_page( 'tiendas' ) ) {
+		$custom = get_stylesheet_directory() . '/page-tiendas.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+
 	// Checkout — forzar nuestro template con murg-nav / murg-footer
 	if ( function_exists( 'is_checkout' ) && is_checkout() && ! is_wc_endpoint_url() ) {
 		$custom = get_stylesheet_directory() . '/page-checkout.php';
@@ -1252,6 +1262,12 @@ function murguia_is_custom_template() {
 		return true;
 	}
 	if ( is_page( 'las-4cs' ) ) {
+		return true;
+	}
+	if ( is_page() && 'page-tiendas.php' === get_page_template_slug() ) {
+		return true;
+	}
+	if ( is_page( 'tiendas' ) ) {
 		return true;
 	}
 	// Checkout
