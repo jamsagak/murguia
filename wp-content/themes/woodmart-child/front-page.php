@@ -251,8 +251,8 @@ $shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
      ============================================================ -->
 <?php
 $novios_titulo  = murg_f( 'hp_novios_titulo', 'Anillos de compromiso' );
-$novios_sub     = murg_f( 'hp_novios_sub',    'Aros de Matrimonio / Anillo de Promesa' );
-$novios_cta_txt = murg_f( 'hp_novios_cta_texto', 'Las 4Cs' );
+$novios_sub     = murg_f( 'hp_novios_sub',    'Aros de Matrimonio / Anillos de Promesa' );
+$novios_cta_txt = murg_f( 'hp_novios_cta_texto', 'Conoce Las 4Cs' );
 $novios_cta_url = murg_f( 'hp_novios_cta_url', home_url( '/las-4cs/' ) );
 $novios_imagen  = murg_f( 'hp_novios_imagen', [] );
 $novios_img_url = ! empty( $novios_imagen['url'] ) ? $novios_imagen['url'] : $img_upload .'novios.jpg';
@@ -280,7 +280,7 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_novios_logos', murguia_aju
 			<p class="murg-novios__sub"><?php echo esc_html( $novios_sub ); ?></p>
 
 			<a href="<?php echo esc_url( $novios_cta_url ); ?>"
-			   class="murg-btn murg-btn--dark">
+			   class="murg-btn murg-btn--dark" style="text-transform:none">
 				<?php echo esc_html( $novios_cta_txt ); ?>
 			</a>
 
