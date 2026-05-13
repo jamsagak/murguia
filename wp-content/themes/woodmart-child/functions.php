@@ -190,6 +190,30 @@ function murguia_register_cpts() {
 		'show_in_menu' => 'xts_dashboard',
 		'show_in_rest' => true,
 	] );
+
+	register_post_type( 'murguia_tienda', [
+		'labels'       => [
+			'name'               => 'Tiendas',
+			'singular_name'      => 'Tienda',
+			'menu_name'          => 'Tiendas',
+			'all_items'          => 'Todas las Tiendas',
+			'add_new_item'       => 'Anadir Tienda',
+			'edit_item'          => 'Editar Tienda',
+			'new_item'           => 'Nueva Tienda',
+			'view_item'          => 'Ver Tienda',
+			'search_items'       => 'Buscar Tiendas',
+			'not_found'          => 'No se encontraron tiendas',
+			'featured_image'     => 'Imagen principal',
+			'set_featured_image' => 'Asignar imagen principal',
+		],
+		'public'       => true,
+		'has_archive'  => false,
+		'supports'     => [ 'title', 'thumbnail', 'page-attributes' ],
+		'rewrite'      => [ 'slug' => 'local' ],
+		'show_in_menu' => 'xts_dashboard',
+		'show_in_rest' => true,
+		'menu_icon'    => 'dashicons-store',
+	] );
 }
 
 /* ------------------------------------------------------------------
@@ -208,8 +232,10 @@ function murguia_ensure_ajustes_defaults() {
 		[ 'post_title' => 'Tienda',            'post_name' => 'tienda' ],
 		[ 'post_title' => 'Producto',          'post_name' => 'producto' ],
 		[ 'post_title' => 'Contacto',          'post_name' => 'contacto' ],
+		[ 'post_title' => 'Tiendas',           'post_name' => 'tiendas' ],
 		[ 'post_title' => 'Anillos de Compromiso', 'post_name' => 'anillos-compromiso-page' ],
 		[ 'post_title' => 'Alta Joyería',      'post_name' => 'alta-joyeria-page' ],
+		[ 'post_title' => 'Las 4Cs',            'post_name' => 'las-4cs-page' ],
 	];
 
 	foreach ( $secciones as $data ) {
@@ -1710,4 +1736,488 @@ function murguia_register_anillos_compromiso_fields() {
 			]
 		),
 	] );
+}
+
+/* ------------------------------------------------------------------
+   TIENDAS Y LAS 4CS - CPT, SCF y contenido inicial editable
+   ------------------------------------------------------------------ */
+add_action( 'acf/init', 'murguia_register_tiendas_fields' );
+add_action( 'init', 'murguia_register_tiendas_fields', 20 );
+add_action( 'acf/init', 'murguia_register_tiendas_page_fields' );
+add_action( 'init', 'murguia_register_tiendas_page_fields', 20 );
+
+function murguia_register_tiendas_page_fields() {
+	static $registered = false;
+	if ( $registered ) return;
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+	$id = murguia_ajuste_id( 'tiendas' );
+	if ( ! $id ) return;
+	$registered = true;
+
+	acf_add_local_field_group( [
+		'key' => 'group_murg_tiendas_page',
+		'title' => 'Tiendas - Pagina',
+		'location' => [ [ [ 'param' => 'post', 'operator' => '==', 'value' => $id ] ] ],
+		'menu_order' => 0,
+		'position' => 'normal',
+		'style' => 'default',
+		'label_placement' => 'top',
+		'show_in_rest' => 1,
+		'fields' => [
+			[ 'key' => 'field_murg_tt_titulo', 'label' => 'Titulo', 'name' => 'tt_titulo', 'type' => 'text' ],
+			[ 'key' => 'field_murg_tt_intro', 'label' => 'Texto introductorio', 'name' => 'tt_intro', 'type' => 'textarea', 'rows' => 3 ],
+			[
+				'key' => 'field_murg_tt_tiendas',
+				'label' => 'Cards de tiendas',
+				'name' => 'tt_tiendas',
+				'type' => 'repeater',
+				'layout' => 'block',
+				'button_label' => 'Agregar tienda',
+				'instructions' => 'Edita aqui las tiendas visibles en la pagina. Este es el panel principal para direccion, imagen principal, galeria y mapa.',
+				'sub_fields' => [
+					[ 'key' => 'field_murg_tt_tienda_visible', 'label' => 'Visible', 'name' => 'visible', 'type' => 'true_false', 'ui' => 1, 'default_value' => 1 ],
+					[ 'key' => 'field_murg_tt_tienda_nombre', 'label' => 'Nombre de tienda', 'name' => 'nombre', 'type' => 'text', 'required' => 1 ],
+					[ 'key' => 'field_murg_tt_tienda_direccion', 'label' => 'Direccion', 'name' => 'direccion', 'type' => 'textarea', 'rows' => 2 ],
+					[ 'key' => 'field_murg_tt_tienda_telefono', 'label' => 'Telefono', 'name' => 'telefono', 'type' => 'text' ],
+					[ 'key' => 'field_murg_tt_tienda_horario', 'label' => 'Horario', 'name' => 'horario', 'type' => 'textarea', 'rows' => 3 ],
+					[
+						'key' => 'field_murg_tt_tienda_imagen_principal',
+						'label' => 'Imagen principal',
+						'name' => 'imagen_principal',
+						'type' => 'image',
+						'return_format' => 'array',
+						'preview_size' => 'medium',
+						'instructions' => 'Imagen del card. Se muestra completa, sin recorte. Recomendado: todas las tiendas con el mismo tamano/proporcion.',
+					],
+					[
+						'key' => 'field_murg_tt_tienda_galeria',
+						'label' => 'Galeria adicional',
+						'name' => 'galeria',
+						'type' => 'repeater',
+						'layout' => 'block',
+						'button_label' => 'Agregar imagen',
+						'sub_fields' => [
+							[ 'key' => 'field_murg_tt_tienda_galeria_imagen', 'label' => 'Imagen', 'name' => 'imagen', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ],
+						],
+					],
+					[ 'key' => 'field_murg_tt_tienda_whatsapp_texto', 'label' => 'Texto boton WhatsApp/contacto', 'name' => 'whatsapp_texto', 'type' => 'text' ],
+					[ 'key' => 'field_murg_tt_tienda_whatsapp_url', 'label' => 'URL WhatsApp/contacto', 'name' => 'whatsapp_url', 'type' => 'url' ],
+					[ 'key' => 'field_murg_tt_tienda_maps_url', 'label' => 'URL Google Maps fallback', 'name' => 'maps_url', 'type' => 'url' ],
+					[
+						'key' => 'field_murg_tt_tienda_mapa_iframe',
+						'label' => 'Mapa embebido de Google Maps',
+						'name' => 'mapa_iframe',
+						'type' => 'textarea',
+						'rows' => 4,
+						'instructions' => 'Pega aqui el iframe de Google Maps o solo el valor src del iframe. Se abre en popup.',
+					],
+					[ 'key' => 'field_murg_tt_tienda_orden', 'label' => 'Orden', 'name' => 'orden', 'type' => 'number', 'default_value' => 0 ],
+				],
+			],
+		],
+	] );
+}
+
+function murguia_register_tiendas_fields() {
+	static $registered = false;
+	if ( $registered ) return;
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+	$registered = true;
+
+	acf_add_local_field_group( [
+		'key' => 'group_murg_tiendas',
+		'title' => 'Tienda - Datos del local',
+		'location' => [ [ [ 'param' => 'post_type', 'operator' => '==', 'value' => 'murguia_tienda' ] ] ],
+		'menu_order' => 0,
+		'position' => 'normal',
+		'style' => 'default',
+		'label_placement' => 'top',
+		'show_in_rest' => 1,
+		'fields' => [
+			[ 'key' => 'field_murg_tienda_nombre', 'label' => 'Nombre de tienda', 'name' => 'tienda_nombre', 'type' => 'text', 'required' => 1 ],
+			[ 'key' => 'field_murg_tienda_direccion', 'label' => 'Direccion', 'name' => 'tienda_direccion', 'type' => 'textarea', 'rows' => 2 ],
+			[ 'key' => 'field_murg_tienda_telefono', 'label' => 'Telefono', 'name' => 'tienda_telefono', 'type' => 'text' ],
+			[ 'key' => 'field_murg_tienda_horario', 'label' => 'Horario', 'name' => 'tienda_horario', 'type' => 'textarea', 'rows' => 3 ],
+			[
+				'key' => 'field_murg_tienda_imagen_principal',
+				'label' => 'Imagen principal',
+				'name' => 'tienda_imagen_principal',
+				'type' => 'image',
+				'return_format' => 'array',
+				'preview_size' => 'medium',
+				'instructions' => 'Imagen que aparece junto a los datos. Se muestra completa, sin recorte. Sube las 3 principales con el mismo tamano/proporcion.',
+			],
+			[
+				'key' => 'field_murg_tienda_galeria',
+				'label' => 'Galeria de imagenes adicionales',
+				'name' => 'tienda_galeria',
+				'type' => 'repeater',
+				'layout' => 'block',
+				'button_label' => 'Agregar imagen',
+				'instructions' => 'Formato WebP/JPG. Recomendado: 1600x1000px o mayor, optimizado.',
+				'sub_fields' => [
+					[ 'key' => 'field_murg_tienda_galeria_imagen', 'label' => 'Imagen', 'name' => 'imagen', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ],
+				],
+			],
+			[ 'key' => 'field_murg_tienda_whatsapp_texto', 'label' => 'Texto boton WhatsApp/contacto', 'name' => 'tienda_whatsapp_texto', 'type' => 'text' ],
+			[ 'key' => 'field_murg_tienda_whatsapp_url', 'label' => 'URL WhatsApp/contacto', 'name' => 'tienda_whatsapp_url', 'type' => 'url' ],
+			[ 'key' => 'field_murg_tienda_maps_url', 'label' => 'URL Google Maps', 'name' => 'tienda_maps_url', 'type' => 'url' ],
+			[
+				'key' => 'field_murg_tienda_mapa_iframe',
+				'label' => 'Mapa embebido de Google Maps',
+				'name' => 'tienda_mapa_iframe',
+				'type' => 'textarea',
+				'rows' => 4,
+				'instructions' => 'Pega aqui el iframe de Google Maps o solo el valor src del iframe. Se abre en popup.',
+			],
+			[ 'key' => 'field_murg_tienda_orden', 'label' => 'Orden', 'name' => 'tienda_orden', 'type' => 'number', 'default_value' => 0 ],
+			[ 'key' => 'field_murg_tienda_visible', 'label' => 'Visible en la pagina', 'name' => 'tienda_visible', 'type' => 'true_false', 'ui' => 1, 'default_value' => 1 ],
+		],
+	] );
+}
+
+add_action( 'acf/init', 'murguia_register_4cs_fields' );
+add_action( 'init', 'murguia_register_4cs_fields', 20 );
+
+function murguia_register_4cs_fields() {
+	static $registered = false;
+	if ( $registered ) return;
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+	$id = murguia_ajuste_id( 'las-4cs-page' );
+	if ( ! $id ) return;
+	$registered = true;
+
+	acf_add_local_field_group( [
+		'key' => 'group_murg_4cs',
+		'title' => 'Las 4Cs - Contenido',
+		'location' => [ [ [ 'param' => 'post', 'operator' => '==', 'value' => $id ] ] ],
+		'menu_order' => 0,
+		'position' => 'normal',
+		'style' => 'default',
+		'label_placement' => 'top',
+		'show_in_rest' => 1,
+		'fields' => [
+			[ 'key' => 'field_murg_4cs_tab_hero', 'label' => 'Hero', 'name' => '', 'type' => 'tab' ],
+			[ 'key' => 'field_murg_4cs_hero_eyebrow', 'label' => 'Eyebrow', 'name' => 'c4_hero_eyebrow', 'type' => 'text' ],
+			[ 'key' => 'field_murg_4cs_hero_titulo', 'label' => 'Titulo', 'name' => 'c4_hero_titulo', 'type' => 'text' ],
+			[ 'key' => 'field_murg_4cs_hero_subtitulo', 'label' => 'Subtitulo', 'name' => 'c4_hero_subtitulo', 'type' => 'textarea', 'rows' => 2 ],
+			[ 'key' => 'field_murg_4cs_hero_intro', 'label' => 'Texto introductorio', 'name' => 'c4_hero_intro', 'type' => 'textarea', 'rows' => 4 ],
+			[ 'key' => 'field_murg_4cs_hero_imagen', 'label' => 'Imagen hero', 'name' => 'c4_hero_imagen', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium', 'instructions' => 'Recomendado: imagen editorial de diamante o joya, minimo 1600x1000px.' ],
+			[
+				'key' => 'field_murg_4cs_secciones',
+				'label' => 'Secciones 4Cs',
+				'name' => 'c4_secciones',
+				'type' => 'repeater',
+				'layout' => 'block',
+				'button_label' => 'Agregar seccion',
+				'sub_fields' => [
+					[ 'key' => 'field_murg_4cs_seccion_titulo', 'label' => 'Titulo de la C', 'name' => 'titulo', 'type' => 'text' ],
+					[ 'key' => 'field_murg_4cs_seccion_subtitulo', 'label' => 'Subtitulo opcional', 'name' => 'subtitulo', 'type' => 'text' ],
+					[ 'key' => 'field_murg_4cs_seccion_descripcion', 'label' => 'Descripcion', 'name' => 'descripcion', 'type' => 'textarea', 'rows' => 5 ],
+					[ 'key' => 'field_murg_4cs_seccion_imagen', 'label' => 'Imagen principal', 'name' => 'imagen', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ],
+					[ 'key' => 'field_murg_4cs_seccion_imagen_sec', 'label' => 'Imagen secundaria opcional', 'name' => 'imagen_secundaria', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'medium' ],
+					[ 'key' => 'field_murg_4cs_seccion_puntos', 'label' => 'Puntos destacados', 'name' => 'puntos', 'type' => 'textarea', 'rows' => 4, 'instructions' => 'Un punto por linea.' ],
+					[ 'key' => 'field_murg_4cs_seccion_orden', 'label' => 'Orden', 'name' => 'orden', 'type' => 'number' ],
+				],
+			],
+			[ 'key' => 'field_murg_4cs_tab_escalas', 'label' => 'Escalas y ejemplos', 'name' => '', 'type' => 'tab' ],
+			[
+				'key' => 'field_murg_4cs_color_escala',
+				'label' => 'Escala de color D-Z',
+				'name' => 'c4_color_escala',
+				'type' => 'repeater',
+				'layout' => 'table',
+				'button_label' => 'Agregar grado',
+				'sub_fields' => [
+					[ 'key' => 'field_murg_4cs_color_grado', 'label' => 'Grado', 'name' => 'grado', 'type' => 'text' ],
+					[ 'key' => 'field_murg_4cs_color_label', 'label' => 'Etiqueta', 'name' => 'etiqueta', 'type' => 'text' ],
+				],
+			],
+			[
+				'key' => 'field_murg_4cs_claridad_escala',
+				'label' => 'Escala de claridad',
+				'name' => 'c4_claridad_escala',
+				'type' => 'repeater',
+				'layout' => 'table',
+				'button_label' => 'Agregar grado',
+				'sub_fields' => [
+					[ 'key' => 'field_murg_4cs_claridad_grado', 'label' => 'Grado', 'name' => 'grado', 'type' => 'text' ],
+					[ 'key' => 'field_murg_4cs_claridad_label', 'label' => 'Descripcion', 'name' => 'descripcion', 'type' => 'text' ],
+				],
+			],
+			[
+				'key' => 'field_murg_4cs_corte_conceptos',
+				'label' => 'Conceptos de corte',
+				'name' => 'c4_corte_conceptos',
+				'type' => 'repeater',
+				'layout' => 'block',
+				'button_label' => 'Agregar concepto',
+				'sub_fields' => [
+					[ 'key' => 'field_murg_4cs_corte_concepto_titulo', 'label' => 'Titulo', 'name' => 'titulo', 'type' => 'text' ],
+					[ 'key' => 'field_murg_4cs_corte_concepto_texto', 'label' => 'Texto', 'name' => 'texto', 'type' => 'textarea', 'rows' => 2 ],
+				],
+			],
+			[
+				'key' => 'field_murg_4cs_carataje_ejemplos',
+				'label' => 'Ejemplos de carataje',
+				'name' => 'c4_carataje_ejemplos',
+				'type' => 'repeater',
+				'layout' => 'table',
+				'button_label' => 'Agregar ejemplo',
+				'sub_fields' => [
+					[ 'key' => 'field_murg_4cs_carataje_valor', 'label' => 'Valor', 'name' => 'valor', 'type' => 'text' ],
+					[ 'key' => 'field_murg_4cs_carataje_label', 'label' => 'Etiqueta opcional', 'name' => 'etiqueta', 'type' => 'text' ],
+					[ 'key' => 'field_murg_4cs_carataje_imagen', 'label' => 'Imagen opcional', 'name' => 'imagen', 'type' => 'image', 'return_format' => 'array', 'preview_size' => 'thumbnail' ],
+				],
+			],
+			[ 'key' => 'field_murg_4cs_tab_cta', 'label' => 'CTA', 'name' => '', 'type' => 'tab' ],
+			[ 'key' => 'field_murg_4cs_cta_titulo', 'label' => 'Titulo CTA', 'name' => 'c4_cta_titulo', 'type' => 'text' ],
+			[ 'key' => 'field_murg_4cs_cta_texto', 'label' => 'Texto CTA', 'name' => 'c4_cta_texto', 'type' => 'textarea', 'rows' => 2 ],
+			[ 'key' => 'field_murg_4cs_cta_principal_texto', 'label' => 'Boton principal - texto', 'name' => 'c4_cta_principal_texto', 'type' => 'text' ],
+			[ 'key' => 'field_murg_4cs_cta_principal_url', 'label' => 'Boton principal - URL', 'name' => 'c4_cta_principal_url', 'type' => 'url' ],
+			[ 'key' => 'field_murg_4cs_cta_secundario_texto', 'label' => 'Boton secundario - texto', 'name' => 'c4_cta_secundario_texto', 'type' => 'text' ],
+			[ 'key' => 'field_murg_4cs_cta_secundario_url', 'label' => 'Boton secundario - URL', 'name' => 'c4_cta_secundario_url', 'type' => 'url' ],
+		],
+	] );
+}
+
+function murguia_update_editable_field( $selector, $value, $post_id, $only_if_empty = true ) {
+	if ( $only_if_empty && function_exists( 'get_field' ) ) {
+		$current = get_field( $selector, $post_id );
+		if ( $current !== null && $current !== false && $current !== '' && $current !== [] ) return;
+	}
+	if ( function_exists( 'update_field' ) ) {
+		update_field( $selector, $value, $post_id );
+		return;
+	}
+	update_post_meta( $post_id, $selector, $value );
+}
+
+function murguia_find_attachment_id_by_stem( $stem ) {
+	global $wpdb;
+	static $cache = [];
+
+	if ( isset( $cache[ $stem ] ) ) return $cache[ $stem ];
+
+	$like_file = '%' . $wpdb->esc_like( '/' . $stem . '.' ) . '%';
+	$id = (int) $wpdb->get_var( $wpdb->prepare(
+		"SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s LIMIT 1",
+		$like_file
+	) );
+
+	if ( ! $id ) {
+		$id = (int) $wpdb->get_var( $wpdb->prepare(
+			"SELECT ID FROM {$wpdb->posts} WHERE post_type = 'attachment' AND post_title = %s LIMIT 1",
+			$stem
+		) );
+	}
+
+	$cache[ $stem ] = $id;
+	return $id;
+}
+
+function murguia_store_gallery_seed( $prefix, $from, $to ) {
+	$rows = [];
+	for ( $i = $from; $i <= $to; $i++ ) {
+		$id = murguia_find_attachment_id_by_stem( sprintf( '%s%05d', $prefix, $i ) );
+		if ( $id ) {
+			$rows[] = [ 'imagen' => $id ];
+		}
+	}
+	return $rows;
+}
+
+add_action( 'init', 'murguia_seed_tiendas_y_4cs', 1000 );
+add_action( 'init', 'murguia_ensure_custom_pages', 1001 );
+
+function murguia_ensure_custom_pages() {
+	$pages = [
+		[
+			'title' => 'Tiendas',
+			'slug' => 'tiendas',
+			'template' => 'page-tiendas.php',
+			'content' => 'Conoce nuestras boutiques en Lima y encuentra el espacio mas cercano para recibir asesoria personalizada.',
+		],
+		[
+			'title' => 'Las 4Cs',
+			'slug' => 'las-4cs',
+			'template' => 'page-las-4cs.php',
+			'content' => '',
+		],
+	];
+
+	foreach ( $pages as $page ) {
+		$post = get_page_by_path( $page['slug'], OBJECT, 'page' );
+		if ( $post ) {
+			if ( get_post_meta( $post->ID, '_wp_page_template', true ) !== $page['template'] ) {
+				update_post_meta( $post->ID, '_wp_page_template', $page['template'] );
+			}
+			continue;
+		}
+
+		$post_id = wp_insert_post( [
+			'post_title' => $page['title'],
+			'post_name' => $page['slug'],
+			'post_content' => $page['content'],
+			'post_type' => 'page',
+			'post_status' => 'publish',
+		] );
+
+		if ( ! is_wp_error( $post_id ) && $post_id ) {
+			update_post_meta( $post_id, '_wp_page_template', $page['template'] );
+		}
+	}
+}
+
+function murguia_seed_store_media_fields( $post_id, $gallery ) {
+	$gallery = is_array( $gallery ) ? array_values( array_filter( $gallery ) ) : [];
+	if ( empty( $gallery ) ) return;
+
+	$principal = function_exists( 'get_field' ) ? get_field( 'tienda_imagen_principal', $post_id ) : get_post_meta( $post_id, 'tienda_imagen_principal', true );
+	if ( $principal ) return;
+
+	$principal_id = (int) ( $gallery[0]['imagen'] ?? 0 );
+	if ( ! $principal_id ) return;
+
+	murguia_update_editable_field( 'tienda_imagen_principal', $principal_id, $post_id, false );
+	set_post_thumbnail( $post_id, $principal_id );
+
+	if ( count( $gallery ) > 1 ) {
+		murguia_update_editable_field( 'tienda_galeria', array_slice( $gallery, 1 ), $post_id, false );
+	}
+}
+
+function murguia_store_seed_to_repeater_row( $store ) {
+	$gallery = is_array( $store['gallery'] ?? [] ) ? array_values( $store['gallery'] ) : [];
+	return [
+		'visible'          => 1,
+		'nombre'           => $store['name'] ?? '',
+		'direccion'        => $store['address'] ?? '',
+		'telefono'         => $store['phone'] ?? '',
+		'horario'          => $store['hours'] ?? '',
+		'imagen_principal' => (int) ( $gallery[0]['imagen'] ?? 0 ),
+		'galeria'          => array_slice( $gallery, 1 ),
+		'whatsapp_texto'   => 'Contactar por WhatsApp',
+		'whatsapp_url'     => 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $store['phone'] ?? '' ),
+		'maps_url'         => $store['maps'] ?? '',
+		'mapa_iframe'      => '',
+		'orden'            => (int) ( $store['order'] ?? 0 ),
+	];
+}
+
+function murguia_seed_tiendas_y_4cs() {
+	if ( ! post_type_exists( 'murguia_tienda' ) ) return;
+
+	$stores = [
+		[
+			'name' => 'San Isidro',
+			'slug' => 'san-isidro',
+			'address' => 'Av. Pardo y Aliaga 572, San Isidro. Lima, Peru',
+			'phone' => '+51 719-5359',
+			'hours' => 'Lunes a Viernes de 10:00am a 7:00pm y Sabados de 10:00am a 5:00pm',
+			'maps' => 'https://www.google.com/maps/search/?api=1&query=Av.%20Pardo%20y%20Aliaga%20572%2C%20San%20Isidro%2C%20Lima%2C%20Peru',
+			'gallery' => murguia_store_gallery_seed( 'San-isidro', 1, 14 ),
+			'order' => 10,
+		],
+		[
+			'name' => 'Miraflores',
+			'slug' => 'miraflores',
+			'address' => 'Av. La Paz 1198, Miraflores, Lima, Peru',
+			'phone' => '+01 652 - 6666',
+			'hours' => 'Lunes a Viernes de 10:30am a 7:00pm y Sabados de 10:30am a 5:00pm',
+			'maps' => 'https://www.google.com/maps/search/?api=1&query=Av.%20La%20Paz%201198%2C%20Miraflores%2C%20Lima%2C%20Peru',
+			'gallery' => murguia_store_gallery_seed( 'Miraflores', 1, 8 ),
+			'order' => 20,
+		],
+		[
+			'name' => 'Surco - Jockey Plaza',
+			'slug' => 'surco-jockey-plaza',
+			'address' => 'Av. Javier Prado Este 4200, Jockey Plaza, Surco, Lima, Peru',
+			'phone' => '+01 279-4393',
+			'hours' => 'Lunes a Domingo 11:00am a 9:15pm',
+			'maps' => 'https://www.google.com/maps/search/?api=1&query=Jockey%20Plaza%2C%20Av.%20Javier%20Prado%20Este%204200%2C%20Surco%2C%20Lima%2C%20Peru',
+			'gallery' => murguia_store_gallery_seed( 'jockey', 1, 7 ),
+			'order' => 30,
+		],
+	];
+
+	foreach ( $stores as $store ) {
+		$post = get_page_by_path( $store['slug'], OBJECT, 'murguia_tienda' );
+		if ( ! $post ) {
+			$post_id = wp_insert_post( [
+				'post_title' => $store['name'],
+				'post_name' => $store['slug'],
+				'post_type' => 'murguia_tienda',
+				'post_status' => 'publish',
+				'menu_order' => $store['order'],
+			] );
+			if ( is_wp_error( $post_id ) || ! $post_id ) continue;
+			murguia_update_editable_field( 'tienda_nombre', $store['name'], $post_id, false );
+			murguia_update_editable_field( 'tienda_direccion', $store['address'], $post_id, false );
+			murguia_update_editable_field( 'tienda_telefono', $store['phone'], $post_id, false );
+			murguia_update_editable_field( 'tienda_horario', $store['hours'], $post_id, false );
+			murguia_update_editable_field( 'tienda_imagen_principal', (int) ( $store['gallery'][0]['imagen'] ?? 0 ), $post_id, false );
+			murguia_update_editable_field( 'tienda_galeria', array_slice( $store['gallery'], 1 ), $post_id, false );
+			murguia_update_editable_field( 'tienda_whatsapp_texto', 'Contactar por WhatsApp', $post_id, false );
+			murguia_update_editable_field( 'tienda_whatsapp_url', 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $store['phone'] ), $post_id, false );
+			murguia_update_editable_field( 'tienda_maps_url', $store['maps'], $post_id, false );
+			murguia_update_editable_field( 'tienda_orden', $store['order'], $post_id, false );
+			murguia_update_editable_field( 'tienda_visible', 1, $post_id, false );
+			if ( ! has_post_thumbnail( $post_id ) && ! empty( $store['gallery'][0]['imagen'] ) ) {
+				set_post_thumbnail( $post_id, (int) $store['gallery'][0]['imagen'] );
+			}
+		} else {
+			murguia_seed_store_media_fields( $post->ID, $store['gallery'] );
+		}
+	}
+
+	$tt_id = murguia_ajuste_id( 'tiendas' );
+	if ( $tt_id ) {
+		murguia_update_editable_field( 'tt_titulo', 'Tiendas', $tt_id );
+		murguia_update_editable_field( 'tt_intro', 'Conoce nuestras boutiques en Lima y encuentra el espacio mas cercano para recibir asesoria personalizada.', $tt_id );
+		murguia_update_editable_field( 'tt_tiendas', array_map( 'murguia_store_seed_to_repeater_row', $stores ), $tt_id );
+	}
+
+	$c4_id = murguia_ajuste_id( 'las-4cs-page' );
+	if ( ! $c4_id ) return;
+
+	murguia_update_editable_field( 'c4_hero_eyebrow', 'Guia del diamante', $c4_id );
+	murguia_update_editable_field( 'c4_hero_titulo', 'Las 4Cs del Diamante', $c4_id );
+	murguia_update_editable_field( 'c4_hero_subtitulo', 'Color, claridad, corte y carataje: los criterios universales para elegir un diamante con confianza.', $c4_id );
+	murguia_update_editable_field( 'c4_hero_intro', 'Cada diamante se entiende mejor cuando se mira desde sus cuatro dimensiones esenciales. Esta guia resume las 4Cs para ayudarte a reconocer la belleza, el valor y el caracter de cada piedra.', $c4_id );
+	murguia_update_editable_field( 'c4_secciones', [
+		[ 'titulo' => 'Color', 'subtitulo' => 'La ausencia de color como signo de pureza', 'descripcion' => 'La evaluacion del color de la mayoria de los diamantes de calidad se basa en la ausencia de color. Un diamante quimicamente puro y estructuralmente perfecto no tiene matiz, como una gota de agua pura, y por eso alcanza un valor mas alto. La escala mas aceptada va de D a Z: D es el grado mas incoloro y la presencia de color aumenta gradualmente hasta Z. Muchas diferencias son sutiles para el ojo no entrenado, pero influyen en la calidad y el precio.', 'puntos' => "Escala internacional de D a Z\nMenor color, mayor rareza\nEl matiz impacta calidad y precio", 'orden' => 10 ],
+		[ 'titulo' => 'Claridad', 'subtitulo' => 'Inclusiones y pequenos rasgos naturales', 'descripcion' => 'Los diamantes naturales nacen bajo calor y presion extremos en lo profundo de la tierra. Ese proceso puede producir caracteristicas internas llamadas inclusiones y caracteristicas externas llamadas defectos. La claridad evalua su numero, tamano, relieve, naturaleza y posicion, asi como su efecto sobre la apariencia general. Aunque ningun diamante natural es absolutamente puro, cuanto mas se acerca a esa pureza, mayor es su valor.', 'puntos' => "Evalua inclusiones y defectos\nConsidera numero, tamano y posicion\nLa pureza visual aumenta el valor", 'orden' => 20 ],
+		[ 'titulo' => 'Corte', 'subtitulo' => 'La arquitectura de la luz', 'descripcion' => 'Los diamantes son reconocidos por su capacidad de transmitir luz y destellos intensos. El grado de corte describe que tan bien interactuan las facetas con la luz. Es una de las 4Cs mas complejas porque combina belleza visual y precision tecnica: brillo, fuego y centello describen la apariencia boca arriba, mientras que proporcion, durabilidad, pulido y simetria hablan del diseno y la artesania.', 'puntos' => "Define brillo, fuego y centello\nDepende de proporciones y simetria\nEs clave para la belleza visual", 'orden' => 30 ],
+		[ 'titulo' => 'Carataje', 'subtitulo' => 'Peso, presencia y equilibrio', 'descripcion' => 'El peso en quilates mide cuanto pesa un diamante. Un quilate equivale a 200 miligramos. El precio suele aumentar con el peso porque los diamantes grandes son mas raros, pero dos diamantes del mismo carataje pueden tener valores muy distintos segun color, claridad y corte. El valor de un diamante se determina por el equilibrio de las 4Cs, no solo por su peso.', 'puntos' => "1 quilate equivale a 200 mg\nEl peso no determina todo el valor\nDebe leerse junto con las otras 3Cs", 'orden' => 40 ],
+	], $c4_id );
+	murguia_update_editable_field( 'c4_color_escala', [
+		[ 'grado' => 'D', 'etiqueta' => 'Incoloro' ], [ 'grado' => 'E', 'etiqueta' => 'Incoloro' ], [ 'grado' => 'F', 'etiqueta' => 'Incoloro' ],
+		[ 'grado' => 'G', 'etiqueta' => 'Casi incoloro' ], [ 'grado' => 'H', 'etiqueta' => 'Casi incoloro' ], [ 'grado' => 'I', 'etiqueta' => 'Casi incoloro' ], [ 'grado' => 'J', 'etiqueta' => 'Casi incoloro' ],
+		[ 'grado' => 'K-Z', 'etiqueta' => 'Color perceptible' ],
+	], $c4_id );
+	murguia_update_editable_field( 'c4_claridad_escala', [
+		[ 'grado' => 'IF', 'descripcion' => 'Internamente perfecto' ],
+		[ 'grado' => 'VVS1', 'descripcion' => 'Inclusion muy muy ligera' ],
+		[ 'grado' => 'VVS2', 'descripcion' => 'Inclusion muy muy ligera' ],
+		[ 'grado' => 'VS1', 'descripcion' => 'Inclusion muy ligera' ],
+		[ 'grado' => 'VS2', 'descripcion' => 'Inclusion muy ligera' ],
+		[ 'grado' => 'SI1', 'descripcion' => 'Inclusion ligera' ],
+		[ 'grado' => 'SI2', 'descripcion' => 'Inclusion ligera' ],
+	], $c4_id );
+	murguia_update_editable_field( 'c4_corte_conceptos', [
+		[ 'titulo' => 'Brillo', 'texto' => 'Luz blanca interna y externa reflejada desde un diamante.' ],
+		[ 'titulo' => 'Fuego', 'texto' => 'Dispersion de la luz blanca en todos los colores del arco iris.' ],
+		[ 'titulo' => 'Centello', 'texto' => 'Destellos y patron de areas claras y oscuras causadas por los reflejos internos.' ],
+	], $c4_id );
+	murguia_update_editable_field( 'c4_carataje_ejemplos', [
+		[ 'valor' => '.25', 'etiqueta' => '0.25 ct' ], [ 'valor' => '.50', 'etiqueta' => '0.50 ct' ], [ 'valor' => '1.00', 'etiqueta' => '1.00 ct' ],
+		[ 'valor' => '1.50', 'etiqueta' => '1.50 ct' ], [ 'valor' => '2.00', 'etiqueta' => '2.00 ct' ], [ 'valor' => '2.50', 'etiqueta' => '2.50 ct' ],
+	], $c4_id );
+	murguia_update_editable_field( 'c4_cta_titulo', 'Elige con asesoria experta', $c4_id );
+	murguia_update_editable_field( 'c4_cta_texto', 'Nuestro equipo puede ayudarte a comparar diamantes y encontrar el equilibrio adecuado entre belleza, rareza y presupuesto.', $c4_id );
+	murguia_update_editable_field( 'c4_cta_principal_texto', 'Agendar cita', $c4_id );
+	murguia_update_editable_field( 'c4_cta_principal_url', home_url( '/contacto/' ), $c4_id );
+	murguia_update_editable_field( 'c4_cta_secundario_texto', 'Ver anillos', $c4_id );
+	murguia_update_editable_field( 'c4_cta_secundario_url', home_url( '/anillos-compromiso/' ), $c4_id );
 }

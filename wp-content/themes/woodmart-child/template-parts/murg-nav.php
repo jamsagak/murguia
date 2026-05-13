@@ -157,7 +157,8 @@ $_marca_links = [
 		<nav class="murg-mobile-menu__nav" aria-label="Menú principal">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Inicio</a>
 			<a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a>
-			<a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Contacto</a>
+			<a href="<?php echo esc_url( home_url( '/las-4cs/' ) ); ?>">Conoce las 4Cs</a>
+			<a href="<?php echo esc_url( home_url( '/tiendas/' ) ); ?>">Contacto</a>
 			<a href="<?php echo esc_url( $_shop_url ); ?>">Tienda</a>
 			<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a>
 		</nav>

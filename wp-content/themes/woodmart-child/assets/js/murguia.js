@@ -113,6 +113,80 @@
 	} );
 
 	/* ------------------------------------------------------------------
+	   TIENDAS - galerias por local
+	   ------------------------------------------------------------------ */
+	document.querySelectorAll( '[data-store-gallery]' ).forEach( function ( gallery ) {
+		var slides = Array.prototype.slice.call( gallery.querySelectorAll( '[data-store-slide]' ) );
+		var prev   = gallery.querySelector( '[data-store-prev]' );
+		var next   = gallery.querySelector( '[data-store-next]' );
+		var count  = gallery.querySelector( '[data-store-count]' );
+		var index  = 0;
+
+		if ( slides.length < 2 ) return;
+
+		var render = function () {
+			slides.forEach( function ( slide, slideIndex ) {
+				slide.classList.toggle( 'is-active', slideIndex === index );
+			} );
+			if ( count ) {
+				count.textContent = ( index + 1 ) + ' / ' + slides.length;
+			}
+		};
+
+		if ( prev ) {
+			prev.addEventListener( 'click', function () {
+				index = ( index - 1 + slides.length ) % slides.length;
+				render();
+			} );
+		}
+
+		if ( next ) {
+			next.addEventListener( 'click', function () {
+				index = ( index + 1 ) % slides.length;
+				render();
+			} );
+		}
+
+		render();
+	} );
+
+	/* ------------------------------------------------------------------
+	   TIENDAS - popups de galeria y mapa
+	   ------------------------------------------------------------------ */
+	var storeModalTriggers = Array.prototype.slice.call( document.querySelectorAll( '[data-store-modal-open]' ) );
+	var activeStoreModal = null;
+
+	var closeStoreModal = function () {
+		if ( ! activeStoreModal ) return;
+		activeStoreModal.classList.remove( 'is-open' );
+		activeStoreModal.setAttribute( 'aria-hidden', 'true' );
+		document.body.classList.remove( 'murg-modal-open' );
+		activeStoreModal = null;
+	};
+
+	storeModalTriggers.forEach( function ( trigger ) {
+		trigger.addEventListener( 'click', function () {
+			var id = trigger.getAttribute( 'data-store-modal-open' );
+			var modal = id ? document.getElementById( id ) : null;
+			if ( ! modal ) return;
+			activeStoreModal = modal;
+			modal.classList.add( 'is-open' );
+			modal.setAttribute( 'aria-hidden', 'false' );
+			document.body.classList.add( 'murg-modal-open' );
+		} );
+	} );
+
+	document.querySelectorAll( '[data-store-modal-close]' ).forEach( function ( close ) {
+		close.addEventListener( 'click', closeStoreModal );
+	} );
+
+	document.addEventListener( 'keydown', function ( event ) {
+		if ( event.key === 'Escape' ) {
+			closeStoreModal();
+		}
+	} );
+
+	/* ------------------------------------------------------------------
 	   HOME PIEZAS — product category tabs
 	   ------------------------------------------------------------------ */
 	var piezasTabs = Array.prototype.slice.call( document.querySelectorAll( '.murg-piezas__tab' ) );
@@ -1195,6 +1269,13 @@
 			'.murg-tiendas__hero-inner',
 			'.murg-tiendas__card',
 			'.murg-tiendas__cta > div',
+			'.murg-tiendas-hero__inner',
+			'.murg-store-card',
+			'.murg-4cs-hero__copy',
+			'.murg-4cs-hero__media',
+			'.murg-4cs-section',
+			'.murg-4cs-scale',
+			'.murg-4cs-cta',
 			'.murg-ac-diamond-grid',
 			'.murg-ac-engagement__media',
 			'.murg-ac-engagement__copy',
