@@ -1457,10 +1457,10 @@
 .murg-footer__tagline {
   font-family: 'Inter', sans-serif;
   font-size: 17px;
-  line-height: 1.5;
+  line-height: 1.9;
   text-transform: none;
   max-width: 310px;
-  color: #b6b6b6;
+  color: var(--murg-forest);
 }
 .murg-footer__tagline strong {
   color: var(--murg-ink);
@@ -1470,10 +1470,10 @@
 .murg-footer__col h5 {
   font-family: 'Inter', sans-serif;
   font-size: 17px;
-  line-height: 1.5;
+  line-height: 1.9;
   text-transform: none;
   letter-spacing: 0;
-  text-transform: none;
+  color: var(--murg-forest);
   color: var(--murg-forest);
   font-weight: 400;
   margin-bottom: 18px;
@@ -1484,23 +1484,24 @@
   margin-bottom: 0;
   font-family: 'Inter', sans-serif;
   font-size: 17px;
-  line-height: 1.5;
+  line-height: 1.9;
   text-transform: none;
+  color: var(--murg-forest);
 }
 .murg-footer__col a {
-  color: var(--murg-muted);
+  color: var(--murg-forest);
   text-decoration: none;
   transition: color 0.3s;
 }
-.murg-footer__col a:hover { color: var(--murg-forest); }
+.murg-footer__col a:hover { color: var(--murg-gold); }
 
 .murg-footer__legal {
   margin: 32px 0 0;
   font-family: 'Inter', sans-serif;
   font-size: 17px;
-  line-height: 1.5;
+  line-height: 1.9;
   text-transform: none;
-  color: var(--murg-muted);
+  color: var(--murg-forest);
 }
 .murg-footer__social-title {
   margin-top: 50px;
