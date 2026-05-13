@@ -5328,13 +5328,19 @@ body.murg-search-open { overflow: hidden; }
   transition: transform 0.25s ease, color 0.25s ease;
 }
 
-.murg-piezas__tab:hover {
+.murg-piezas__tab:hover,
+button.murg-piezas__tab:hover {
   color: var(--murg-gold);
   transform: translateY(-2px);
+  background-color: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 .murg-piezas__tab.is-active {
   color: var(--murg-forest);
   border-bottom-color: var(--murg-forest);
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .murg-piezas__header {
