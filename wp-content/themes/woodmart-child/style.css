@@ -5719,6 +5719,14 @@ button.murg-piezas__tab:hover {
 .murg-nav.is-scrolled .murg-burger {
   width: 26px;
   gap: 4px;
+  color: var(--murg-forest);
+}
+/* Scrolled: siempre ocultar left, mostrar right */
+.murg-nav.is-scrolled .murg-burger--left {
+  display: none;
+}
+.murg-nav.is-scrolled .murg-burger--right {
+  display: flex;
 }
 
 .murg-nav.is-scrolled .murg-nav__logo {
