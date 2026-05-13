@@ -988,15 +988,17 @@
 	/* ------------------------------------------------------------------
 	   BURGER MENU — menú lateral
 	   ------------------------------------------------------------------ */
-	var burgerBtn   = document.getElementById( 'murg-burger' );
+	var burgerBtns  = document.querySelectorAll( '.murg-burger' );
 	var mobileMenu  = document.getElementById( 'murg-mobile-menu' );
 
 	function menuOpen() {
 		if ( ! mobileMenu ) return;
 		mobileMenu.classList.add( 'is-open' );
 		mobileMenu.setAttribute( 'aria-hidden', 'false' );
-		burgerBtn.classList.add( 'is-open' );
-		burgerBtn.setAttribute( 'aria-expanded', 'true' );
+		burgerBtns.forEach( function ( b ) {
+			b.classList.add( 'is-open' );
+			b.setAttribute( 'aria-expanded', 'true' );
+		} );
 		document.body.style.overflow = 'hidden';
 	}
 
@@ -1004,16 +1006,18 @@
 		if ( ! mobileMenu ) return;
 		mobileMenu.classList.remove( 'is-open' );
 		mobileMenu.setAttribute( 'aria-hidden', 'true' );
-		burgerBtn.classList.remove( 'is-open' );
-		burgerBtn.setAttribute( 'aria-expanded', 'false' );
+		burgerBtns.forEach( function ( b ) {
+			b.classList.remove( 'is-open' );
+			b.setAttribute( 'aria-expanded', 'false' );
+		} );
 		document.body.style.overflow = '';
 	}
 
-	if ( burgerBtn ) {
-		burgerBtn.addEventListener( 'click', function () {
-			mobileMenu.classList.contains( 'is-open' ) ? menuClose() : menuOpen();
+	burgerBtns.forEach( function ( btn ) {
+		btn.addEventListener( 'click', function () {
+			mobileMenu && mobileMenu.classList.contains( 'is-open' ) ? menuClose() : menuOpen();
 		} );
-	}
+	} );
 
 	if ( mobileMenu ) {
 		mobileMenu.querySelectorAll( '[data-close-menu]' ).forEach( function ( el ) {

@@ -218,18 +218,32 @@
   background: currentColor;
   border-radius: 1px;
   display: block;
-  height: 1.5px;
+  height: 2px;
   transition: transform 0.3s, opacity 0.3s;
   width: 100%;
 }
+/* Home: burger blanco (hereda del nav color: #fff) */
+.murg-home .murg-burger { color: #fff; }
+.murg-home .murg-nav.is-scrolled .murg-burger { color: var(--murg-forest); }
+/* No-home: burger verde */
+body:not(.murg-home) .murg-burger { color: var(--murg-forest); }
+
+/* Burger izquierdo: visible solo en home */
+.murg-burger--left { display: flex; }
+body:not(.murg-home) .murg-burger--left { display: none; }
+
+/* Burger derecho (dentro de icons): visible solo fuera de home */
+.murg-burger--right { display: none; }
+body:not(.murg-home) .murg-burger--right { display: flex; }
+
 .murg-burger.is-open .murg-burger__line:nth-child(1) {
-  transform: translateY(6.5px) rotate(45deg);
+  transform: translateY(7px) rotate(45deg);
 }
 .murg-burger.is-open .murg-burger__line:nth-child(2) {
   opacity: 0;
 }
 .murg-burger.is-open .murg-burger__line:nth-child(3) {
-  transform: translateY(-6.5px) rotate(-45deg);
+  transform: translateY(-7px) rotate(-45deg);
 }
 
 /* Mobile menu drawer */

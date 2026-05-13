@@ -47,8 +47,7 @@ $_marca_links = [
 	<div class="murg-nav__row murg-nav__row--top">
 
 		<button type="button"
-		        class="murg-burger"
-		        id="murg-burger"
+		        class="murg-burger murg-burger--left"
 		        aria-label="Abrir menú"
 		        aria-expanded="false"
 		        aria-controls="murg-mobile-menu">
@@ -69,6 +68,16 @@ $_marca_links = [
 		</a>
 
 		<div class="murg-nav__icons">
+			<button type="button"
+			        class="murg-burger murg-burger--right"
+			        aria-label="Abrir menú"
+			        aria-expanded="false"
+			        aria-controls="murg-mobile-menu">
+				<span class="murg-burger__line"></span>
+				<span class="murg-burger__line"></span>
+				<span class="murg-burger__line"></span>
+			</button>
+
 			<button type="button"
 			        class="murg-nav__icon-btn"
 			        id="murg-search-open"
