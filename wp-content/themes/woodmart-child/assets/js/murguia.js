@@ -488,12 +488,25 @@
 		overlay.className = 'murg-sidebar-overlay';
 		document.body.appendChild( overlay );
 
-		function openSidebar()  { sidebar.classList.add( 'is-open' );  overlay.classList.add( 'is-visible' ); }
-		function closeSidebar() { sidebar.classList.remove( 'is-open' ); overlay.classList.remove( 'is-visible' ); }
+		function openSidebar()  {
+			sidebar.classList.add( 'is-open' );
+			sidebar.setAttribute( 'aria-hidden', 'false' );
+			overlay.classList.add( 'is-visible' );
+			document.body.classList.add( 'murg-filter-open' );
+		}
+		function closeSidebar() {
+			sidebar.classList.remove( 'is-open' );
+			sidebar.setAttribute( 'aria-hidden', 'true' );
+			overlay.classList.remove( 'is-visible' );
+			document.body.classList.remove( 'murg-filter-open' );
+		}
 
 		filterToggle.addEventListener( 'click', openSidebar );
 		if ( sidebarClose ) sidebarClose.addEventListener( 'click', closeSidebar );
 		overlay.addEventListener( 'click', closeSidebar );
+		document.addEventListener( 'keydown', function ( e ) {
+			if ( e.key === 'Escape' && sidebar.classList.contains( 'is-open' ) ) closeSidebar();
+		} );
 	}
 
 	// Price slider
@@ -1282,6 +1295,9 @@
 			'.murg-ac-story__copy',
 			'.murg-ac-appointment__copy',
 			'.murg-ac-testimonial',
+			'.murg-design-flow__inner',
+			'.murg-design-config__block',
+			'.murg-design-flow__cta',
 			// .murg-product excluido — está dentro de .murg-bestsellers (data-reveal-block)
 		];
 

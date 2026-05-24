@@ -209,8 +209,8 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 			<h2>Anillos de<br>compromiso</h2>
 			<p>Disenados pieza por pieza en nuestro taller. Diamantes certificados por GIA, HRD e IGI. Acompanamiento personalizado de inicio a fin.</p>
 			<div class="murg-ac-actions">
-				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $cita_url ); ?>">Disenar mi anillo</a>
-				<a class="murg-ac-link" href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso' ) ); ?>">Conocer las 4Cs</a>
+				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( home_url( '/disena-tu-anillo/' ) ); ?>">Disenar mi anillo</a>
+				<a class="murg-ac-link" href="<?php echo esc_url( home_url( '/las-4cs/' ) ); ?>">Conocer las 4Cs</a>
 			</div>
 			<div class="murg-ac-trust">
 				<span>4,500+ parejas</span>

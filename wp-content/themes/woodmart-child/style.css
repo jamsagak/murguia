@@ -1862,7 +1862,7 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
 
 .murg-shop-layout {
   display: grid;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 1fr;
   min-height: 100vh;
   padding-top: 90px;
 }
@@ -1871,12 +1871,22 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
 .murg-sidebar {
   border-right: 1px solid var(--murg-line);
   padding: 32px 28px 60px;
-  position: sticky;
-  top: 90px;
-  height: calc(100vh - 90px);
+  position: fixed;
+  top: 0;
+  left: -390px;
+  width: min(360px, 90vw);
+  height: 100vh;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--murg-line) transparent;
+  z-index: 10000;
+  background: var(--murg-cream);
+  box-shadow: none;
+  transition: left 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+}
+.murg-sidebar.is-open {
+  left: 0;
+  box-shadow: 18px 0 60px rgba(10,10,10,0.18);
 }
 .murg-sidebar::-webkit-scrollbar { width: 4px; }
 .murg-sidebar::-webkit-scrollbar-thumb { background: var(--murg-line); border-radius: 2px; }
@@ -1894,7 +1904,7 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   letter-spacing: 0.02em;
 }
 .murg-sidebar__close {
-  display: none;
+  display: block;
   background: none;
   border: none;
   font-size: 24px;
@@ -2170,7 +2180,7 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   gap: 24px;
 }
 .murg-filter-toggle {
-  display: none;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
   background: none;
@@ -2185,6 +2195,15 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   transition: border-color 0.2s;
 }
 .murg-filter-toggle:hover { border-color: var(--murg-gold); }
+body.murg-filter-open { overflow: hidden; }
+.murg-sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(10,10,10,0.32);
+  z-index: 9999;
+}
+.murg-sidebar-overlay.is-visible { display: block; }
 .murg-shop-topbar__count {
   font-size: 12px;
   color: var(--murg-muted);
@@ -2429,11 +2448,19 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   font-family: 'Tiro Bangla', serif;
   font-weight: 400;
   color: var(--murg-ink);
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 .murg-product-detail__price .woocommerce-Price-amount { font-size: inherit; font-family: inherit; }
 .murg-product-detail__price del { color: var(--murg-muted); margin-right: 12px; opacity: 0.6; }
 .murg-product-detail__price ins { text-decoration: none; }
+.murg-product-detail__size-note {
+  margin: 0 0 20px;
+  color: var(--murg-forest);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  line-height: 1.5;
+  opacity: 0.82;
+}
 .murg-product-detail__desc {
   color: var(--murg-muted);
   font-size: 14px;
@@ -2952,10 +2979,9 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   .murg-page-header { padding: 130px 32px 56px; }
   .murg-page-header__title { font-size: 48px; }
 
-  /* Shop sidebar → overlay on tablet */
+  /* Shop sidebar → full overlay remains on tablet/mobile */
   .murg-shop-layout { grid-template-columns: 1fr; }
   .murg-sidebar {
-    position: fixed;
     top: 0; left: -320px;
     width: 300px;
     height: 100vh;
@@ -2975,15 +3001,6 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   .murg-shop-topbar { justify-content: center; }
   .murg-shop-topbar__count,
   .murg-shop-topbar__right { display: none; }
-  .murg-sidebar-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(10,10,10,0.3);
-    z-index: 9999;
-  }
-  .murg-sidebar-overlay.is-visible { display: block; }
-
   .murg-shop-grid { grid-template-columns: 1fr 1fr; padding: 32px; gap: 32px 20px; }
   .murg-shop-topbar { padding: 16px 32px; }
   .murg-pagination { padding: 0 32px 60px; }
@@ -8284,4 +8301,150 @@ body.murg-modal-open {
     grid-template-columns: 1fr;
   }
   .murg-4cs-scales { padding-left: 20px; padding-right: 20px; }
+}
+
+/* ============================================================
+   DISEÑA TU ANILLO / AROS DE MATRIMONIO
+   ============================================================ */
+.murg-design-flow {
+  background: var(--murg-cream);
+  color: var(--murg-forest);
+}
+.murg-design-flow__hero {
+  min-height: 74vh;
+  display: flex;
+  align-items: center;
+  padding: 160px clamp(24px, 6vw, 96px) 88px;
+  background:
+    linear-gradient(90deg, rgba(25,46,29,0.86), rgba(25,46,29,0.48)),
+    url('/wp-content/uploads/2026/05/Imagen-anillos-categorias.jpg') center / cover no-repeat;
+  color: var(--murg-cream);
+}
+.murg-design-flow--bands .murg-design-flow__hero {
+  background:
+    linear-gradient(90deg, rgba(25,46,29,0.88), rgba(25,46,29,0.46)),
+    url('/wp-content/uploads/2026/05/novios.jpg') center / cover no-repeat;
+}
+.murg-design-flow__inner { max-width: 720px; }
+.murg-design-flow__inner h1,
+.murg-design-flow__cta h2,
+.murg-design-config__block h2 {
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+}
+.murg-design-flow__inner h1 {
+  margin: 14px 0 18px;
+  font-size: clamp(36px, 5vw, 72px);
+  line-height: 1.02;
+}
+.murg-design-flow__inner p {
+  max-width: 560px;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(15px, 1.25vw, 18px);
+  line-height: 1.8;
+}
+.murg-design-flow__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+.murg-design-config {
+  padding: clamp(64px, 8vw, 120px) clamp(22px, 5vw, 80px);
+}
+.murg-design-config__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 2.8vw, 36px);
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.murg-design-config__grid--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.murg-design-config__block {
+  border-top: 1px solid rgba(25,46,29,0.28);
+  padding-top: 22px;
+}
+.murg-design-config__step {
+  display: inline-block;
+  margin-bottom: 18px;
+  color: var(--murg-gold-soft);
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+}
+.murg-design-config__block h2 {
+  margin: 0 0 14px;
+  font-size: clamp(22px, 2.2vw, 34px);
+  line-height: 1.15;
+}
+.murg-design-config__block p {
+  margin: 0;
+  color: rgba(25,46,29,0.72);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.murg-design-shapes {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.murg-design-shape {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 8px;
+  border: 1px solid rgba(25,46,29,0.14);
+  background: rgba(255,255,255,0.26);
+}
+.murg-design-shape img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  opacity: 0.78;
+}
+.murg-design-shape span,
+.murg-design-options span {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--murg-forest);
+}
+.murg-design-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.murg-design-options span {
+  padding: 10px 12px;
+  border: 1px solid rgba(25,46,29,0.16);
+}
+.murg-design-flow__cta {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px clamp(70px, 8vw, 120px);
+  text-align: center;
+}
+.murg-design-flow__cta h2 {
+  margin: 0 0 14px;
+  font-size: clamp(28px, 4vw, 52px);
+}
+.murg-design-flow__cta p {
+  max-width: 560px;
+  margin: 0 auto 26px;
+  color: rgba(25,46,29,0.72);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.8;
+}
+@media (max-width: 900px) {
+  .murg-design-config__grid,
+  .murg-design-config__grid--four { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  .murg-design-flow__hero { min-height: 68vh; padding: 140px 22px 64px; }
+  .murg-design-flow__actions { flex-direction: column; align-items: stretch; }
+  .murg-design-config__grid,
+  .murg-design-config__grid--four { grid-template-columns: 1fr; }
+  .murg-design-shapes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

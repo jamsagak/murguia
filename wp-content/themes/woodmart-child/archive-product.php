@@ -1,7 +1,7 @@
 <?php
 /**
  * Joyería Murguía — Tienda / Catálogo
- * archive-product.php — Layout con sidebar de filtros
+ * archive-product.php — Layout con panel de filtros
  */
 defined( 'ABSPATH' ) || exit;
 
@@ -211,11 +211,11 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 <div class="murg-shop-wrap">
 <div class="murg-shop-layout">
 
-	<!-- SIDEBAR -->
-	<aside class="murg-sidebar" id="murg-sidebar">
+	<!-- FILTER PANEL -->
+	<aside class="murg-sidebar murg-sidebar--panel" id="murg-sidebar" aria-hidden="true">
 		<div class="murg-sidebar__header">
 			<h2 class="murg-sidebar__title">Filtros</h2>
-			<button class="murg-sidebar__close" id="murg-sidebar-close" aria-label="Cerrar filtros">&times;</button>
+			<button class="murg-sidebar__close" id="murg-sidebar-close" type="button" aria-label="Cerrar filtros">&times;</button>
 		</div>
 
 		<?php if ( ! $f_cat ) : ?>
@@ -427,7 +427,6 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 				$img_id  = $product->get_image_id();
 				$is_sale = $product->is_on_sale();
 				$is_new  = $product->is_featured();
-				$sku     = $product->get_sku();
 			?>
 			<article class="murg-product murg-product--grid">
 				<a class="murg-product__link" href="<?php echo esc_url( $product->get_permalink() ); ?>">
@@ -459,12 +458,6 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 						<h2 class="murg-product__name"><?php echo esc_html( $product->get_name() ); ?></h2>
 						<div class="murg-product__price"><?php echo wp_kses_post( $product->get_price_html() ); ?></div>
 					</div>
-					<?php if ( $sku ) : ?>
-					<p class="murg-product__ref">
-						<?php echo esc_html( murguia_ajuste( 'prod_ref_prefix', 'REF.', 'producto' ) ); ?>
-						<?php echo esc_html( strtoupper( $sku ) ); ?>
-					</p>
-					<?php endif; ?>
 				</a>
 			</article>
 			<?php endforeach; ?>

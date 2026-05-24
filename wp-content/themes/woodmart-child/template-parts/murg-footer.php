@@ -56,10 +56,11 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajust
 			<h5>Nuestra Empresa</h5>
 			<ul>
 				<li><a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>">Politica de privacidad</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/politica-de-cookies/' ) ); ?>">Politica de cookies</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>">Terminos y condiciones</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/recojos-y-envios/' ) ); ?>">Recojos y envios</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/tiendas/' ) ); ?>">Tiendas</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/politica-de-privacidad/' ) ); ?>">Política de privacidad</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/politica-de-cookies/' ) ); ?>">Política de cookies</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>">Términos y condiciones</a></li>
+				<li><a href="<?php echo esc_url( home_url( '/recojos-y-envios/' ) ); ?>">Recojos y envíos</a></li>
 				<li><a href="<?php echo esc_url( home_url( '/libro-de-reclamaciones/' ) ); ?>">Libro de reclamaciones</a></li>
 				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Contacte con nosotros</a></li>
 				<li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a></li>
@@ -102,9 +103,9 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajust
 		<div><?php echo esc_html( $_foot_copyright ); ?></div>
 		<div>Lima · Peru</div>
 		<div>
-			<a href="<?php echo esc_url( home_url( '/privacy-policy/' ) ); ?>" style="color:inherit;text-decoration:none;">Privacidad</a>
+			<a href="<?php echo esc_url( home_url( '/politica-de-privacidad/' ) ); ?>" style="color:inherit;text-decoration:none;">Privacidad</a>
 			·
-			<a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>" style="color:inherit;text-decoration:none;">Terminos</a>
+			<a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>" style="color:inherit;text-decoration:none;">Términos</a>
 		</div>
 	</div>
 </footer>

@@ -294,18 +294,14 @@ function murg_prod_trust_icon( $name ) {
 			<?php echo wp_kses_post( $product_price ); ?>
 		</div>
 
+		<p class="murg-product-detail__size-note">
+			Consultar disponibilidad de cambio de talla.
+		</p>
+
 		<?php if ( $product_desc ) : ?>
 		<div class="murg-product-detail__desc"><?php echo wp_kses_post( $product_desc ); ?></div>
 		<?php endif; ?>
 
-		<!-- Ring Configurator (solo anillos de compromiso) -->
-		<?php
-		get_template_part( 'template-parts/murg-ring-configurator' );
-		$cat_slugs_check = wp_get_post_terms( $product_id, 'product_cat', [ 'fields' => 'slugs' ] );
-		$is_engagement   = is_array( $cat_slugs_check ) && in_array( 'anillos-de-compromiso', $cat_slugs_check, true );
-		?>
-
-		<?php if ( ! $is_engagement ) : ?>
 		<!-- Specs table -->
 		<?php
 		// Construir la lista completa (atributos + SKU + disponibilidad)
@@ -333,12 +329,11 @@ function murg_prod_trust_icon( $name ) {
 			<?php endforeach; ?>
 		</dl>
 		<?php endif; ?>
-		<?php endif; /* ! $is_engagement */ ?>
 
 		<div class="murg-product-detail__divider" aria-hidden="true"></div>
 
-		<!-- Guía de tallas (solo si tiene imagen ACF y NO es anillo de compromiso, porque esos usan el modal del ring configurator) -->
-		<?php if ( $has_guia_tallas && ! $is_engagement ) : ?>
+		<!-- Guía de tallas (solo si tiene imagen ACF) -->
+		<?php if ( $has_guia_tallas ) : ?>
 		<button class="murg-sizeguide-btn" type="button"
 		        data-target="murg-sizeguide"
 		        aria-haspopup="dialog"
@@ -443,7 +438,6 @@ function murg_prod_trust_icon( $name ) {
 		<div class="murg-related__track" id="murg-rel-track" data-total="<?php echo (int) count( $related ); ?>">
 			<?php foreach ( $related as $rel ) :
 				$rel_img = $rel->get_image_id();
-				$rel_sku = $rel->get_sku();
 			?>
 			<article class="murg-product murg-product--grid murg-related__item">
 				<a class="murg-product__link" href="<?php echo esc_url( $rel->get_permalink() ); ?>">
@@ -464,9 +458,6 @@ function murg_prod_trust_icon( $name ) {
 						<h3 class="murg-product__name"><?php echo esc_html( $rel->get_name() ); ?></h3>
 						<div class="murg-product__price"><?php echo wp_kses_post( $rel->get_price_html() ); ?></div>
 					</div>
-					<?php if ( $rel_sku ) : ?>
-					<p class="murg-product__ref"><?php echo esc_html( $ref_prefix . ' ' . strtoupper( $rel_sku ) ); ?></p>
-					<?php endif; ?>
 				</a>
 			</article>
 			<?php endforeach; ?>
@@ -503,9 +494,9 @@ function murg_prod_trust_icon( $name ) {
 <?php endif; ?>
 
 <!-- ============================================================
-     MODAL DE GUÍA DE TALLAS (solo si hay imagen ACF y NO es anillo de compromiso)
+     MODAL DE GUÍA DE TALLAS (solo si hay imagen ACF)
      ============================================================ -->
-<?php if ( $has_guia_tallas && ! $is_engagement ) : ?>
+<?php if ( $has_guia_tallas ) : ?>
 <div class="murg-sizeguide"
      id="murg-sizeguide"
      role="dialog"

@@ -5,7 +5,7 @@
  * Estructura:
  * 1. Barra verde: "DIAMANTES CERTIFICADOS GIA · HRD · IGI"
  * 2. Fila superior: ES.EN (izq) | Logo (centro) | iconos (der)
- * 3. Fila inferior: NOVIOS · CATÁLOGO · Marcas · Alta Joyería · Hogar
+ * 3. Fila inferior: Anillos de compromiso · Aros de matrimonio · Catálogo · Marcas · Alta Joyería
  */
 $_nav_marca   = murguia_ajuste( 'hp_foot_marca', 'Murguía' );
 $_nav_banner  = murguia_ajuste( 'hp_nav_banner', 'DIAMANTES CERTIFICADOS GIA · HRD · IGI' );
@@ -117,10 +117,10 @@ $_marca_links = [
 		$_current_url = home_url( $_SERVER['REQUEST_URI'] );
 		$_nav_items = [
 			[ 'label' => 'Anillos de Compromiso', 'url' => home_url( '/anillos-compromiso/' ), 'drop' => false ],
+			[ 'label' => 'Aros de Matrimonio',    'url' => home_url( '/aros-matrimonio/' ), 'drop' => false ],
 			[ 'label' => 'Catálogo',              'url' => $_shop_url,                          'drop' => $_cat_links ],
 			[ 'label' => 'Marcas',                'url' => home_url( '/shop/?product_cat=marcas' ), 'drop' => $_marca_links ],
 			[ 'label' => 'Alta Joyería',          'url' => home_url( '/shop/?product_cat=alta-joyeria' ), 'drop' => false ],
-			[ 'label' => 'Tiendas',               'url' => home_url( '/tiendas/' ), 'drop' => false ],
 		];
 		foreach ( $_nav_items as $_item ) :
 			$_is_active = ( rtrim( $_current_url, '/' ) === rtrim( $_item['url'], '/' ) );
@@ -158,7 +158,8 @@ $_marca_links = [
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Inicio</a>
 			<a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a>
 			<a href="<?php echo esc_url( home_url( '/las-4cs/' ) ); ?>">Conoce las 4Cs</a>
-			<a href="<?php echo esc_url( home_url( '/tiendas/' ) ); ?>">Contacto</a>
+			<a href="<?php echo esc_url( home_url( '/tiendas/' ) ); ?>">Tiendas</a>
+			<a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Contacto</a>
 			<a href="<?php echo esc_url( $_shop_url ); ?>">Tienda</a>
 			<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a>
 		</nav>

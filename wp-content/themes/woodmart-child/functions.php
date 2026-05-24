@@ -1183,6 +1183,24 @@ function murguia_override_shop_template( $template ) {
 		if ( file_exists( $custom ) ) return $custom;
 	}
 
+	if ( is_page() && 'page-disena-tu-anillo.php' === get_page_template_slug() ) {
+		$custom = get_stylesheet_directory() . '/page-disena-tu-anillo.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+	if ( is_page( 'disena-tu-anillo' ) ) {
+		$custom = get_stylesheet_directory() . '/page-disena-tu-anillo.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+
+	if ( is_page() && 'page-aros-matrimonio.php' === get_page_template_slug() ) {
+		$custom = get_stylesheet_directory() . '/page-aros-matrimonio.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+	if ( is_page( 'aros-matrimonio' ) ) {
+		$custom = get_stylesheet_directory() . '/page-aros-matrimonio.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+
 	// Las 4Cs
 	if ( is_page() && 'page-las-4cs.php' === get_page_template_slug() ) {
 		$custom = get_stylesheet_directory() . '/page-las-4cs.php';
@@ -1282,6 +1300,18 @@ function murguia_is_custom_template() {
 		return true;
 	}
 	if ( is_page( 'anillos-compromiso' ) ) {
+		return true;
+	}
+	if ( is_page() && 'page-disena-tu-anillo.php' === get_page_template_slug() ) {
+		return true;
+	}
+	if ( is_page( 'disena-tu-anillo' ) ) {
+		return true;
+	}
+	if ( is_page() && 'page-aros-matrimonio.php' === get_page_template_slug() ) {
+		return true;
+	}
+	if ( is_page( 'aros-matrimonio' ) ) {
 		return true;
 	}
 	if ( is_page() && 'page-las-4cs.php' === get_page_template_slug() ) {
@@ -2043,6 +2073,18 @@ function murguia_ensure_custom_pages() {
 			'slug' => 'las-4cs',
 			'template' => 'page-las-4cs.php',
 			'content' => '',
+		],
+		[
+			'title' => 'Diseña tu anillo',
+			'slug' => 'disena-tu-anillo',
+			'template' => 'page-disena-tu-anillo.php',
+			'content' => 'Configura un anillo de compromiso con asesoria privada y cotizacion personalizada.',
+		],
+		[
+			'title' => 'Aros de Matrimonio',
+			'slug' => 'aros-matrimonio',
+			'template' => 'page-aros-matrimonio.php',
+			'content' => 'Disena tus aros de matrimonio con modelo, metal, talla y grabado personalizado.',
 		],
 	];
 
