@@ -12,6 +12,7 @@ $shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id(
 $paged        = max( 1, (int) ( get_query_var( 'paged' ) ?: get_query_var( 'page' ) ?: 1 ) );
 $f_cat        = isset( $_GET['cat'] ) ? sanitize_key( $_GET['cat'] ) : ( isset( $_GET['product_cat'] ) ? sanitize_key( $_GET['product_cat'] ) : '' );
 $f_piedra     = isset( $_GET['piedra'] )   ? sanitize_key( $_GET['piedra'] )   : '';
+$f_forma      = isset( $_GET['forma'] )    ? sanitize_key( $_GET['forma'] )    : '';
 $f_color      = isset( $_GET['color'] )    ? sanitize_key( $_GET['color'] )    : '';
 $f_min        = isset( $_GET['min'] )      ? (float) $_GET['min']              : '';
 $f_max        = isset( $_GET['max'] )      ? (float) $_GET['max']              : '';
@@ -40,6 +41,13 @@ if ( $f_piedra ) {
 		'taxonomy' => 'pa_piedra',
 		'field'    => 'slug',
 		'terms'    => $f_piedra,
+	];
+}
+if ( $f_forma ) {
+	$tax_query[] = [
+		'taxonomy' => 'pa_forma-de-piedra',
+		'field'    => 'slug',
+		'terms'    => $f_forma,
 	];
 }
 if ( $f_color ) {
@@ -150,6 +158,7 @@ function murg_contextual_terms( $taxonomy, $product_ids ) {
 }
 
 $piedras     = murg_contextual_terms( 'pa_piedra', $all_ids );
+$formas      = murg_contextual_terms( 'pa_forma-de-piedra', $all_ids );
 $colores_oro = murg_contextual_terms( 'pa_color-de-oro', $all_ids );
 
 // Price range for slider
@@ -170,6 +179,10 @@ if ( $f_cat ) {
 if ( $f_piedra ) {
 	$term = get_term_by( 'slug', $f_piedra, 'pa_piedra' );
 	if ( $term ) $active_filters[] = [ 'label' => $term->name, 'param' => 'piedra' ];
+}
+if ( $f_forma ) {
+	$term = get_term_by( 'slug', $f_forma, 'pa_forma-de-piedra' );
+	if ( $term ) $active_filters[] = [ 'label' => $term->name, 'param' => 'forma' ];
 }
 if ( $f_color ) {
 	$term = get_term_by( 'slug', $f_color, 'pa_color-de-oro' );
@@ -321,6 +334,27 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 		</details>
 		<?php endif; endif; ?>
 
+		<!-- Forma de piedra -->
+		<?php if ( ! empty( $formas ) && $show_jewelry_filters ) : ?>
+		<details class="murg-filter-group" <?php echo ( $f_cat || $f_forma ) ? 'open' : ''; ?>>
+			<summary class="murg-filter-group__title">Forma</summary>
+			<div class="murg-filter-group__body murg-filter-group__body--scroll">
+				<?php foreach ( $formas as $forma ) : ?>
+				<label class="murg-filter-check">
+					<input type="checkbox"
+					       name="forma"
+					       value="<?php echo esc_attr( $forma->slug ); ?>"
+					       <?php checked( $f_forma, $forma->slug ); ?>
+					       onchange="murgApplyFilter('forma', this.checked ? this.value : '')">
+					<span class="murg-filter-check__box"></span>
+					<span class="murg-filter-check__label"><?php echo esc_html( $forma->name ); ?></span>
+					<span class="murg-filter-check__count"><?php echo (int) $forma->count; ?></span>
+				</label>
+				<?php endforeach; ?>
+			</div>
+		</details>
+		<?php endif; ?>
+
 		<!-- Piedra (solo si la categoría es joyería o no hay categoría) -->
 		<?php if ( ! empty( $piedras ) && $show_jewelry_filters ) : ?>
 		<details class="murg-filter-group" <?php echo ( $f_cat || $f_piedra ) ? 'open' : ''; ?>>
@@ -468,6 +502,7 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			$base_args = array_filter( [
 				'cat'     => $f_cat,
 				'piedra'  => $f_piedra,
+				'forma'   => $f_forma,
 				'color'   => $f_color,
 				'min'     => $f_min !== '' ? $f_min : null,
 				'max'     => $f_max !== '' ? $f_max : null,

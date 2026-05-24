@@ -176,8 +176,8 @@ if ( empty( $testimonios ) || ! is_array( $testimonios ) ) {
 	];
 }
 
-$nl_title = murg_ac( 'ac_newsletter_titulo', '-10% en tu primera compra.' );
-$nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guias y beneficios Murguia.' );
+$nl_title = murg_ac( 'ac_newsletter_titulo', 'Recibe inspiración Murguía.' );
+$nl_sub   = murg_ac( 'ac_newsletter_sub', 'Ideas, guías y piezas seleccionadas para elegir con intención.' );
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -426,6 +426,9 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Recibe novedades de colecciones, guia
 					<input type="email" name="email" placeholder="<?php esc_attr_e( 'Tu correo electronico', 'woodmart-child' ); ?>" required>
 					<button type="submit"><?php esc_html_e( 'Suscribirme', 'woodmart-child' ); ?></button>
 				</div>
+				<?php if ( isset( $_GET['newsletter'] ) && 'ok' === $_GET['newsletter'] ) : ?>
+				<p class="murg-newsletter__message">Gracias. Pronto recibirás novedades de Murguía.</p>
+				<?php endif; ?>
 			</form>
 		</div>
 	</section>

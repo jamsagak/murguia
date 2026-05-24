@@ -527,7 +527,8 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   gap: clamp(10px, 0.87vw, 15px);
   align-items: center;
   justify-content: center;
-  margin-bottom: clamp(20px, 2.43vw, 42px);
+  margin-top: clamp(20px, 2.2vw, 38px);
+  margin-bottom: 0;
   pointer-events: auto;
 }
 .murg-hero__dot-circle {
@@ -1517,6 +1518,44 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   background: var(--murg-gold);
   display: inline-block;
   margin-right: 12px;
+}
+
+.murg-floating-whatsapp {
+  position: fixed;
+  right: clamp(18px, 2vw, 28px);
+  bottom: clamp(18px, 2vw, 28px);
+  z-index: 9998;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: var(--murg-forest);
+  color: var(--murg-cream);
+  box-shadow: 0 14px 34px rgba(10,10,10,0.22);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.murg-floating-whatsapp:hover {
+  color: var(--murg-cream);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px rgba(10,10,10,0.28);
+}
+.murg-floating-whatsapp svg {
+  display: block;
+  width: 19px;
+  height: 19px;
+  fill: currentColor;
+}
+@media (max-width: 640px) {
+  .murg-floating-whatsapp {
+    padding: 12px;
+    border-radius: 50%;
+  }
+  .murg-floating-whatsapp span { display: none; }
 }
 
 /* ============================================================
@@ -5659,6 +5698,13 @@ button.murg-piezas__tab:hover {
   line-height: 1.45;
   white-space: nowrap;
 }
+
+.murg-newsletter__message {
+  margin: 8px 0 0;
+  color: rgba(244,238,229,0.78);
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+}
 .murg-novios .murg-btn--dark {
   width: auto;
   min-width: 185px;
@@ -6519,16 +6565,31 @@ button.murg-piezas__tab:hover {
 /* ============================================================
    LIBRO DE RECLAMACIONES — Formulario
    ============================================================ */
+.murg-reclamos__icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--murg-forest);
+  border: 1px solid rgba(25,46,29,0.22);
+  border-radius: 50%;
+}
+.murg-reclamos__icon svg {
+  width: 42px;
+  height: 42px;
+}
 .murg-reclamos__section {
   border: none;
   padding: 0;
   margin: 0 0 36px;
 }
 .murg-reclamos__legend {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Cinzel', serif;
   font-size: 22px;
   font-weight: 400;
-  color: var(--murg-ink);
+  color: var(--murg-forest);
   margin-bottom: 20px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--murg-line);

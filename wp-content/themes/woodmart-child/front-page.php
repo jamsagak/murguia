@@ -150,6 +150,11 @@ if ( empty( $hero_slides ) ) {
 	<div class="murg-hero__content" aria-live="polite">
 		<h1 class="murg-hero__title"><?php echo esc_html( $s_titulo ); ?></h1>
 
+		<a href="<?php echo esc_url( $s_cta_url ); ?>" class="murg-hero__cta">
+			<?php echo esc_html( $s_cta_txt ); ?>
+		</a>
+		<span class="murg-hero__cta-line" aria-hidden="true"></span>
+
 		<div class="murg-hero__dots-inline" role="tablist" aria-label="Slides">
 			<?php for ( $d = 0; $d < $n_slides; $d++ ) : ?>
 			<button class="murg-hero__dot-circle<?php echo $d === 0 ? ' is-active' : ''; ?>"
@@ -159,11 +164,6 @@ if ( empty( $hero_slides ) ) {
 			        aria-label="Slide <?php echo $d + 1; ?>"></button>
 			<?php endfor; ?>
 		</div>
-
-		<a href="<?php echo esc_url( $s_cta_url ); ?>" class="murg-hero__cta">
-			<?php echo esc_html( $s_cta_txt ); ?>
-		</a>
-		<span class="murg-hero__cta-line" aria-hidden="true"></span>
 	</div>
 
 	<div class="murg-hero__progress" aria-hidden="true">
@@ -180,16 +180,16 @@ $diamond_titulo = murg_f( 'hp_diamond_titulo', 'Anillos de compromiso' );
 $diamond_sub    = murg_f( 'hp_diamond_sub',    'forjada a mano por orfebres' );
 
 $diamond_shapes = [
-	[ 'slug' => 'oval',               'ext' => 'webp', 'label' => 'Oval' ],
-	[ 'slug' => 'round',              'ext' => 'webp', 'label' => 'Round' ],
-	[ 'slug' => 'emerald',            'ext' => 'webp', 'label' => 'Emerald' ],
-	[ 'slug' => 'marquise',           'ext' => 'webp', 'label' => 'Marquise' ],
-	[ 'slug' => 'radiant',            'ext' => 'webp', 'label' => 'Radiant' ],
-	[ 'slug' => 'pear',               'ext' => 'webp', 'label' => 'Pear' ],
-	[ 'slug' => 'elongated-cushion',  'ext' => 'webp', 'label' => 'Elongated Cushion' ],
-	[ 'slug' => 'cushion',            'ext' => 'webp', 'label' => 'Cushion' ],
-	[ 'slug' => 'princess',           'ext' => 'webp', 'label' => 'Princess' ],
-	[ 'slug' => 'asscher',            'ext' => 'webp', 'label' => 'Asscher' ],
+	[ 'slug' => 'oval',               'ext' => 'webp', 'label' => 'Oval',              'filter' => 'oval' ],
+	[ 'slug' => 'round',              'ext' => 'webp', 'label' => 'Round',             'filter' => 'redondo' ],
+	[ 'slug' => 'emerald',            'ext' => 'webp', 'label' => 'Emerald',           'filter' => 'esmeralda' ],
+	[ 'slug' => 'marquise',           'ext' => 'webp', 'label' => 'Marquise',          'filter' => 'marquesa' ],
+	[ 'slug' => 'radiant',            'ext' => 'webp', 'label' => 'Radiant',           'filter' => 'radiante' ],
+	[ 'slug' => 'pear',               'ext' => 'webp', 'label' => 'Pear',              'filter' => 'pera' ],
+	[ 'slug' => 'elongated-cushion',  'ext' => 'webp', 'label' => 'Elongated Cushion', 'filter' => 'cojin' ],
+	[ 'slug' => 'cushion',            'ext' => 'webp', 'label' => 'Cushion',           'filter' => 'cojin' ],
+	[ 'slug' => 'princess',           'ext' => 'webp', 'label' => 'Princess',          'filter' => 'princesa' ],
+	[ 'slug' => 'asscher',            'ext' => 'webp', 'label' => 'Asscher',           'filter' => 'asscher' ],
 ];
 $shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
 ?>
@@ -230,7 +230,7 @@ $shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
 						$icon_url = add_query_arg( 'v', filemtime( $icon_path ), $icon_url );
 					}
 				?>
-				<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso&forma=' . $shape['slug'] ) ); ?>"
+				<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso&forma=' . $shape['filter'] ) ); ?>"
 				   class="murg-diamonds__shape<?php echo $idx === 0 ? ' is-active' : ''; ?>"
 				   data-shape="<?php echo esc_attr( $shape['slug'] ); ?>"
 				   data-label="<?php echo esc_attr( $shape['label'] ); ?>">
@@ -725,8 +725,8 @@ $visita_img_url  = ! empty( $visita_imagen['url'] ) ? $visita_imagen['url'] : $i
      10 NEWSLETTER — -10% primera compra
      ============================================================ -->
 <?php
-$nl_titulo = murg_f( 'hp_nl_titulo', '-10% en tu primera compra.' );
-$nl_sub    = murg_f( 'hp_nl_sub',   '' );
+$nl_titulo = murg_f( 'hp_nl_titulo', 'Recibe inspiración Murguía.' );
+$nl_sub    = murg_f( 'hp_nl_sub',   'Historias, piezas seleccionadas y novedades de la casa, enviadas con calma y criterio.' );
 ?>
 <section class="murg-newsletter" aria-label="Newsletter">
 	<div class="murg-newsletter__inner">
@@ -743,6 +743,9 @@ $nl_sub    = murg_f( 'hp_nl_sub',   '' );
 				       required>
 				<button type="submit"><?php esc_html_e( 'Suscribirme', 'woodmart-child' ); ?></button>
 			</div>
+			<?php if ( isset( $_GET['newsletter'] ) && 'ok' === $_GET['newsletter'] ) : ?>
+			<p class="murg-newsletter__message">Gracias. Pronto recibirás novedades de Murguía.</p>
+			<?php endif; ?>
 		</form>
 	</div>
 </section>

@@ -31,6 +31,13 @@ $departamentos = [
 	<div class="murg-legal__container">
 		<header class="murg-legal__header">
 			<div class="murg-eyebrow"><?php bloginfo( 'name' ); ?></div>
+			<div class="murg-reclamos__icon" aria-hidden="true">
+				<svg viewBox="0 0 64 64" fill="none">
+					<path d="M14 8h26l10 10v38H14V8Z" stroke="currentColor" stroke-width="2"/>
+					<path d="M40 8v12h10M22 28h20M22 36h20M22 44h14" stroke="currentColor" stroke-width="2"/>
+					<path d="M18 58h32" stroke="currentColor" stroke-width="2"/>
+				</svg>
+			</div>
 			<h1 class="murg-legal__title">Libro de Reclamaciones</h1>
 		</header>
 

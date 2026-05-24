@@ -53,6 +53,8 @@ add_action( 'after_setup_theme', function () {
    ------------------------------------------------------------------ */
 add_action( 'admin_post_murg_solicitar_cita',        'murguia_handle_cita' );
 add_action( 'admin_post_nopriv_murg_solicitar_cita', 'murguia_handle_cita' );
+add_action( 'admin_post_murg_newsletter_subscribe',        'murguia_handle_newsletter_subscribe' );
+add_action( 'admin_post_nopriv_murg_newsletter_subscribe', 'murguia_handle_newsletter_subscribe' );
 
 function murguia_handle_cita() {
 	if ( ! isset( $_POST['murg_nonce'] ) || ! wp_verify_nonce( $_POST['murg_nonce'], 'murg_cita' ) ) {
@@ -85,6 +87,42 @@ function murguia_handle_cita() {
 
 	wp_safe_redirect( add_query_arg( 'cita', 'ok', wp_get_referer() ) );
 	exit;
+}
+
+function murguia_handle_newsletter_subscribe() {
+	if ( ! isset( $_POST['murg_nl_nonce'] ) || ! wp_verify_nonce( $_POST['murg_nl_nonce'], 'murg_newsletter' ) ) {
+		wp_die( 'Solicitud no válida.', 403 );
+	}
+
+	$email = sanitize_email( $_POST['email'] ?? '' );
+	if ( ! is_email( $email ) ) {
+		wp_safe_redirect( add_query_arg( 'newsletter', 'error', wp_get_referer() ?: home_url( '/' ) ) );
+		exit;
+	}
+
+	$to      = get_option( 'admin_email' );
+	$subject = '[Murguía] Nueva suscripción al newsletter';
+	$body    = sprintf( "Correo: %s\nOrigen: %s", $email, esc_url_raw( wp_get_referer() ?: home_url( '/' ) ) );
+	wp_mail( $to, $subject, $body, [ 'Content-Type: text/plain; charset=UTF-8' ] );
+
+	wp_safe_redirect( add_query_arg( 'newsletter', 'ok', wp_get_referer() ?: home_url( '/' ) ) );
+	exit;
+}
+
+add_action( 'wp_footer', 'murguia_render_floating_whatsapp', 30 );
+
+function murguia_render_floating_whatsapp() {
+	if ( is_admin() ) return;
+	$url = murguia_ajuste( 'ct_whatsapp', '', 'contacto' );
+	if ( ! $url ) {
+		$url = 'https://wa.me/51114218800';
+	}
+	?>
+	<a class="murg-floating-whatsapp" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
+		<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.52 3.48A11.78 11.78 0 0 0 12.13 0C5.61 0 .32 5.29.32 11.81c0 2.08.54 4.11 1.58 5.9L.22 23.84l6.28-1.65a11.76 11.76 0 0 0 5.63 1.43h.01c6.52 0 11.81-5.29 11.81-11.81 0-3.15-1.23-6.12-3.43-8.33ZM12.14 21.62h-.01a9.8 9.8 0 0 1-5-1.37l-.36-.21-3.73.98 1-3.64-.23-.37a9.77 9.77 0 0 1-1.5-5.2C2.31 6.39 6.72 1.98 12.14 1.98a9.75 9.75 0 0 1 6.98 2.9 9.79 9.79 0 0 1 2.88 6.93c0 5.42-4.41 9.81-9.86 9.81Zm5.39-7.34c-.29-.15-1.74-.86-2.01-.96-.27-.1-.47-.15-.67.15-.2.29-.77.96-.95 1.16-.17.2-.35.22-.64.07-.29-.15-1.24-.46-2.36-1.46-.87-.78-1.46-1.74-1.63-2.03-.17-.29-.02-.45.13-.6.13-.13.29-.35.44-.52.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.29-1.04 1.02-1.04 2.48s1.06 2.87 1.21 3.07c.15.2 2.09 3.2 5.07 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.74-.71 1.99-1.4.25-.69.25-1.28.17-1.4-.07-.13-.27-.2-.56-.35Z"/></svg>
+		<span>WhatsApp</span>
+	</a>
+	<?php
 }
 
 /* ------------------------------------------------------------------
