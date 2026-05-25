@@ -2,11 +2,15 @@
 /**
  * Template Name: Diseña tu anillo
  *
- * Landing consultiva para configurar anillos de compromiso bajo pedido.
+ * Configurador consultivo para anillos de compromiso bajo pedido.
  */
 defined( 'ABSPATH' ) || exit;
 
-$wa_url = murguia_ajuste( 'ac_whatsapp_url', 'https://wa.me/51114218800', 'anillos-compromiso-page' );
+$wa_url_raw = murguia_ajuste( 'ac_whatsapp_url', 'https://wa.me/51114218800', 'anillos-compromiso-page' );
+$wa_number  = preg_replace( '/[^0-9]/', '', $wa_url_raw );
+if ( ! $wa_number ) {
+	$wa_number = '51114218800';
+}
 
 $shape_dir = trailingslashit( get_stylesheet_directory_uri() ) . 'assets/img/diamond-shapes/';
 $shapes = [
@@ -16,7 +20,27 @@ $shapes = [
 	[ 'label' => 'Cojín',     'img' => 'cushion_new.png' ],
 	[ 'label' => 'Pera',      'img' => 'pear_new.png' ],
 	[ 'label' => 'Princesa',  'img' => 'princess_new.png' ],
+	[ 'label' => 'Marquesa',  'img' => 'marquise_new.png' ],
+	[ 'label' => 'Asscher',   'img' => 'asscher_new.png' ],
 ];
+
+$models = [
+	'Solitario clásico',
+	'Hidden halo',
+	'Halo',
+	'Tres piedras',
+	'Pavé',
+	'Diseño personalizado',
+];
+
+$metals = [
+	[ 'label' => 'Oro amarillo 18K', 'color' => '#d4a843' ],
+	[ 'label' => 'Oro blanco 18K',   'color' => '#e8e4dc' ],
+	[ 'label' => 'Oro rosado 18K',   'color' => '#e8b4a0' ],
+	[ 'label' => 'Platino',          'color' => '#c9c9c9' ],
+];
+
+$sizes = [ '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9' ];
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -33,54 +57,114 @@ $shapes = [
 	<section class="murg-design-flow__hero">
 		<div class="murg-design-flow__inner" data-reveal>
 			<p class="murg-eyebrow">Diseña tu anillo</p>
-			<h1>Un anillo creado para una historia única.</h1>
-			<p>Elige modelo, metal y diamante con asesoría privada de Murguía. Nuestro equipo prepara una cotización personalizada según las características elegidas.</p>
-			<p class="murg-design-flow__note">Este flujo no muestra precio final en línea. Cada selección se cotiza de forma privada según disponibilidad de diamante, metal y taller.</p>
+			<h1>Configura una pieza para una historia única.</h1>
+			<p>Selecciona los elementos base de tu anillo de compromiso. Al final verás un resumen para solicitar una cotización privada con Murguía.</p>
+			<p class="murg-design-flow__note">No mostramos precio final en línea. La cotización depende de disponibilidad de diamante, metal, talla y taller.</p>
 			<div class="murg-design-flow__actions">
-				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $wa_url ); ?>" target="_blank" rel="noopener noreferrer">Solicitar cotización</a>
+				<a class="murg-btn murg-btn--dark" href="#murg-ring-builder">Empezar diseño</a>
 				<a class="murg-btn murg-btn--ghost" href="<?php echo esc_url( home_url( '/las-4cs/' ) ); ?>">Conoce Las 4Cs</a>
 			</div>
 		</div>
 	</section>
 
-	<section class="murg-design-config" aria-label="Opciones de diseño">
-		<div class="murg-design-config__grid">
-			<div class="murg-design-config__block" data-reveal>
-				<span class="murg-design-config__step">01</span>
-				<h2>Forma del diamante</h2>
-				<div class="murg-design-shapes">
-					<?php foreach ( $shapes as $shape ) : ?>
-					<div class="murg-design-shape">
-						<img src="<?php echo esc_url( $shape_dir . $shape['img'] ); ?>" alt="<?php echo esc_attr( $shape['label'] ); ?>" loading="lazy">
-						<span><?php echo esc_html( $shape['label'] ); ?></span>
+	<section class="murg-ring-builder" id="murg-ring-builder" data-wa-number="<?php echo esc_attr( $wa_number ); ?>" aria-label="Configurador de anillo">
+		<div class="murg-ring-builder__layout">
+			<div class="murg-ring-builder__steps">
+				<section class="murg-ring-builder__step" data-reveal>
+					<span class="murg-design-config__step">01</span>
+					<h2>Modelo del anillo</h2>
+					<div class="murg-builder-options" data-builder-group="Modelo">
+						<?php foreach ( $models as $index => $model ) : ?>
+						<button type="button" class="murg-builder-option<?php echo 0 === $index ? ' is-selected' : ''; ?>" data-value="<?php echo esc_attr( $model ); ?>">
+							<?php echo esc_html( $model ); ?>
+						</button>
+						<?php endforeach; ?>
 					</div>
-					<?php endforeach; ?>
-				</div>
+				</section>
+
+				<section class="murg-ring-builder__step" data-reveal>
+					<span class="murg-design-config__step">02</span>
+					<h2>Forma del diamante</h2>
+					<div class="murg-design-shapes murg-design-shapes--builder" data-builder-group="Forma">
+						<?php foreach ( $shapes as $index => $shape ) : ?>
+						<button type="button" class="murg-design-shape<?php echo 0 === $index ? ' is-selected' : ''; ?>" data-value="<?php echo esc_attr( $shape['label'] ); ?>">
+							<img src="<?php echo esc_url( $shape_dir . $shape['img'] ); ?>" alt="<?php echo esc_attr( $shape['label'] ); ?>" loading="lazy">
+							<span><?php echo esc_html( $shape['label'] ); ?></span>
+						</button>
+						<?php endforeach; ?>
+					</div>
+				</section>
+
+				<section class="murg-ring-builder__step" data-reveal>
+					<span class="murg-design-config__step">03</span>
+					<h2>Metal</h2>
+					<div class="murg-builder-metals" data-builder-group="Metal">
+						<?php foreach ( $metals as $index => $metal ) : ?>
+						<button type="button" class="murg-builder-metal<?php echo 1 === $index ? ' is-selected' : ''; ?>" data-value="<?php echo esc_attr( $metal['label'] ); ?>">
+							<span style="background: <?php echo esc_attr( $metal['color'] ); ?>"></span>
+							<?php echo esc_html( $metal['label'] ); ?>
+						</button>
+						<?php endforeach; ?>
+					</div>
+				</section>
+
+				<section class="murg-ring-builder__step" data-reveal>
+					<span class="murg-design-config__step">04</span>
+					<div class="murg-builder-range__head">
+						<h2>Quilates aproximados</h2>
+						<strong><span data-builder-output="Quilates">1.00</span> ct</strong>
+					</div>
+					<input class="murg-builder-range" type="range" min="0.30" max="3.00" step="0.10" value="1.00" data-builder-range="Quilates" data-suffix=" ct">
+					<div class="murg-builder-range__scale"><span>0.30 ct</span><span>3.00 ct</span></div>
+				</section>
+
+				<section class="murg-ring-builder__step" data-reveal>
+					<span class="murg-design-config__step">05</span>
+					<h2>Origen del diamante</h2>
+					<div class="murg-builder-options murg-builder-options--two" data-builder-group="Origen">
+						<button type="button" class="murg-builder-option is-selected" data-value="Natural">Natural</button>
+						<button type="button" class="murg-builder-option" data-value="Laboratorio">Laboratorio</button>
+					</div>
+				</section>
+
+				<section class="murg-ring-builder__step" data-reveal>
+					<span class="murg-design-config__step">06</span>
+					<h2>Talla estimada</h2>
+					<div class="murg-builder-options murg-builder-options--sizes" data-builder-group="Talla">
+						<?php foreach ( $sizes as $index => $size ) : ?>
+						<button type="button" class="murg-builder-option<?php echo 4 === $index ? ' is-selected' : ''; ?>" data-value="<?php echo esc_attr( $size ); ?>">
+							<?php echo esc_html( $size ); ?>
+						</button>
+						<?php endforeach; ?>
+					</div>
+					<p class="murg-builder-help">Si no conoces la talla, podemos confirmarla durante la asesoría.</p>
+				</section>
+
+				<section class="murg-ring-builder__step" data-reveal>
+					<span class="murg-design-config__step">07</span>
+					<h2>Notas opcionales</h2>
+					<textarea class="murg-builder-notes" rows="4" data-builder-notes placeholder="Ej. fecha aproximada de entrega, presupuesto referencial, inspiración o detalle especial."></textarea>
+				</section>
 			</div>
 
-			<div class="murg-design-config__block" data-reveal>
-				<span class="murg-design-config__step">02</span>
-				<h2>Metal y acabado</h2>
-				<div class="murg-design-options">
-					<span>Oro amarillo</span>
-					<span>Oro blanco</span>
-					<span>Oro rosado</span>
-					<span>Platino</span>
-				</div>
-			</div>
-
-			<div class="murg-design-config__block" data-reveal>
-				<span class="murg-design-config__step">03</span>
-				<h2>Diamante y origen</h2>
-				<p>Selecciona un diamante natural o de laboratorio. La cotización se define según talla, claridad, color, corte y disponibilidad.</p>
-			</div>
+			<aside class="murg-builder-summary" data-reveal aria-label="Resumen de seleccion">
+				<p class="murg-eyebrow">Resumen</p>
+				<h2>Tu anillo</h2>
+				<dl>
+					<div><dt>Modelo</dt><dd data-summary="Modelo">Solitario clásico</dd></div>
+					<div><dt>Forma</dt><dd data-summary="Forma">Redondo</dd></div>
+					<div><dt>Metal</dt><dd data-summary="Metal">Oro blanco 18K</dd></div>
+					<div><dt>Quilates</dt><dd data-summary="Quilates">1.00 ct</dd></div>
+					<div><dt>Origen</dt><dd data-summary="Origen">Natural</dd></div>
+					<div><dt>Talla</dt><dd data-summary="Talla">6</dd></div>
+				</dl>
+				<div class="murg-builder-summary__notes" data-summary-notes hidden></div>
+				<a class="murg-btn murg-btn--dark murg-builder-summary__cta" href="<?php echo esc_url( 'https://wa.me/' . $wa_number ); ?>" target="_blank" rel="noopener noreferrer" data-builder-whatsapp>
+					Solicitar cotización
+				</a>
+				<p class="murg-builder-summary__fine">Un asesor revisará tus selecciones y te responderá con disponibilidad y próximos pasos.</p>
+			</aside>
 		</div>
-	</section>
-
-	<section class="murg-design-flow__cta" data-reveal>
-		<h2>Agenda una asesoría privada</h2>
-		<p>Te acompañamos desde la elección del diseño hasta la entrega de la pieza final.</p>
-		<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $wa_url ); ?>" target="_blank" rel="noopener noreferrer">Hablar por WhatsApp</a>
 	</section>
 </main>
 

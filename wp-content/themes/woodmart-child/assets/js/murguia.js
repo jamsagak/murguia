@@ -1298,6 +1298,8 @@
 			'.murg-design-flow__inner',
 			'.murg-design-config__block',
 			'.murg-design-flow__cta',
+			'.murg-ring-builder__step',
+			'.murg-builder-summary',
 			'.murg-aj-piezas__intro',
 			'.murg-aj-pieza',
 			// .murg-product excluido — está dentro de .murg-bestsellers (data-reveal-block)
@@ -1402,6 +1404,92 @@
 				}
 			} );
 		} );
+	}
+
+	/* ------------------------------------------------------------------
+	   DISEÑA TU ANILLO — configurador consultivo
+	   ------------------------------------------------------------------ */
+	var ringBuilder = document.getElementById( 'murg-ring-builder' );
+	if ( ringBuilder ) {
+		var summaryFields = {};
+		ringBuilder.querySelectorAll( '[data-summary]' ).forEach( function ( el ) {
+			summaryFields[ el.dataset.summary ] = el;
+		} );
+
+		var notesSummary = ringBuilder.querySelector( '[data-summary-notes]' );
+		var waBtn = ringBuilder.querySelector( '[data-builder-whatsapp]' );
+		var waNumber = ringBuilder.dataset.waNumber || '51114218800';
+		var builderState = {};
+
+		function setBuilderValue( key, value ) {
+			builderState[ key ] = value;
+			if ( summaryFields[ key ] ) {
+				summaryFields[ key ].textContent = key === 'Quilates' ? value + ' ct' : value;
+			}
+			updateBuilderWhatsapp();
+		}
+
+		function updateBuilderWhatsapp() {
+			if ( ! waBtn ) return;
+			var lines = [
+				'Hola, quisiera solicitar una cotizacion para un anillo de compromiso.',
+				'Modelo: ' + ( builderState.Modelo || '-' ),
+				'Forma: ' + ( builderState.Forma || '-' ),
+				'Metal: ' + ( builderState.Metal || '-' ),
+				'Quilates aproximados: ' + ( builderState.Quilates || '-' ) + ' ct',
+				'Origen: ' + ( builderState.Origen || '-' ),
+				'Talla estimada: ' + ( builderState.Talla || '-' )
+			];
+			if ( builderState.Notas ) {
+				lines.push( 'Notas: ' + builderState.Notas );
+			}
+			waBtn.href = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent( lines.join( '\n' ) );
+		}
+
+		ringBuilder.querySelectorAll( '[data-builder-group]' ).forEach( function ( group ) {
+			var key = group.dataset.builderGroup;
+			var selected = group.querySelector( '.is-selected[data-value]' );
+			if ( selected ) {
+				setBuilderValue( key, selected.dataset.value );
+			}
+
+			group.querySelectorAll( '[data-value]' ).forEach( function ( btn ) {
+				btn.addEventListener( 'click', function () {
+					group.querySelectorAll( '.is-selected' ).forEach( function ( current ) {
+						current.classList.remove( 'is-selected' );
+					} );
+					btn.classList.add( 'is-selected' );
+					setBuilderValue( key, btn.dataset.value );
+				} );
+			} );
+		} );
+
+		ringBuilder.querySelectorAll( '[data-builder-range]' ).forEach( function ( range ) {
+			var key = range.dataset.builderRange;
+			var out = ringBuilder.querySelector( '[data-builder-output="' + key + '"]' );
+			var syncRange = function () {
+				var value = parseFloat( range.value ).toFixed(2);
+				if ( out ) out.textContent = value;
+				setBuilderValue( key, value );
+			};
+			range.addEventListener( 'input', syncRange );
+			syncRange();
+		} );
+
+		var notes = ringBuilder.querySelector( '[data-builder-notes]' );
+		if ( notes ) {
+			notes.addEventListener( 'input', function () {
+				var value = notes.value.trim();
+				builderState.Notas = value;
+				if ( notesSummary ) {
+					notesSummary.hidden = ! value;
+					notesSummary.textContent = value ? 'Notas: ' + value : '';
+				}
+				updateBuilderWhatsapp();
+			} );
+		}
+
+		updateBuilderWhatsapp();
 	}
 
 	/* ------------------------------------------------------------------
