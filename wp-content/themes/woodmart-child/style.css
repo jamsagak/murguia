@@ -318,6 +318,30 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
 .murg-mobile-menu__nav a:hover {
   color: var(--murg-gold);
 }
+.murg-mobile-menu__group {
+  border-bottom: 1px solid var(--murg-line, #e5e0d8);
+}
+.murg-mobile-menu__group > a {
+  border-bottom: 0;
+}
+.murg-mobile-menu__subnav {
+  display: grid;
+  gap: 0;
+  padding: 0 0 12px 16px;
+  margin-top: -4px;
+  border-left: 1px solid rgba(201,168,76,0.45);
+}
+.murg-mobile-menu__subnav a {
+  border-bottom: 0;
+  padding: 7px 0;
+  color: rgba(25,46,29,0.72);
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+.murg-mobile-menu__subnav a:first-child {
+  border-top: 0;
+}
 
 /* Logo */
 .murg-nav__logo {

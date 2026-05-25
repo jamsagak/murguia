@@ -156,11 +156,22 @@ $_marca_links = [
 		</button>
 		<nav class="murg-mobile-menu__nav" aria-label="Menú principal">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>">Inicio</a>
+			<div class="murg-mobile-menu__group">
+				<a href="<?php echo esc_url( home_url( '/anillos-compromiso/' ) ); ?>">Anillos de compromiso</a>
+				<div class="murg-mobile-menu__subnav">
+					<a href="<?php echo esc_url( home_url( '/disena-tu-anillo/' ) ); ?>">Diseña tu anillo</a>
+					<a href="<?php echo esc_url( home_url( '/las-4cs/' ) ); ?>">Conoce las 4Cs</a>
+					<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso' ) ); ?>">Ver anillos</a>
+				</div>
+			</div>
+			<a href="<?php echo esc_url( home_url( '/aros-matrimonio/' ) ); ?>">Aros de matrimonio</a>
+			<a href="<?php echo esc_url( $_shop_url ); ?>">Catálogo</a>
+			<a href="<?php echo esc_url( home_url( '/shop/?product_cat=marcas' ) ); ?>">Marcas</a>
+			<a href="<?php echo esc_url( home_url( '/shop/?product_cat=alta-joyeria' ) ); ?>">Alta Joyería</a>
 			<a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a>
-			<a href="<?php echo esc_url( home_url( '/las-4cs/' ) ); ?>">Conoce las 4Cs</a>
 			<a href="<?php echo esc_url( home_url( '/tiendas/' ) ); ?>">Tiendas</a>
 			<a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Contacto</a>
-			<a href="<?php echo esc_url( $_shop_url ); ?>">Tienda</a>
+			<a href="<?php echo esc_url( home_url( '/libro-de-reclamaciones/' ) ); ?>">Libro de reclamaciones</a>
 			<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a>
 		</nav>
 	</div>
