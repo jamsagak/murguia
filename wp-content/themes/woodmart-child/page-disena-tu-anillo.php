@@ -159,6 +159,18 @@ $sizes = [ '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9' ];
 			<aside class="murg-builder-summary" aria-label="Resumen de seleccion">
 				<p class="murg-eyebrow">Resumen</p>
 				<h2>Tu anillo</h2>
+				<div class="murg-builder-preview" data-ring-preview data-model="Solitario clásico" data-shape="Redondo" data-metal="oro-blanco" data-carat="1.00" aria-label="Vista previa del anillo">
+					<div class="murg-builder-preview__stage">
+						<div class="murg-builder-preview__band" aria-hidden="true"></div>
+						<div class="murg-builder-preview__pave" aria-hidden="true"></div>
+						<div class="murg-builder-preview__side-stones" aria-hidden="true">
+							<span></span><span></span>
+						</div>
+						<div class="murg-builder-preview__halo" aria-hidden="true"></div>
+						<div class="murg-builder-preview__stone" aria-hidden="true"></div>
+					</div>
+					<p class="murg-builder-preview__caption">Vista referencial para cotización</p>
+				</div>
 				<dl>
 					<div><dt>Modelo</dt><dd data-summary="Modelo">Solitario clásico</dd></div>
 					<div><dt>Forma</dt><dd data-summary="Forma">Redondo</dd></div>

@@ -8716,6 +8716,161 @@ body.murg-modal-open {
   transform: none;
   transition: none;
 }
+.murg-builder-preview {
+  margin: -4px 0 24px;
+  padding: 20px 16px 14px;
+  border: 1px solid rgba(25,46,29,0.1);
+  background:
+    radial-gradient(circle at 50% 34%, rgba(201,168,76,0.14), transparent 32%),
+    rgba(245,240,232,0.42);
+}
+.murg-builder-preview__stage {
+  position: relative;
+  width: min(240px, 100%);
+  height: 190px;
+  margin: 0 auto;
+}
+.murg-builder-preview__band {
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  width: 150px;
+  height: 150px;
+  border: 13px solid var(--builder-metal, #e8e4dc);
+  border-top-width: 9px;
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow:
+    inset 0 8px 18px rgba(0,0,0,0.12),
+    0 10px 22px rgba(25,46,29,0.12);
+}
+.murg-builder-preview__band::after {
+  content: "";
+  position: absolute;
+  inset: 7px;
+  border-radius: 50%;
+  border-top: 2px solid rgba(255,255,255,0.58);
+  opacity: 0.75;
+}
+.murg-builder-preview__stone {
+  position: absolute;
+  left: 50%;
+  top: 24px;
+  width: var(--stone-size, 52px);
+  height: var(--stone-size, 52px);
+  transform: translateX(-50%) rotate(var(--stone-rotate, 45deg));
+  background:
+    linear-gradient(135deg, rgba(255,255,255,0.96), rgba(210,226,230,0.72) 45%, rgba(255,255,255,0.86));
+  border: 2px solid rgba(25,46,29,0.16);
+  box-shadow:
+    0 12px 28px rgba(25,46,29,0.16),
+    inset -8px -8px 16px rgba(25,46,29,0.08),
+    inset 8px 8px 18px rgba(255,255,255,0.82);
+  z-index: 4;
+  transition: width 0.25s ease, height 0.25s ease, border-radius 0.25s ease, clip-path 0.25s ease, transform 0.25s ease;
+}
+.murg-builder-preview[data-shape="Redondo"] .murg-builder-preview__stone {
+  border-radius: 50%;
+  transform: translateX(-50%) rotate(0deg);
+}
+.murg-builder-preview[data-shape="Oval"] .murg-builder-preview__stone {
+  width: calc(var(--stone-size, 52px) * 0.82);
+  height: calc(var(--stone-size, 52px) * 1.18);
+  border-radius: 50%;
+  transform: translateX(-50%) rotate(0deg);
+}
+.murg-builder-preview[data-shape="Esmeralda"],
+.murg-builder-preview[data-shape="Asscher"] {
+  --stone-rotate: 0deg;
+}
+.murg-builder-preview[data-shape="Esmeralda"] .murg-builder-preview__stone {
+  width: calc(var(--stone-size, 52px) * 0.86);
+  height: calc(var(--stone-size, 52px) * 1.12);
+  border-radius: 6px;
+}
+.murg-builder-preview[data-shape="Asscher"] .murg-builder-preview__stone {
+  border-radius: 7px;
+}
+.murg-builder-preview[data-shape="Cojín"] .murg-builder-preview__stone {
+  border-radius: 16px;
+  transform: translateX(-50%) rotate(0deg);
+}
+.murg-builder-preview[data-shape="Pera"] .murg-builder-preview__stone {
+  border-radius: 50% 50% 50% 4px;
+}
+.murg-builder-preview[data-shape="Princesa"] .murg-builder-preview__stone {
+  border-radius: 2px;
+}
+.murg-builder-preview[data-shape="Marquesa"] .murg-builder-preview__stone {
+  width: calc(var(--stone-size, 52px) * 0.72);
+  height: calc(var(--stone-size, 52px) * 1.28);
+  border-radius: 50% 50% 50% 50% / 12% 12% 88% 88%;
+  transform: translateX(-50%) rotate(45deg);
+}
+.murg-builder-preview__halo,
+.murg-builder-preview__side-stones,
+.murg-builder-preview__pave {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.murg-builder-preview__halo {
+  position: absolute;
+  left: 50%;
+  top: 18px;
+  width: calc(var(--stone-size, 52px) + 20px);
+  height: calc(var(--stone-size, 52px) + 20px);
+  border: 5px dotted rgba(201,168,76,0.72);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.murg-builder-preview__side-stones {
+  position: absolute;
+  left: 50%;
+  top: 48px;
+  width: 118px;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: space-between;
+  z-index: 2;
+}
+.murg-builder-preview__side-stones span {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fff, #dbe7eb);
+  border: 1px solid rgba(25,46,29,0.12);
+}
+.murg-builder-preview__pave {
+  position: absolute;
+  left: 50%;
+  bottom: 120px;
+  width: 102px;
+  height: 18px;
+  transform: translateX(-50%);
+  background:
+    radial-gradient(circle, rgba(255,255,255,0.96) 0 3px, transparent 4px) 0 50% / 14px 14px repeat-x;
+  z-index: 3;
+}
+.murg-builder-preview[data-model*="Halo"] .murg-builder-preview__halo,
+.murg-builder-preview[data-model*="halo"] .murg-builder-preview__halo {
+  opacity: 1;
+}
+.murg-builder-preview[data-model="Tres piedras"] .murg-builder-preview__side-stones,
+.murg-builder-preview[data-model="Pavé"] .murg-builder-preview__pave {
+  opacity: 1;
+}
+.murg-builder-preview[data-model="Diseño personalizado"] .murg-builder-preview__band {
+  border-radius: 44% 56% 50% 50%;
+}
+.murg-builder-preview__caption {
+  margin: 8px 0 0;
+  color: rgba(25,46,29,0.56);
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  text-align: center;
+}
 .murg-builder-summary dl {
   display: grid;
   gap: 0;

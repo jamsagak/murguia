@@ -1418,15 +1418,43 @@
 		var notesSummary = ringBuilder.querySelector( '[data-summary-notes]' );
 		var waBtn = ringBuilder.querySelector( '[data-builder-whatsapp]' );
 		var stickySummary = ringBuilder.querySelector( '.murg-builder-summary' );
+		var ringPreview = ringBuilder.querySelector( '[data-ring-preview]' );
 		var waNumber = ringBuilder.dataset.waNumber || '51114218800';
 		var builderState = {};
+		var metalColors = {
+			'Oro amarillo 18K': '#d4a843',
+			'Oro blanco 18K': '#e8e4dc',
+			'Oro rosado 18K': '#e8b4a0',
+			'Platino': '#c9c9c9'
+		};
 
 		function setBuilderValue( key, value ) {
 			builderState[ key ] = value;
 			if ( summaryFields[ key ] ) {
 				summaryFields[ key ].textContent = key === 'Quilates' ? value + ' ct' : value;
 			}
+			updateRingPreview();
 			updateBuilderWhatsapp();
+		}
+
+		function updateRingPreview() {
+			if ( ! ringPreview ) return;
+			if ( builderState.Modelo ) {
+				ringPreview.dataset.model = builderState.Modelo;
+			}
+			if ( builderState.Forma ) {
+				ringPreview.dataset.shape = builderState.Forma;
+			}
+			if ( builderState.Metal ) {
+				ringPreview.dataset.metal = builderState.Metal;
+				ringPreview.style.setProperty( '--builder-metal', metalColors[ builderState.Metal ] || '#e8e4dc' );
+			}
+			if ( builderState.Quilates ) {
+				var carat = parseFloat( builderState.Quilates ) || 1;
+				var size = Math.max( 42, Math.min( 72, 42 + ( carat * 10 ) ) );
+				ringPreview.dataset.carat = builderState.Quilates;
+				ringPreview.style.setProperty( '--stone-size', size + 'px' );
+			}
 		}
 
 		function updateBuilderWhatsapp() {
