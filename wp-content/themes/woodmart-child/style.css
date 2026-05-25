@@ -85,6 +85,7 @@
    ============================================================ */
 .murg-home * { box-sizing: border-box; margin: 0; padding: 0; }
 .murg-home { overflow-x: hidden; }
+.murg-design-ring-page { overflow-x: clip; }
 
 .murg-home {
   font-family: 'Cinzel', serif;
@@ -8713,6 +8714,7 @@ body.murg-modal-open {
 .murg-builder-summary[data-reveal],
 .murg-builder-summary[data-reveal].is-revealed {
   transform: none;
+  transition: none;
 }
 .murg-builder-summary dl {
   display: grid;

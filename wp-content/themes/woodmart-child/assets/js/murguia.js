@@ -1299,7 +1299,6 @@
 			'.murg-design-config__block',
 			'.murg-design-flow__cta',
 			'.murg-ring-builder__step',
-			'.murg-builder-summary',
 			'.murg-aj-piezas__intro',
 			'.murg-aj-pieza',
 			// .murg-product excluido — está dentro de .murg-bestsellers (data-reveal-block)
@@ -1503,12 +1502,24 @@
 			}
 
 			var topGap = 96;
-			var builderRect = ringBuilder.getBoundingClientRect();
+			var layout = ringBuilder.querySelector( '.murg-ring-builder__layout' ) || ringBuilder;
+			var builderRect = layout.getBoundingClientRect();
 			var summaryRect = stickySummary.getBoundingClientRect();
+			var isFixed = stickySummary.style.position === 'fixed';
+			if ( isFixed ) {
+				stickySummary.style.position = '';
+				stickySummary.style.top = '';
+				stickySummary.style.left = '';
+				stickySummary.style.width = '';
+				stickySummary.style.maxHeight = '';
+				stickySummary.style.zIndex = '';
+				summaryRect = stickySummary.getBoundingClientRect();
+			}
 			var naturalLeft = summaryRect.left;
 			var naturalWidth = summaryRect.width;
+			var naturalHeight = summaryRect.height;
 			var maxHeight = window.innerHeight - topGap - 20;
-			var shouldFix = builderRect.top <= topGap && builderRect.bottom > topGap + summaryRect.height;
+			var shouldFix = builderRect.top <= topGap && builderRect.bottom > topGap + Math.min( naturalHeight, maxHeight );
 
 			if ( shouldFix ) {
 				stickySummary.style.position = 'fixed';
