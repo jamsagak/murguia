@@ -8404,8 +8404,8 @@ body.murg-modal-open {
   align-items: center;
   padding: 160px clamp(24px, 6vw, 96px) 88px;
   background:
-    linear-gradient(90deg, rgba(25,46,29,0.86), rgba(25,46,29,0.48)),
-    url('/wp-content/uploads/2026/05/Imagen-anillos-categorias.jpg') center / cover no-repeat;
+    linear-gradient(90deg, rgba(25,46,29,0.86), rgba(25,46,29,0.42)),
+    url('/wp-content/uploads/2026/05/hero.jpg') center / cover no-repeat;
   color: var(--murg-cream);
 }
 .murg-design-flow--bands .murg-design-flow__hero {
@@ -8445,6 +8445,16 @@ body.murg-modal-open {
   flex-wrap: wrap;
   gap: 14px;
   margin-top: 34px;
+}
+.murg-design-ring-page .murg-design-flow__actions .murg-btn--ghost {
+  color: var(--murg-cream);
+  border-color: rgba(245,240,232,0.78);
+  background: rgba(245,240,232,0.08);
+}
+.murg-design-ring-page .murg-design-flow__actions .murg-btn--ghost:hover {
+  color: var(--murg-forest);
+  border-color: var(--murg-cream);
+  background: var(--murg-cream);
 }
 .murg-design-config {
   padding: clamp(64px, 8vw, 120px) clamp(22px, 5vw, 80px);
@@ -8907,6 +8917,10 @@ body.murg-modal-open {
 .murg-builder-summary__cta {
   width: 100%;
   justify-content: center;
+  white-space: nowrap;
+  padding-left: 18px;
+  padding-right: 18px;
+  font-size: 11px;
 }
 .murg-design-flow__cta {
   max-width: 900px;
