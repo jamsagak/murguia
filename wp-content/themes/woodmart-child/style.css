@@ -8698,16 +8698,18 @@ body.murg-modal-open {
   width: 100%;
   resize: vertical;
   min-height: 110px;
-  border: 1px solid rgba(25,46,29,0.16);
+  border: 1px solid rgba(25,46,29,0.32);
   background: rgba(255,255,255,0.48);
   color: var(--murg-forest);
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   line-height: 1.6;
   padding: 14px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
 }
 .murg-builder-notes:focus {
   outline: 1px solid var(--murg-gold);
+  border-color: rgba(201,168,76,0.75);
 }
 .murg-builder-summary {
   position: -webkit-sticky;
