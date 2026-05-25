@@ -35,6 +35,7 @@ $shapes = [
 			<p class="murg-eyebrow">Diseña tu anillo</p>
 			<h1>Un anillo creado para una historia única.</h1>
 			<p>Elige modelo, metal y diamante con asesoría privada de Murguía. Nuestro equipo prepara una cotización personalizada según las características elegidas.</p>
+			<p class="murg-design-flow__note">Este flujo no muestra precio final en línea. Cada selección se cotiza de forma privada según disponibilidad de diamante, metal y taller.</p>
 			<div class="murg-design-flow__actions">
 				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $wa_url ); ?>" target="_blank" rel="noopener noreferrer">Solicitar cotización</a>
 				<a class="murg-btn murg-btn--ghost" href="<?php echo esc_url( home_url( '/las-4cs/' ) ); ?>">Conoce Las 4Cs</a>

@@ -178,6 +178,12 @@ if ( empty( $testimonios ) || ! is_array( $testimonios ) ) {
 
 $nl_title = murg_ac( 'ac_newsletter_titulo', 'Recibe inspiración Murguía.' );
 $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Ideas, guías y piezas seleccionadas para elegir con intención.' );
+$nl_form  = function_exists( 'murguia_newsletter_form_config' ) ? murguia_newsletter_form_config() : [
+	'action'     => admin_url( 'admin-post.php' ),
+	'method'     => 'post',
+	'email_name' => 'email',
+	'external'   => false,
+];
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -419,11 +425,13 @@ $nl_sub   = murg_ac( 'ac_newsletter_sub', 'Ideas, guías y piezas seleccionadas 
 		<div class="murg-newsletter__inner">
 			<h2 class="murg-newsletter__title"><?php echo esc_html( $nl_title ); ?></h2>
 			<?php if ( $nl_sub ) : ?><p class="murg-newsletter__sub"><?php echo esc_html( $nl_sub ); ?></p><?php endif; ?>
-			<form class="murg-newsletter__form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-				<?php wp_nonce_field( 'murg_newsletter', 'murg_nl_nonce' ); ?>
-				<input type="hidden" name="action" value="murg_newsletter_subscribe">
+			<form class="murg-newsletter__form" method="<?php echo esc_attr( $nl_form['method'] ); ?>" action="<?php echo esc_url( $nl_form['action'] ); ?>">
+				<?php if ( empty( $nl_form['external'] ) ) : ?>
+					<?php wp_nonce_field( 'murg_newsletter', 'murg_nl_nonce' ); ?>
+					<input type="hidden" name="action" value="murg_newsletter_subscribe">
+				<?php endif; ?>
 				<div class="murg-newsletter__field">
-					<input type="email" name="email" placeholder="<?php esc_attr_e( 'Tu correo electronico', 'woodmart-child' ); ?>" required>
+					<input type="email" name="<?php echo esc_attr( $nl_form['email_name'] ); ?>" placeholder="<?php esc_attr_e( 'Tu correo electronico', 'woodmart-child' ); ?>" required>
 					<button type="submit"><?php esc_html_e( 'Suscribirme', 'woodmart-child' ); ?></button>
 				</div>
 				<?php if ( isset( $_GET['newsletter'] ) && 'ok' === $_GET['newsletter'] ) : ?>

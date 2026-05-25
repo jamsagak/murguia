@@ -28,7 +28,10 @@ $aj_intro_imagen  = murg_aj( 'aj_intro_imagen',  [] );
 // ── Campos de consulta ──────────────────────────────────────
 $aj_whatsapp      = murg_aj( 'aj_whatsapp',      '' );
 $aj_email         = murg_aj( 'aj_email',         '' );
-$aj_cita_url      = murg_aj( 'aj_cita_url',      home_url( '/contact-us/' ) );
+$aj_cita_url      = murg_aj( 'aj_cita_url',      home_url( '/contacto/' ) );
+if ( ! $aj_whatsapp ) {
+	$aj_whatsapp = murguia_ajuste( 'ct_whatsapp', '51114218800', 'contacto' );
+}
 
 // ── Productos de la categoría Alta Joyería ──────────────────
 $aj_query = new WP_Query( [
@@ -147,6 +150,11 @@ if ( $aj_query->have_posts() ) {
      PIEZAS — landing tipo lookbook, una por una
      ============================================================ -->
 <section class="murg-aj-piezas" id="aj-piezas">
+	<div class="murg-aj-piezas__intro" data-reveal>
+		<div class="murg-eyebrow">Consulta privada</div>
+		<h2 class="murg-serif">Piezas seleccionadas bajo atencion personalizada</h2>
+		<p>Alta Joyería se presenta como una experiencia privada. Cada pieza se revisa con un asesor para confirmar disponibilidad, detalles de gemas y condiciones de entrega.</p>
+	</div>
 
 	<?php if ( ! empty( $aj_products ) ) : ?>
 
@@ -180,7 +188,7 @@ if ( $aj_query->have_posts() ) {
 			<div class="murg-aj-pieza__info">
 				<div class="murg-eyebrow murg-aj-pieza__eyebrow">Alta Joyería · Murguía</div>
 				<h3 class="murg-aj-pieza__nombre murg-serif">
-					<a href="<?php echo esc_url( $piece['url'] ); ?>"><?php echo esc_html( $piece['name'] ); ?></a>
+					<?php echo esc_html( $piece['name'] ); ?>
 				</h3>
 				<?php if ( $piece['ref'] ) : ?>
 				<div class="murg-aj-pieza__ref"><?php echo esc_html( $piece['ref'] ); ?></div>
@@ -189,24 +197,21 @@ if ( $aj_query->have_posts() ) {
 				<p class="murg-aj-pieza__desc"><?php echo esc_html( $piece['desc'] ); ?></p>
 				<?php endif; ?>
 				<div class="murg-aj-pieza__divider" aria-hidden="true"></div>
-				<div class="murg-aj-pieza__precio-label">Precio bajo consulta</div>
+				<div class="murg-aj-pieza__precio-label">Cotizacion privada</div>
 				<div class="murg-aj-pieza__actions">
 					<?php if ( $aj_whatsapp ) : ?>
 					<a href="<?php echo esc_url( 'https://wa.me/' . preg_replace( '/[^0-9]/', '', $aj_whatsapp ) . '?text=' . rawurlencode( 'Hola, me interesa la pieza: ' . $piece['name'] . ' (' . $piece['ref'] . ')' ) ); ?>"
 					   class="murg-btn murg-btn--gold murg-aj-pieza__btn-wa"
 					   target="_blank" rel="noopener noreferrer">
 						<span class="murg-whatsapp-dot" aria-hidden="true"></span>
-						Consultar por WhatsApp
+						Solicitar cotizacion privada
 					</a>
 					<?php else : ?>
 					<a href="<?php echo esc_url( $aj_cita_url . '?pieza=' . rawurlencode( $piece['name'] ) ); ?>"
 					   class="murg-btn murg-btn--gold murg-aj-pieza__btn-wa">
-						Consultar esta pieza
+						Solicitar cotizacion privada
 					</a>
 					<?php endif; ?>
-					<a href="<?php echo esc_url( $piece['url'] ); ?>" class="murg-aj-pieza__btn-detail">
-						Ver ficha completa →
-					</a>
 				</div>
 			</div>
 

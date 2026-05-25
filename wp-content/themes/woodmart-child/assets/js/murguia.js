@@ -1298,6 +1298,8 @@
 			'.murg-design-flow__inner',
 			'.murg-design-config__block',
 			'.murg-design-flow__cta',
+			'.murg-aj-piezas__intro',
+			'.murg-aj-pieza',
 			// .murg-product excluido — está dentro de .murg-bestsellers (data-reveal-block)
 		];
 

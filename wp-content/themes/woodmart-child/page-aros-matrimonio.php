@@ -25,6 +25,7 @@ $wa_url = murguia_ajuste( 'ac_whatsapp_url', 'https://wa.me/51114218800', 'anill
 			<p class="murg-eyebrow">Aros de matrimonio</p>
 			<h1>Diseña un aro para todos los días de la historia.</h1>
 			<p>Elige modelo, metal, talla y grabado con asesoría personalizada. Creamos una propuesta a medida para cada pareja.</p>
+			<p class="murg-design-flow__note">La propuesta se confirma por cotización privada. No hay precio final automático porque cada aro depende del metal, talla, ancho y grabado.</p>
 			<div class="murg-design-flow__actions">
 				<a class="murg-btn murg-btn--dark" href="<?php echo esc_url( $wa_url ); ?>" target="_blank" rel="noopener noreferrer">Diseña tu aro</a>
 				<a class="murg-btn murg-btn--ghost" href="<?php echo esc_url( home_url( '/shop/?product_cat=aros-de-matrimonio' ) ); ?>">Ver catálogo</a>

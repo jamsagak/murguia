@@ -55,6 +55,8 @@ add_action( 'admin_post_murg_solicitar_cita',        'murguia_handle_cita' );
 add_action( 'admin_post_nopriv_murg_solicitar_cita', 'murguia_handle_cita' );
 add_action( 'admin_post_murg_newsletter_subscribe',        'murguia_handle_newsletter_subscribe' );
 add_action( 'admin_post_nopriv_murg_newsletter_subscribe', 'murguia_handle_newsletter_subscribe' );
+add_action( 'woocommerce_review_order_before_submit',      'murguia_checkout_newsletter_optin', 9 );
+add_action( 'woocommerce_checkout_order_processed',        'murguia_capture_checkout_newsletter_optin', 10, 3 );
 
 function murguia_handle_cita() {
 	if ( ! isset( $_POST['murg_nonce'] ) || ! wp_verify_nonce( $_POST['murg_nonce'], 'murg_cita' ) ) {
@@ -107,6 +109,54 @@ function murguia_handle_newsletter_subscribe() {
 
 	wp_safe_redirect( add_query_arg( 'newsletter', 'ok', wp_get_referer() ?: home_url( '/' ) ) );
 	exit;
+}
+
+function murguia_newsletter_form_config() {
+	$action     = trim( (string) murguia_ajuste( 'hp_mailchimp_action', '', 'pagina-de-inicio' ) );
+	$email_name = trim( (string) murguia_ajuste( 'hp_mailchimp_email_name', 'EMAIL', 'pagina-de-inicio' ) );
+
+	if ( $action ) {
+		return [
+			'action'     => esc_url( $action ),
+			'method'     => 'post',
+			'email_name' => $email_name ?: 'EMAIL',
+			'external'   => true,
+		];
+	}
+
+	return [
+		'action'     => esc_url( admin_url( 'admin-post.php' ) ),
+		'method'     => 'post',
+		'email_name' => 'email',
+		'external'   => false,
+	];
+}
+
+function murguia_checkout_newsletter_optin() {
+	if ( ! function_exists( 'woocommerce_form_field' ) ) {
+		return;
+	}
+
+	woocommerce_form_field( 'murg_newsletter_optin', [
+		'type'  => 'checkbox',
+		'class' => [ 'form-row-wide', 'murg-checkout-newsletter' ],
+		'label' => 'Deseo recibir inspiracion, novedades y piezas seleccionadas de Murguia.',
+	], false );
+}
+
+function murguia_capture_checkout_newsletter_optin( $order_id, $posted_data, $order ) {
+	if ( empty( $_POST['murg_newsletter_optin'] ) || ! $order instanceof WC_Order ) {
+		return;
+	}
+
+	$email = $order->get_billing_email();
+	if ( ! is_email( $email ) ) {
+		return;
+	}
+
+	$subject = '[Murguia] Suscripcion newsletter desde checkout';
+	$message = "Email: {$email}\nPedido: #{$order_id}\nOrigen: checkout";
+	wp_mail( get_option( 'admin_email' ), $subject, $message );
 }
 
 add_action( 'wp_footer', 'murguia_render_floating_whatsapp', 30 );
@@ -727,6 +777,21 @@ function murguia_register_homepage_fields() {
 				'label' => 'Subtitulo opcional',
 				'name'  => 'hp_nl_sub',
 				'type'  => 'text',
+			],
+			[
+				'key'          => 'field_murg_hp_mailchimp_action',
+				'label'        => 'Mailchimp action URL',
+				'name'         => 'hp_mailchimp_action',
+				'type'         => 'url',
+				'instructions' => 'Opcional. Pega aqui el action URL del formulario embebido de Mailchimp. Si esta vacio, el formulario enviara el correo al admin del sitio.',
+			],
+			[
+				'key'           => 'field_murg_hp_mailchimp_email_name',
+				'label'         => 'Nombre del campo email',
+				'name'          => 'hp_mailchimp_email_name',
+				'type'          => 'text',
+				'default_value' => 'EMAIL',
+				'instructions'  => 'Mailchimp suele usar EMAIL. Cambiar solo si el formulario externo usa otro nombre.',
 			],
 		],
 	] );
