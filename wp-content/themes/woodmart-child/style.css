@@ -8666,11 +8666,18 @@ body.murg-modal-open {
 }
 .murg-builder-summary {
   position: sticky;
-  top: 112px;
+  top: 96px;
+  align-self: start;
+  max-height: calc(100vh - 116px);
+  overflow-y: auto;
   padding: clamp(24px, 3vw, 34px);
   border: 1px solid rgba(25,46,29,0.14);
   background: #fffaf2;
   box-shadow: 0 24px 70px rgba(25,46,29,0.08);
+}
+.murg-builder-summary[data-reveal],
+.murg-builder-summary[data-reveal].is-revealed {
+  transform: none;
 }
 .murg-builder-summary dl {
   display: grid;
