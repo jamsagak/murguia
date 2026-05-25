@@ -1451,7 +1451,7 @@
 			}
 			if ( builderState.Quilates ) {
 				var carat = parseFloat( builderState.Quilates ) || 1;
-				var size = Math.max( 42, Math.min( 72, 42 + ( carat * 10 ) ) );
+				var size = Math.max( 32, Math.min( 54, 32 + ( carat * 7 ) ) );
 				ringPreview.dataset.carat = builderState.Quilates;
 				ringPreview.style.setProperty( '--stone-size', size + 'px' );
 			}
