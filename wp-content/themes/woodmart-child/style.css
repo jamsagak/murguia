@@ -8395,6 +8395,7 @@ body.murg-modal-open {
 .murg-design-flow {
   background: var(--murg-cream);
   color: var(--murg-forest);
+  overflow: visible;
 }
 .murg-design-flow__hero {
   min-height: 74vh;
@@ -8517,6 +8518,7 @@ body.murg-modal-open {
 .murg-ring-builder {
   padding: clamp(64px, 8vw, 120px) clamp(18px, 5vw, 80px);
   background: var(--murg-cream);
+  overflow: visible;
 }
 .murg-ring-builder__layout {
   display: grid;
@@ -8525,6 +8527,7 @@ body.murg-modal-open {
   max-width: 1320px;
   margin: 0 auto;
   align-items: start;
+  overflow: visible;
 }
 .murg-ring-builder__steps {
   display: grid;
@@ -8619,6 +8622,37 @@ body.murg-modal-open {
   gap: 16px;
   align-items: baseline;
 }
+.murg-builder-step-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.murg-builder-step-head h2 {
+  margin-bottom: 0;
+}
+.murg-builder-sizeguide-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0;
+  border: 0;
+  background: transparent !important;
+  color: rgba(25,46,29,0.68);
+  box-shadow: none !important;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-transform: none;
+  white-space: nowrap;
+}
+.murg-builder-sizeguide-link:hover {
+  color: var(--murg-gold);
+  background: transparent !important;
+}
 .murg-builder-range__head h2 {
   margin-bottom: 14px;
 }
@@ -8665,7 +8699,8 @@ body.murg-modal-open {
   outline: 1px solid var(--murg-gold);
 }
 .murg-builder-summary {
-  position: sticky;
+  position: -webkit-sticky;
+  position: sticky !important;
   top: 96px;
   align-self: start;
   max-height: calc(100vh - 116px);
@@ -8763,4 +8798,5 @@ body.murg-modal-open {
   .murg-builder-summary { padding: 20px 16px; }
   .murg-design-shapes--builder { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .murg-builder-range__head { align-items: flex-start; flex-direction: column; }
+  .murg-builder-step-head { align-items: flex-start; flex-direction: column; gap: 10px; }
 }

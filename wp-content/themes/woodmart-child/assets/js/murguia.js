@@ -1418,6 +1418,7 @@
 
 		var notesSummary = ringBuilder.querySelector( '[data-summary-notes]' );
 		var waBtn = ringBuilder.querySelector( '[data-builder-whatsapp]' );
+		var stickySummary = ringBuilder.querySelector( '.murg-builder-summary' );
 		var waNumber = ringBuilder.dataset.waNumber || '51114218800';
 		var builderState = {};
 
@@ -1489,6 +1490,45 @@
 			} );
 		}
 
+		function syncBuilderSticky() {
+			if ( ! stickySummary ) return;
+			if ( window.innerWidth <= 900 ) {
+				stickySummary.style.position = '';
+				stickySummary.style.top = '';
+				stickySummary.style.left = '';
+				stickySummary.style.width = '';
+				stickySummary.style.maxHeight = '';
+				stickySummary.style.zIndex = '';
+				return;
+			}
+
+			var topGap = 96;
+			var builderRect = ringBuilder.getBoundingClientRect();
+			var summaryRect = stickySummary.getBoundingClientRect();
+			var naturalLeft = summaryRect.left;
+			var naturalWidth = summaryRect.width;
+			var maxHeight = window.innerHeight - topGap - 20;
+			var shouldFix = builderRect.top <= topGap && builderRect.bottom > topGap + summaryRect.height;
+
+			if ( shouldFix ) {
+				stickySummary.style.position = 'fixed';
+				stickySummary.style.top = topGap + 'px';
+				stickySummary.style.left = naturalLeft + 'px';
+				stickySummary.style.width = naturalWidth + 'px';
+				stickySummary.style.maxHeight = maxHeight + 'px';
+				stickySummary.style.zIndex = '20';
+			} else {
+				stickySummary.style.position = '';
+				stickySummary.style.top = '';
+				stickySummary.style.left = '';
+				stickySummary.style.width = '';
+				stickySummary.style.maxHeight = '';
+				stickySummary.style.zIndex = '';
+			}
+		}
+		window.addEventListener( 'scroll', syncBuilderSticky, { passive: true } );
+		window.addEventListener( 'resize', syncBuilderSticky );
+		syncBuilderSticky();
 		updateBuilderWhatsapp();
 	}
 
