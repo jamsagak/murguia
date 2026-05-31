@@ -21,9 +21,9 @@ $_payment_logos = [
 ];
 
 $_social_links = [
-	[ 'file' => 'IG.svg', 'alt' => 'Instagram', 'url' => 'https://www.instagram.com/' ],
-	[ 'file' => 'fb.svg', 'alt' => 'Facebook',  'url' => 'https://www.facebook.com/' ],
-	[ 'file' => 'yt.svg', 'alt' => 'YouTube',   'url' => home_url( '/contacto/' ) ],
+	[ 'file' => 'IG.svg', 'alt' => 'Instagram', 'url' => 'https://www.instagram.com/joyeriamurguia/' ],
+	[ 'file' => 'fb.svg', 'alt' => 'Facebook',  'url' => 'https://web.facebook.com/JoyeriaMurguia' ],
+	[ 'file' => 'yt.svg', 'alt' => 'YouTube',   'url' => 'https://www.youtube.com/channel/UCw0lqbvcCZ4BbMd57wj3XPg' ],
 ];
 
 $_foot_redes = [];
@@ -86,7 +86,7 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajust
 					     loading="eager">
 				<?php endforeach; ?>
 			</div>
-			<h5 class="murg-footer__social-title">Siguenos</h5>
+			<h5 class="murg-footer__social-title">Síguenos</h5>
 			<div class="murg-footer__social" aria-label="Redes sociales">
 				<?php foreach ( $_social_links as $link ) : ?>
 					<a href="<?php echo esc_url( $link['url'] ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( $link['alt'] ); ?>">
