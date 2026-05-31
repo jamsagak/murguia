@@ -7,7 +7,7 @@
  */
 defined( 'ABSPATH' ) || exit;
 
-$about_img_base = home_url( '/img/cms/nosotros/' );
+$about_img_base = get_stylesheet_directory_uri() . '/assets/img/nosotros/';
 
 $history_blocks = [
 	[
