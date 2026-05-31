@@ -147,7 +147,7 @@ $intro_img = ! empty( $aj_intro_imagen['url'] ) ? $aj_intro_imagen['url'] : $aj_
 	</div>
 </section>
 
-<section class="murg-aj-cta-final" data-reveal>
+<section class="murg-aj-cta-final">
 	<div class="murg-gold-line" aria-hidden="true"></div>
 	<div class="murg-eyebrow murg-aj-cta-final__eyebrow">Experiencia personalizada</div>
 	<h2 class="murg-aj-cta-final__titulo murg-serif">Una pieza hecha <em>para usted</em></h2>
