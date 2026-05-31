@@ -1299,10 +1299,14 @@
 			'.murg-design-config__block',
 			'.murg-design-flow__cta',
 			'.murg-ring-builder__step',
+			'.murg-aj-intro__text',
+			'.murg-aj-intro__img',
 			'.murg-aj-piezas__intro',
 			'.murg-aj-private__media',
 			'.murg-aj-private__copy',
 			'.murg-aj-pieza',
+			'.murg-aj-products__head',
+			'.murg-aj-product',
 			// .murg-product excluido — está dentro de .murg-bestsellers (data-reveal-block)
 		];
 

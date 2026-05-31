@@ -147,62 +147,6 @@ $intro_img = ! empty( $aj_intro_imagen['url'] ) ? $aj_intro_imagen['url'] : $aj_
 	</div>
 </section>
 
-<section class="murg-aj-piezas" id="aj-piezas">
-	<div class="murg-aj-piezas__intro" data-reveal>
-		<div class="murg-eyebrow">Consulta privada</div>
-		<h2 class="murg-serif">Piezas seleccionadas bajo atención personalizada</h2>
-		<p>Alta Joyería se presenta como una experiencia privada. Cada pieza se revisa con un asesor para confirmar disponibilidad, detalles de gemas y condiciones de entrega.</p>
-	</div>
-
-	<?php if ( ! empty( $aj_products ) ) : ?>
-		<?php foreach ( $aj_products as $idx => $piece ) : ?>
-			<?php $flip = ( $idx % 2 !== 0 ) ? ' murg-aj-pieza--flip' : ''; ?>
-			<article class="murg-aj-pieza<?php echo esc_attr( $flip ); ?>" data-reveal>
-				<div class="murg-aj-pieza__img-wrap">
-					<?php if ( $piece['img'] ) : ?>
-						<div class="murg-aj-pieza__img-inner">
-							<img class="murg-aj-pieza__img murg-aj-pieza__img--main" src="<?php echo esc_url( $piece['img'] ); ?>" alt="<?php echo esc_attr( $piece['alt'] ); ?>" loading="<?php echo 0 === $idx ? 'eager' : 'lazy'; ?>">
-							<?php if ( $piece['img2'] ) : ?>
-								<img class="murg-aj-pieza__img murg-aj-pieza__img--hover" src="<?php echo esc_url( $piece['img2'] ); ?>" alt="<?php echo esc_attr( $piece['alt'] ); ?> — detalle" loading="lazy" aria-hidden="true">
-							<?php endif; ?>
-						</div>
-						<div class="murg-aj-pieza__num" aria-hidden="true"><?php printf( '%02d', $idx + 1 ); ?></div>
-					<?php endif; ?>
-				</div>
-				<div class="murg-aj-pieza__info">
-					<div class="murg-eyebrow murg-aj-pieza__eyebrow">Alta Joyería · Murguía</div>
-					<h3 class="murg-aj-pieza__nombre murg-serif"><?php echo esc_html( $piece['name'] ); ?></h3>
-					<?php if ( $piece['ref'] ) : ?>
-						<div class="murg-aj-pieza__ref"><?php echo esc_html( $piece['ref'] ); ?></div>
-					<?php endif; ?>
-					<?php if ( $piece['desc'] ) : ?>
-						<p class="murg-aj-pieza__desc"><?php echo esc_html( $piece['desc'] ); ?></p>
-					<?php endif; ?>
-					<div class="murg-aj-pieza__divider" aria-hidden="true"></div>
-					<div class="murg-aj-pieza__precio-label">Cotización privada</div>
-					<div class="murg-aj-pieza__actions">
-						<?php if ( $aj_whatsapp_clean ) : ?>
-							<a href="<?php echo esc_url( 'https://wa.me/' . $aj_whatsapp_clean . '?text=' . rawurlencode( 'Hola, me interesa la pieza: ' . $piece['name'] . ( $piece['ref'] ? ' (' . $piece['ref'] . ')' : '' ) ) ); ?>" class="murg-btn murg-btn--gold murg-aj-pieza__btn-wa" target="_blank" rel="noopener noreferrer">
-								<span class="murg-whatsapp-dot" aria-hidden="true"></span>
-								Solicitar cotización privada
-							</a>
-						<?php else : ?>
-							<a href="<?php echo esc_url( $aj_cita_url . '?pieza=' . rawurlencode( $piece['name'] ) ); ?>" class="murg-btn murg-btn--gold murg-aj-pieza__btn-wa">Solicitar cotización privada</a>
-						<?php endif; ?>
-					</div>
-				</div>
-			</article>
-		<?php endforeach; ?>
-	<?php else : ?>
-		<div class="murg-aj-empty">
-			<p class="murg-serif" style="font-size: 28px; color: rgba(245,240,232,0.4);">La colección estará disponible pronto.</p>
-			<?php if ( current_user_can( 'edit_theme_options' ) ) : ?>
-				<p style="font-size: 11px; color: rgba(245,240,232,0.3); margin-top: 12px;">[ Admin: agrega productos a la categoría WooCommerce "alta-joyeria" ]</p>
-			<?php endif; ?>
-		</div>
-	<?php endif; ?>
-</section>
-
 <section class="murg-aj-cta-final" data-reveal>
 	<div class="murg-gold-line" aria-hidden="true"></div>
 	<div class="murg-eyebrow murg-aj-cta-final__eyebrow">Experiencia personalizada</div>
@@ -218,6 +162,47 @@ $intro_img = ! empty( $aj_intro_imagen['url'] ) ? $aj_intro_imagen['url'] : $aj_
 		<?php endif; ?>
 	</div>
 	<div class="murg-gold-line" style="margin-top: 56px;" aria-hidden="true"></div>
+</section>
+
+<section class="murg-aj-products" id="aj-piezas">
+	<div class="murg-aj-products__head" data-reveal>
+		<div class="murg-eyebrow">Colección Alta Joyería</div>
+		<h2 class="murg-serif">Piezas disponibles para consulta privada</h2>
+		<p>Una selección de creaciones exclusivas de Murguía. Cada pieza se confirma con un asesor para revisar disponibilidad, detalles de gemas y condiciones de entrega.</p>
+	</div>
+
+	<?php if ( ! empty( $aj_products ) ) : ?>
+		<div class="murg-aj-products__grid">
+			<?php foreach ( $aj_products as $idx => $piece ) : ?>
+				<article class="murg-aj-product" data-reveal>
+					<a class="murg-aj-product__media" href="<?php echo esc_url( $piece['url'] ); ?>" aria-label="<?php echo esc_attr( $piece['name'] ); ?>">
+						<?php if ( $piece['img'] ) : ?>
+							<img src="<?php echo esc_url( $piece['img'] ); ?>" alt="<?php echo esc_attr( $piece['alt'] ); ?>" loading="<?php echo 0 === $idx ? 'eager' : 'lazy'; ?>">
+						<?php endif; ?>
+					</a>
+					<div class="murg-aj-product__body">
+						<h3 class="murg-aj-product__name"><?php echo esc_html( $piece['name'] ); ?></h3>
+						<?php if ( $piece['desc'] ) : ?>
+							<p class="murg-aj-product__desc"><?php echo esc_html( wp_trim_words( $piece['desc'], 24, '...' ) ); ?></p>
+						<?php endif; ?>
+						<div class="murg-aj-product__meta">Cotización privada</div>
+						<?php if ( $aj_whatsapp_clean ) : ?>
+							<a href="<?php echo esc_url( 'https://wa.me/' . $aj_whatsapp_clean . '?text=' . rawurlencode( 'Hola, me interesa la pieza: ' . $piece['name'] . ( $piece['ref'] ? ' (' . $piece['ref'] . ')' : '' ) ) ); ?>" class="murg-aj-product__link" target="_blank" rel="noopener noreferrer">
+								Solicitar información
+							</a>
+						<?php endif; ?>
+					</div>
+				</article>
+			<?php endforeach; ?>
+		</div>
+	<?php else : ?>
+		<div class="murg-aj-empty">
+			<p class="murg-serif" style="font-size: 28px; color: rgba(245,240,232,0.4);">La colección estará disponible pronto.</p>
+			<?php if ( current_user_can( 'edit_theme_options' ) ) : ?>
+				<p style="font-size: 11px; color: rgba(245,240,232,0.3); margin-top: 12px;">[ Admin: agrega productos a la categoría WooCommerce "alta-joyeria" ]</p>
+			<?php endif; ?>
+		</div>
+	<?php endif; ?>
 </section>
 
 <?php get_template_part( 'template-parts/murg-footer' ); ?>
