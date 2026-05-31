@@ -1300,6 +1300,8 @@
 			'.murg-design-flow__cta',
 			'.murg-ring-builder__step',
 			'.murg-aj-piezas__intro',
+			'.murg-aj-private__media',
+			'.murg-aj-private__copy',
 			'.murg-aj-pieza',
 			// .murg-product excluido — está dentro de .murg-bestsellers (data-reveal-block)
 		];
