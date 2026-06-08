@@ -204,7 +204,7 @@ if ( empty( $compromiso_logos ) && function_exists( 'have_rows' ) && have_rows( 
 	}
 }
 ?>
-<section class="murg-compromiso" data-reveal aria-label="<?php echo esc_attr( $compromiso_titulo ); ?>">
+<section class="murg-compromiso" aria-label="<?php echo esc_attr( $compromiso_titulo ); ?>">
 	<div class="murg-compromiso__inner">
 
 		<!-- LEFT: imagen -->

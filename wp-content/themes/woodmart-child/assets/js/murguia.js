@@ -1289,6 +1289,8 @@
 			'.murg-4cs-section',
 			'.murg-4cs-scale',
 			'.murg-4cs-cta',
+			'.murg-compromiso__visual',
+			'.murg-compromiso__content',
 			'.murg-ac-diamond-grid',
 			'.murg-ac-engagement__media',
 			'.murg-ac-engagement__copy',
