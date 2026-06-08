@@ -5814,6 +5814,115 @@ button.murg-piezas__tab:hover {
 }
 
 /* ============================================================
+   02 ANILLOS DE COMPROMISO — split layout (Figma: Cinzel + Inter)
+   Reemplaza secciones antiguas murg-diamonds + murg-novios
+   ============================================================ */
+.murg-compromiso {
+  background: var(--murg-parchment);
+  padding: clamp(72px, 5vw, 100px) clamp(24px, 3.59vw, 62px);
+}
+.murg-compromiso__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(40px, 4vw, 80px);
+  max-width: 1389px;
+  margin: 0 auto;
+  align-items: center;
+}
+.murg-compromiso__visual {
+  overflow: hidden;
+}
+.murg-compromiso__img {
+  width: 100%;
+  height: 100%;
+  min-height: clamp(380px, 40vw, 692px);
+  object-fit: cover;
+  display: block;
+}
+.murg-compromiso__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: clamp(18px, 1.6vw, 28px);
+  padding: clamp(24px, 2.5vw, 48px) 0;
+}
+.murg-compromiso__title {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 2.08vw, 36px);
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--murg-forest);
+  line-height: 1.15;
+}
+.murg-compromiso__desc {
+  font-family: var(--font-body);
+  font-size: clamp(15px, 1.15vw, 20px);
+  font-weight: 400;
+  color: #474747;
+  line-height: 1.55;
+  max-width: 540px;
+}
+.murg-compromiso__cert-label {
+  font-family: var(--font-body);
+  font-size: clamp(14px, 1.1vw, 20px);
+  font-weight: 400;
+  color: #9d9898;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+.murg-compromiso__logos {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: clamp(14px, 1.5vw, 24px);
+  align-items: center;
+}
+.murg-compromiso__logos img {
+  max-height: clamp(40px, 4vw, 70px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+.murg-compromiso__cta {
+  min-width: 220px;
+  height: clamp(52px, 4.05vw, 70px);
+  padding: 0 clamp(24px, 2.5vw, 44px);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(13px, 0.93vw, 16px);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin-top: clamp(4px, 0.5vw, 8px);
+}
+
+/* — Tablet — */
+@media (max-width: 1024px) {
+  .murg-compromiso__inner { gap: 32px; }
+  .murg-compromiso__img { min-height: 420px; }
+}
+/* — Mobile — */
+@media (max-width: 768px) {
+  .murg-compromiso { padding: 48px 20px; }
+  .murg-compromiso__inner {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .murg-compromiso__visual { order: 1; }
+  .murg-compromiso__content { order: 2; align-items: center; text-align: center; }
+  .murg-compromiso__img { min-height: 320px; }
+  .murg-compromiso__logos { justify-content: center; flex-wrap: wrap; gap: 16px; }
+  .murg-compromiso__desc { max-width: 100%; }
+}
+@media (max-width: 480px) {
+  .murg-compromiso { padding: 40px 16px; }
+  .murg-compromiso__img { min-height: 260px; }
+  .murg-compromiso__content { gap: 16px; }
+  .murg-compromiso__cta { width: 100%; min-width: unset; height: 52px; }
+}
+
+/* ============================================================
    NAV STICKY - compact state after scroll
    ============================================================ */
 .murg-nav,

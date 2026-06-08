@@ -173,131 +173,75 @@ if ( empty( $hero_slides ) ) {
 </section>
 
 <!-- ============================================================
-     02 ANILLOS DE COMPROMISO — formas de diamante
+     02 ANILLOS DE COMPROMISO — imagen + texto + certificaciones
+     (Fusiona antiguas secciones 02 Diamonds y 03 Novios)
      ============================================================ -->
 <?php
-$diamond_titulo = murg_f( 'hp_diamond_titulo', 'Anillos de compromiso' );
-$diamond_sub    = murg_f( 'hp_diamond_sub',    'forjada a mano por orfebres' );
+$compromiso_titulo   = murg_f( 'hp_compromiso_titulo', 'Anillos de compromiso' );
+$compromiso_desc     = murg_f( 'hp_compromiso_desc', 'Cada anillo de compromiso cuenta una historia única. Nuestros diamantes certificados internacionalmente garantizan la máxima calidad y autenticidad en cada pieza que creamos para ti.' );
+$compromiso_cert_lbl = murg_f( 'hp_compromiso_cert_label', 'Certificados internacionales' );
+$compromiso_cta_txt  = murg_f( 'hp_compromiso_cta_texto', 'Ver Colección' );
+$compromiso_cta_url  = murg_f( 'hp_compromiso_cta_url', home_url( '/anillos-compromiso/' ) );
+$compromiso_imagen   = murg_f( 'hp_compromiso_imagen', [] );
+$compromiso_img_url  = ! empty( $compromiso_imagen['url'] ) ? $compromiso_imagen['url'] : $img_upload . 'novios.jpg';
 
-$diamond_shapes = [
-	[ 'slug' => 'oval',               'ext' => 'webp', 'label' => 'Oval',              'filter' => 'oval' ],
-	[ 'slug' => 'round',              'ext' => 'webp', 'label' => 'Round',             'filter' => 'redondo' ],
-	[ 'slug' => 'emerald',            'ext' => 'webp', 'label' => 'Emerald',           'filter' => 'esmeralda' ],
-	[ 'slug' => 'marquise',           'ext' => 'webp', 'label' => 'Marquise',          'filter' => 'marquesa' ],
-	[ 'slug' => 'radiant',            'ext' => 'webp', 'label' => 'Radiant',           'filter' => 'radiante' ],
-	[ 'slug' => 'pear',               'ext' => 'webp', 'label' => 'Pear',              'filter' => 'pera' ],
-	[ 'slug' => 'elongated-cushion',  'ext' => 'webp', 'label' => 'Elongated Cushion', 'filter' => 'cojin' ],
-	[ 'slug' => 'cushion',            'ext' => 'webp', 'label' => 'Cushion',           'filter' => 'cojin' ],
-	[ 'slug' => 'princess',           'ext' => 'webp', 'label' => 'Princess',          'filter' => 'princesa' ],
-	[ 'slug' => 'asscher',            'ext' => 'webp', 'label' => 'Asscher',           'filter' => 'asscher' ],
-];
-$shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
-?>
-<section class="murg-diamonds" aria-label="<?php echo esc_attr( $diamond_titulo ); ?>">
-
-	<header class="murg-diamonds__header">
-		<h2 class="murg-diamonds__title"><?php echo esc_html( $diamond_titulo ); ?></h2>
-		<p class="murg-diamonds__sub"><?php echo esc_html( $diamond_sub ); ?></p>
-	</header>
-
-	<div class="murg-diamonds__inner">
-
-		<!-- LEFT: ring photo -->
-		<div class="murg-diamonds__visual">
-			<div class="murg-diamonds__ring-wrap">
-				<?php foreach ( $diamond_shapes as $idx => $shape ) : ?>
-				<img class="murg-diamonds__ring-img<?php echo $idx === 0 ? ' is-active' : ''; ?>"
-				     src="<?php echo esc_url( $img_upload . 'ring-' . $shape['slug'] . '.' . $shape['ext'] ); ?>"
-				     alt="<?php echo esc_attr( $shape['label'] ); ?>"
-				     loading="<?php echo $idx === 0 ? 'eager' : 'lazy'; ?>"
-				     data-shape="<?php echo esc_attr( $shape['slug'] ); ?>">
-				<?php endforeach; ?>
-			</div>
-			<p class="murg-diamonds__active-label"><?php echo esc_html( $diamond_shapes[0]['label'] ); ?></p>
-		</div>
-
-		<!-- Divider -->
-		<div class="murg-diamonds__divider" aria-hidden="true"></div>
-
-		<!-- RIGHT: grid -->
-		<div class="murg-diamonds__selector">
-			<div class="murg-diamonds__grid">
-				<?php foreach ( $diamond_shapes as $idx => $shape ) :
-					$icon_file = 'assets/img/diamond-shapes/' . $shape['slug'] . '_new.png';
-					$icon_path = get_stylesheet_directory() . '/' . $icon_file;
-					$icon_url  = get_stylesheet_directory_uri() . '/' . $icon_file;
-					if ( file_exists( $icon_path ) ) {
-						$icon_url = add_query_arg( 'v', filemtime( $icon_path ), $icon_url );
-					}
-				?>
-				<a href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso&forma=' . $shape['filter'] ) ); ?>"
-				   class="murg-diamonds__shape<?php echo $idx === 0 ? ' is-active' : ''; ?>"
-				   data-shape="<?php echo esc_attr( $shape['slug'] ); ?>"
-				   data-label="<?php echo esc_attr( $shape['label'] ); ?>">
-					<img src="<?php echo esc_url( $icon_url ); ?>"
-					     alt="<?php echo esc_attr( $shape['label'] ); ?>"
-					     loading="lazy">
-					<span><?php echo esc_html( $shape['label'] ); ?></span>
-				</a>
-				<?php endforeach; ?>
-			</div>
-		</div>
-
-	</div>
-</section>
-
-<!-- ============================================================
-     03 NOVIOS — imagen + texto + logos marcas
-     ============================================================ -->
-<?php
-$novios_titulo  = murg_f( 'hp_novios_titulo', 'Anillos de compromiso' );
-$novios_sub     = murg_f( 'hp_novios_sub',    'Aros de Matrimonio / Anillos de Promesa' );
-$novios_cta_txt = murg_f( 'hp_novios_cta_texto', 'Conoce Las 4Cs' );
-$novios_cta_url = murg_f( 'hp_novios_cta_url', home_url( '/las-4cs/' ) );
-$novios_imagen  = murg_f( 'hp_novios_imagen', [] );
-$novios_img_url = ! empty( $novios_imagen['url'] ) ? $novios_imagen['url'] : $img_upload .'novios.jpg';
-
-$novios_logos = [];
-if ( function_exists( 'have_rows' ) && have_rows( 'hp_novios_logos', murguia_ajuste_id() ) ) {
+$compromiso_logos = [];
+if ( function_exists( 'have_rows' ) && have_rows( 'hp_compromiso_logos', murguia_ajuste_id() ) ) {
+	while ( have_rows( 'hp_compromiso_logos', murguia_ajuste_id() ) ) {
+		the_row();
+		$compromiso_logos[] = [
+			'imagen' => get_sub_field( 'imagen' ),
+		];
+	}
+}
+/* Fallback: reutilizar logos de hp_novios_logos si el nuevo repeater está vacío */
+if ( empty( $compromiso_logos ) && function_exists( 'have_rows' ) && have_rows( 'hp_novios_logos', murguia_ajuste_id() ) ) {
 	while ( have_rows( 'hp_novios_logos', murguia_ajuste_id() ) ) {
 		the_row();
-		$novios_logos[] = [
+		$compromiso_logos[] = [
 			'imagen' => get_sub_field( 'imagen' ),
 		];
 	}
 }
 ?>
-<section class="murg-novios" aria-label="<?php echo esc_attr( $novios_titulo ); ?>">
+<section class="murg-compromiso" data-reveal aria-label="<?php echo esc_attr( $compromiso_titulo ); ?>">
+	<div class="murg-compromiso__inner">
 
-	<div class="murg-novios__panel">
-		<img src="<?php echo esc_url( $novios_img_url ); ?>"
-		     alt="<?php echo esc_attr( $novios_titulo ); ?>"
-		     loading="lazy"
-		     class="murg-novios__img">
+		<!-- LEFT: imagen -->
+		<div class="murg-compromiso__visual">
+			<img src="<?php echo esc_url( $compromiso_img_url ); ?>"
+			     alt="<?php echo esc_attr( $compromiso_titulo ); ?>"
+			     loading="lazy"
+			     class="murg-compromiso__img">
+		</div>
 
-		<div class="murg-novios__content">
-			<h2 class="murg-novios__title"><?php echo esc_html( $novios_titulo ); ?></h2>
-			<p class="murg-novios__sub"><?php echo esc_html( $novios_sub ); ?></p>
+		<!-- RIGHT: contenido -->
+		<div class="murg-compromiso__content">
+			<h2 class="murg-compromiso__title"><?php echo esc_html( $compromiso_titulo ); ?></h2>
 
-			<a href="<?php echo esc_url( $novios_cta_url ); ?>"
-			   class="murg-btn murg-btn--dark" style="text-transform:none">
-				<?php echo esc_html( $novios_cta_txt ); ?>
-			</a>
+			<p class="murg-compromiso__desc"><?php echo esc_html( $compromiso_desc ); ?></p>
 
-			<?php if ( ! empty( $novios_logos ) ) : ?>
-			<div class="murg-novios__logos" aria-label="Certificaciones">
-				<?php foreach ( $novios_logos as $logo ) :
+			<p class="murg-compromiso__cert-label"><?php echo esc_html( $compromiso_cert_lbl ); ?></p>
+
+			<?php if ( ! empty( $compromiso_logos ) ) : ?>
+			<div class="murg-compromiso__logos" aria-label="Certificaciones">
+				<?php foreach ( $compromiso_logos as $logo ) :
 					if ( empty( $logo['imagen']['url'] ) ) continue;
 				?>
-					<img src="<?php echo esc_url( $logo['imagen']['url'] ); ?>"
-					     alt="<?php echo esc_attr( $logo['imagen']['alt'] ?? '' ); ?>"
-					     loading="lazy">
+				<img src="<?php echo esc_url( $logo['imagen']['url'] ); ?>"
+				     alt="<?php echo esc_attr( $logo['imagen']['alt'] ?? '' ); ?>"
+				     loading="lazy">
 				<?php endforeach; ?>
 			</div>
 			<?php endif; ?>
-		</div>
-	</div>
 
+			<a href="<?php echo esc_url( $compromiso_cta_url ); ?>"
+			   class="murg-btn murg-btn--dark murg-compromiso__cta">
+				<?php echo esc_html( $compromiso_cta_txt ); ?>
+			</a>
+		</div>
+
+	</div>
 </section>
 
 <!-- ============================================================
@@ -305,7 +249,7 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_novios_logos', murguia_aju
      ============================================================ -->
 <?php
 $icon_strip_items = [
-	[ 'slug' => 'diamate', 'label' => 'Diamantes', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso' ) ],
+	[ 'slug' => 'diamante', 'label' => 'Diamantes', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso' ) ],
 	[ 'slug' => 'pulsera',  'label' => 'Pulseras',  'url' => home_url( '/shop/?product_cat=pulseras' ) ],
 	[ 'slug' => 'anillo',   'label' => 'Anillos',   'url' => home_url( '/shop/?product_cat=anillos' ) ],
 	[ 'slug' => 'arete',    'label' => 'Aretes',    'url' => home_url( '/shop/?product_cat=aretes' ) ],
