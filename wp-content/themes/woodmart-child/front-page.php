@@ -183,7 +183,7 @@ $compromiso_cert_lbl = murg_f( 'hp_compromiso_cert_label', 'Certificados interna
 $compromiso_cta_txt  = murg_f( 'hp_compromiso_cta_texto', 'Ver Colección' );
 $compromiso_cta_url  = murg_f( 'hp_compromiso_cta_url', home_url( '/anillos-compromiso/' ) );
 $compromiso_imagen   = murg_f( 'hp_compromiso_imagen', [] );
-$compromiso_img_url  = ! empty( $compromiso_imagen['url'] ) ? $compromiso_imagen['url'] : $img_upload . 'novios.jpg';
+$compromiso_img_url  = ! empty( $compromiso_imagen['url'] ) ? $compromiso_imagen['url'] : $img_upload . 'compromiso-home.webp';
 
 $compromiso_logos = [];
 if ( function_exists( 'have_rows' ) && have_rows( 'hp_compromiso_logos', murguia_ajuste_id() ) ) {
