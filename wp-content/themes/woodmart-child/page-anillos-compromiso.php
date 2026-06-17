@@ -96,12 +96,13 @@ $diamond_shapes = [
 	[ 'slug' => 'asscher',           'ext' => 'webp', 'label' => 'Asscher' ],
 ];
 $shapes_dir = get_stylesheet_directory_uri() . '/assets/img/diamond-shapes/';
+$_shop_url  = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_page_id( 'shop' ) ) : home_url( '/shop/' );
 
 $prod_title = murg_ac( 'ac_productos_titulo', 'Anillos de compromiso destacados' );
 $prod_sub   = murg_ac( 'ac_productos_sub', 'Seleccionamos piezas listas para acompanar una propuesta inolvidable.' );
 $prod_qty   = max( 9, min( 12, (int) murg_ac( 'ac_productos_cantidad', 9 ) ) );
 $prod_cta_t = murg_ac( 'ac_productos_cta_texto', 'Ver tienda completa' );
-$prod_cta_u = murg_ac( 'ac_productos_cta_url', home_url( '/shop/?product_cat=anillos-de-compromiso' ) );
+$prod_cta_u = murg_ac( 'ac_productos_cta_url', add_query_arg( 'product_cat', 'anillos-de-compromiso', $_shop_url ) );
 
 $prod_cat = murg_ac( 'ac_productos_categoria', 0 );
 $prod_cat_slug = 'anillos-de-compromiso';
@@ -136,10 +137,10 @@ $ring_tabs = [
 $style_items = murg_ac( 'ac_estilos_items', [] );
 if ( empty( $style_items ) || ! is_array( $style_items ) ) {
 	$style_items = [
-		[ 'titulo' => 'Solitario', 'texto' => 'Un diamante protagonista, limpio y atemporal.', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=solitario' ) ],
-		[ 'titulo' => 'Halo', 'texto' => 'Un centro rodeado de brillo para mayor presencia.', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=halo' ) ],
-		[ 'titulo' => 'Pave', 'texto' => 'Diamantes pequenos en el aro para una luz continua.', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=pave' ) ],
-		[ 'titulo' => 'Tres piedras', 'texto' => 'Pasado, presente y futuro en una misma pieza.', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso&estilo=tres-piedras' ) ],
+		[ 'titulo' => 'Solitario', 'texto' => 'Un diamante protagonista, limpio y atemporal.', 'url' => add_query_arg( [ 'product_cat' => 'anillos-de-compromiso', 'estilo' => 'solitario' ], $_shop_url ) ],
+		[ 'titulo' => 'Halo', 'texto' => 'Un centro rodeado de brillo para mayor presencia.', 'url' => add_query_arg( [ 'product_cat' => 'anillos-de-compromiso', 'estilo' => 'halo' ], $_shop_url ) ],
+		[ 'titulo' => 'Pave', 'texto' => 'Diamantes pequenos en el aro para una luz continua.', 'url' => add_query_arg( [ 'product_cat' => 'anillos-de-compromiso', 'estilo' => 'pave' ], $_shop_url ) ],
+		[ 'titulo' => 'Tres piedras', 'texto' => 'Pasado, presente y futuro en una misma pieza.', 'url' => add_query_arg( [ 'product_cat' => 'anillos-de-compromiso', 'estilo' => 'tres-piedras' ], $_shop_url ) ],
 		[ 'titulo' => 'A medida', 'texto' => 'Disenamos contigo una joya irrepetible.', 'url' => home_url( '/contacto/' ) ],
 	];
 }
@@ -227,7 +228,7 @@ $nl_form  = function_exists( 'murguia_newsletter_form_config' ) ? murguia_newsle
 		<div class="murg-ac-style-grid murg-ac-engagement__styles">
 			<?php foreach ( array_slice( $style_items, 0, 5 ) as $item ) :
 				$item_img = $item['imagen'] ?? [];
-				$item_url = $item['url'] ?? home_url( '/shop/?product_cat=anillos-de-compromiso' );
+				$item_url = $item['url'] ?? add_query_arg( 'product_cat', 'anillos-de-compromiso', $_shop_url );
 			?>
 			<a class="murg-ac-style" href="<?php echo esc_url( $item_url ); ?>" data-reveal>
 				<?php if ( murg_ac_img_url( $item_img ) ) : ?>
@@ -250,8 +251,21 @@ $nl_form  = function_exists( 'murguia_newsletter_form_config' ) ? murguia_newsle
 		<div class="murg-ac-diamond-grid" data-reveal>
 			<?php foreach ( $diamond_shapes as $shape ) :
 				$shape_src = $shapes_dir . $shape['slug'] . '_new.png';
+				$db_slug = $shape['slug'];
+				if ( $shape['slug'] === 'round' ) {
+					$db_slug = 'redondo';
+				} elseif ( in_array( $shape['slug'], [ 'princess', 'cushion', 'elongated-cushion' ] ) ) {
+					$db_slug = 'cuadrado';
+				} elseif ( in_array( $shape['slug'], [ 'emerald', 'asscher', 'radiant' ] ) ) {
+					$db_slug = 'rectangular';
+				} elseif ( $shape['slug'] === 'pear' ) {
+					$db_slug = 'gota';
+				} elseif ( $shape['slug'] === 'marquise' ) {
+					$db_slug = 'oval'; // Fallback
+				}
+				$target_url = add_query_arg( [ 'product_cat' => 'anillos-de-compromiso', 'forma' => $db_slug ], $_shop_url );
 			?>
-			<a class="murg-ac-diamond" href="<?php echo esc_url( home_url( '/shop/?product_cat=anillos-de-compromiso&forma=' . $shape['slug'] ) ); ?>">
+			<a class="murg-ac-diamond" href="<?php echo esc_url( $target_url ); ?>">
 				<div class="murg-ac-diamond__img">
 					<img src="<?php echo esc_url( $shape_src ); ?>"
 					     alt="<?php echo esc_attr( $shape['label'] ); ?>"

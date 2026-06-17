@@ -61,9 +61,21 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajust
 				<li><a href="<?php echo esc_url( home_url( '/politica-de-cookies/' ) ); ?>">Política de cookies</a></li>
 				<li><a href="<?php echo esc_url( home_url( '/terminos-y-condiciones/' ) ); ?>">Términos y condiciones</a></li>
 				<li><a href="<?php echo esc_url( home_url( '/recojos-y-envios/' ) ); ?>">Recojos y envíos</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/libro-de-reclamaciones/' ) ); ?>">Libro de reclamaciones</a></li>
+				<li class="murg-footer__reclamos-li" style="margin: 14px 0 6px;">
+					<a href="<?php echo esc_url( home_url( '/libro-de-reclamaciones/' ) ); ?>" style="display: inline-block;" aria-label="Libro de reclamaciones">
+						<svg width="150" height="42" viewBox="0 0 180 50" fill="none" style="display: block;">
+							<rect width="180" height="50" rx="4" fill="#0c2340" stroke="#C9A84C" stroke-width="1.5"/>
+							<g transform="translate(12, 13)" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+								<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" fill="#C9A84C"/>
+								<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" fill="#C9A84C"/>
+							</g>
+							<text x="46" y="21" fill="white" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="1">LIBRO DE</text>
+							<text x="46" y="34" fill="white" font-family="'Inter', sans-serif" font-size="11" font-weight="800" letter-spacing="0.5">RECLAMACIONES</text>
+							<text x="46" y="43" fill="#C9A84C" font-family="'Inter', sans-serif" font-size="7" font-weight="700" letter-spacing="0.5">VIRTUAL</text>
+						</svg>
+					</a>
+				</li>
 				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Contacte con nosotros</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a></li>
 			</ul>
 		</div>
 

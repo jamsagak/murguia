@@ -119,9 +119,10 @@ $_marca_links = [
 			[ 'label' => 'Anillos de Compromiso', 'url' => home_url( '/anillos-compromiso/' ), 'drop' => false ],
 			[ 'label' => 'Aros de Matrimonio',    'url' => home_url( '/aros-matrimonio/' ), 'drop' => false ],
 			[ 'label' => 'Catálogo',              'url' => $_shop_url,                          'drop' => $_cat_links ],
-			[ 'label' => 'Marcas',                'url' => home_url( '/shop/?product_cat=marcas' ), 'drop' => $_marca_links ],
+	
+		[ 'label' => 'Marcas',                'url' => home_url( '/shop/?product_cat=marcas' ), 'drop' => $_marca_links ],
 			[ 'label' => 'Alta Joyería',          'url' => home_url( '/alta-joyeria/' ), 'drop' => false ],
-		];
+	];
 		foreach ( $_nav_items as $_item ) :
 			$_is_active = ( rtrim( $_current_url, '/' ) === rtrim( $_item['url'], '/' ) );
 			$_active_class = $_is_active ? ' is-active' : '';
@@ -166,13 +167,10 @@ $_marca_links = [
 			</div>
 			<a href="<?php echo esc_url( home_url( '/aros-matrimonio/' ) ); ?>">Aros de matrimonio</a>
 			<a href="<?php echo esc_url( $_shop_url ); ?>">Catálogo</a>
-			<a href="<?php echo esc_url( home_url( '/shop/?product_cat=marcas' ) ); ?>">Marcas</a>
 			<a href="<?php echo esc_url( home_url( '/alta-joyeria/' ) ); ?>">Alta Joyería</a>
 			<a href="<?php echo esc_url( home_url( '/nosotros/' ) ); ?>">Nosotros</a>
 			<a href="<?php echo esc_url( home_url( '/tiendas/' ) ); ?>">Tiendas</a>
 			<a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Contacto</a>
-			<a href="<?php echo esc_url( home_url( '/libro-de-reclamaciones/' ) ); ?>">Libro de reclamaciones</a>
-			<a href="<?php echo esc_url( home_url( '/blog/' ) ); ?>">Blog</a>
 		</nav>
 	</div>
 </div>

@@ -41,7 +41,7 @@ URL referencia: https://joyeriamurguia.com
 - [x] Tienda — archive-product.php · slug: tienda · field prefix: sh_
 - [x] Producto — single-product.php · slug: producto · field prefix: prod_
 - [x] Contacto — page-contact.php (Template Name: Contacto) · slug: contacto · field prefix: ct_
-- [ ] Sobre Nosotros — page-about.php · slug: nosotros · field prefix: ab_
+- [x] Sobre Nosotros — page-nosotros.php · slug: nosotros · field prefix: ab_
 
 ### Protocolo cuando se actualiza un diseño
 Cuando el usuario suba un nuevo zip de Claude Design para una página:

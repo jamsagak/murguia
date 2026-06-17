@@ -44,6 +44,7 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_hero_slides', murguia_ajus
 		the_row();
 		$tipo       = get_sub_field( 'tipo' ) ?: 'imagen';
 		$img        = get_sub_field( 'imagen' );
+		$img_mobile = get_sub_field( 'imagen_mobile' );
 		$video_url  = trim( (string) get_sub_field( 'video_url' ) );
 		$vid_inicio = (int) ( get_sub_field( 'video_inicio' ) ?: 0 );
 		$vid_fin    = (int) ( get_sub_field( 'video_fin' ) ?: 15 );
@@ -72,6 +73,7 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_hero_slides', murguia_ajus
 		$hero_slides[] = [
 			'tipo'        => $tipo,
 			'url'         => ! empty( $img['url'] ) ? $img['url'] : $img_upload . 'hero.jpg',
+			'url_mobile'  => ! empty( $img_mobile['url'] ) ? $img_mobile['url'] : '',
 			'alt'         => $img['alt'] ?? 'Joyería Murguía',
 			'video_embed' => $video_embed,
 			'video_mp4'   => $video_mp4,
@@ -90,6 +92,7 @@ if ( empty( $hero_slides ) ) {
 	$hero_slides[] = [
 		'tipo'        => 'imagen',
 		'url'         => $img_upload . 'hero.jpg',
+		'url_mobile'  => '',
 		'alt'         => 'Joyeria Murguia',
 		'video_embed' => '', 'video_mp4' => '', 'video_inicio' => 0, 'video_fin' => 15,
 		'intervalo'   => 5000,
@@ -128,10 +131,16 @@ if ( empty( $hero_slides ) ) {
 			       data-inicio="<?php echo (int) $slide['video_inicio']; ?>"
 			       data-fin="<?php echo (int) $slide['video_fin']; ?>"></video>
 			<?php else : ?>
-			<img class="murg-hero__img"
-			     src="<?php echo esc_url( $slide['url'] ); ?>"
-			     alt="<?php echo esc_attr( $slide['alt'] ); ?>"
-			     <?php echo $idx > 0 ? 'loading="lazy"' : 'loading="eager"'; ?>>
+			<picture>
+				<?php if ( ! empty( $slide['url_mobile'] ) ) : ?>
+				<source media="(max-width: 768px)"
+				        srcset="<?php echo esc_url( $slide['url_mobile'] ); ?>">
+				<?php endif; ?>
+				<img class="murg-hero__img"
+				     src="<?php echo esc_url( $slide['url'] ); ?>"
+				     alt="<?php echo esc_attr( $slide['alt'] ); ?>"
+				     <?php echo $idx > 0 ? 'loading="lazy"' : 'loading="eager"'; ?>>
+			</picture>
 			<?php endif; ?>
 		</div>
 		<div class="murg-hero__vignette"></div>
@@ -249,10 +258,9 @@ if ( empty( $compromiso_logos ) && function_exists( 'have_rows' ) && have_rows( 
      ============================================================ -->
 <?php
 $icon_strip_items = [
-	[ 'slug' => 'diamante', 'label' => 'Diamantes', 'url' => home_url( '/shop/?product_cat=anillos-de-compromiso' ) ],
 	[ 'slug' => 'pulsera',  'label' => 'Pulseras',  'url' => home_url( '/shop/?product_cat=pulseras' ) ],
-	[ 'slug' => 'anillo',   'label' => 'Anillos',   'url' => home_url( '/shop/?product_cat=anillos' ) ],
 	[ 'slug' => 'arete',    'label' => 'Aretes',    'url' => home_url( '/shop/?product_cat=aretes' ) ],
+	[ 'slug' => 'anillo',   'label' => 'Anillos',   'url' => home_url( '/shop/?product_cat=anillos' ) ],
 	[ 'slug' => 'collar',   'label' => 'Collares',  'url' => home_url( '/shop/?product_cat=collares-y-dijes' ) ],
 	[ 'slug' => 'hogar',    'label' => 'Hogar',     'url' => home_url( '/hogar/' ) ],
 ];

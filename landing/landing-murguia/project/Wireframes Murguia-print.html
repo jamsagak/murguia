@@ -1,0 +1,1413 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1440" />
+<title>Wireframes — Casa Murguía · Landing premium</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Architects+Daughter&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4ede0;
+    --paper-2: #ebe2d1;
+    --ink: #1c1c1c;
+    --ink-2: #3a3a3a;
+    --muted: #8a8275;
+    --gold: #a88a5c;
+    --rust: #b25030;
+    --rule: rgba(28,28,28,.55);
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink); }
+  body {
+    font-family: 'Inter', sans-serif;
+    background-image:
+      radial-gradient(circle at 12% 8%, rgba(28,28,28,.025) 0, transparent 60%),
+      radial-gradient(circle at 88% 92%, rgba(168,138,92,.05) 0, transparent 55%);
+  }
+
+  /* ── App chrome ───────────────────────────────────── */
+  .app-bar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(244,237,224,.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--rule);
+    padding: 14px 36px;
+    display: flex; align-items: center; gap: 28px;
+  }
+  .app-bar .brand {
+    font-family: 'Caveat', cursive; font-size: 22px; font-weight: 600;
+    letter-spacing: .02em;
+  }
+  .app-bar .brand small { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); margin-left: 10px; letter-spacing: .12em; text-transform: uppercase;}
+  .tabs { display: flex; gap: 8px; margin-left: auto; }
+  .tab {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 14px; padding: 9px 18px;
+    border: 1.5px solid var(--ink); background: transparent;
+    cursor: pointer; color: var(--ink); border-radius: 2px;
+    transition: all .15s ease;
+  }
+  .tab.active { background: var(--ink); color: var(--paper); }
+  .tab:hover:not(.active) { background: rgba(28,28,28,.08); }
+  .meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: .08em;
+  }
+
+  /* ── Direction container ──────────────────────────── */
+  .direction { display: block; padding: 48px 0 120px; }
+  .direction + .direction { border-top: 2px dashed rgba(28,28,28,.4); margin-top: 48px; padding-top: 80px; }
+  .app-bar .tabs { display: none; }
+
+  .direction-head {
+    max-width: 1280px; margin: 0 auto 56px; padding: 0 36px;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+    align-items: end;
+  }
+  .direction-head h1 {
+    font-family: 'Caveat', cursive; font-weight: 600;
+    font-size: 56px; line-height: 1; margin: 0 0 8px;
+  }
+  .direction-head .kicker {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: .18em; text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .direction-head p {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 17px; line-height: 1.55; color: var(--ink-2); margin: 0;
+  }
+  .direction-head .pillars {
+    display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;
+  }
+  .pill {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    border: 1px dashed var(--ink); padding: 5px 10px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--ink-2);
+  }
+
+  /* ── Section row: wireframe + annotation rail ─────── */
+  .row {
+    max-width: 1280px; margin: 0 auto 72px; padding: 0 36px;
+    display: grid; grid-template-columns: 820px 1fr; gap: 56px;
+    align-items: start;
+  }
+  .wire {
+    background: #fbf7ec;
+    border: 1.5px solid var(--ink);
+    box-shadow: 4px 4px 0 rgba(28,28,28,.08);
+    position: relative;
+    overflow: hidden;
+  }
+  .wire .browser-bar {
+    height: 22px; border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; gap: 6px; padding: 0 10px;
+    background: var(--paper-2);
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--muted);
+  }
+  .wire .browser-bar .dots { display:flex; gap: 5px;}
+  .wire .browser-bar .dots i { width:7px; height:7px; border:1px solid var(--ink); border-radius: 50%; display:block;}
+  .wire .browser-bar .url { margin-left: 16px; letter-spacing: .06em; }
+
+  .annot {
+    padding-top: 26px;
+    position: relative;
+  }
+  .annot .section-tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+    margin-bottom: 6px; display: flex; align-items: center; gap: 8px;
+  }
+  .annot .section-tag .num {
+    width: 22px; height: 22px; border: 1.5px solid var(--ink);
+    border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Caveat', cursive; font-size: 16px; color: var(--ink);
+    background: var(--paper);
+  }
+  .annot h3 {
+    font-family: 'Caveat', cursive; font-weight: 600;
+    font-size: 32px; line-height: 1.1; margin: 0 0 10px;
+  }
+  .annot .why {
+    font-family: 'Architects Daughter', cursive;
+    font-size: 15px; line-height: 1.6; color: var(--ink-2); margin: 0 0 14px;
+  }
+  .annot .why b { color: var(--ink); border-bottom: 1.5px solid var(--gold); padding-bottom: 1px;}
+  .annot ul {
+    margin: 0; padding: 0; list-style: none;
+    font-family: 'Inter', sans-serif; font-size: 12.5px; line-height: 1.65;
+    color: var(--ink-2);
+  }
+  .annot ul li {
+    padding-left: 18px; position: relative; margin-bottom: 4px;
+  }
+  .annot ul li::before {
+    content: ""; position: absolute; left: 0; top: 8px;
+    width: 8px; height: 8px; border-left: 1.5px solid var(--ink);
+    border-bottom: 1.5px solid var(--ink); transform: rotate(-45deg);
+  }
+  .annot .ux-note {
+    margin-top: 16px; padding: 10px 14px;
+    border: 1px dashed var(--gold);
+    font-family: 'Architects Daughter', cursive; font-size: 13px;
+    color: var(--ink); line-height: 1.5;
+    background: rgba(168,138,92,.06);
+  }
+  .annot .ux-note::before {
+    content: "UX · ";
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: .15em; color: var(--gold); font-weight: 600;
+  }
+
+  /* ── Wireframe primitives ─────────────────────────── */
+  .ph {
+    background:
+      repeating-linear-gradient(135deg, rgba(28,28,28,.07) 0 1px, transparent 1px 9px),
+      #efe7d4;
+    border: 1.2px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    color: var(--ink-2); letter-spacing: .1em; text-transform: uppercase;
+    text-align: center;
+    position: relative;
+  }
+  .ph::after, .ph::before {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(to top right, transparent calc(50% - .6px), rgba(28,28,28,.5) calc(50% - .6px) calc(50% + .6px), transparent calc(50% + .6px)),
+      linear-gradient(to top left,  transparent calc(50% - .6px), rgba(28,28,28,.5) calc(50% - .6px) calc(50% + .6px), transparent calc(50% + .6px));
+    opacity: .35;
+    pointer-events: none;
+  }
+  .ph::before { content: none; } /* keep only one X */
+  .ph > span { position: relative; z-index: 1; background: #efe7d4; padding: 2px 6px;}
+
+  .lbl {
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--muted);
+  }
+  .head-line {
+    font-family: 'Caveat', cursive; line-height: 1;
+  }
+  .body-line {
+    font-family: 'Architects Daughter', cursive; color: var(--ink-2);
+  }
+
+  .cta {
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Architects Daughter', cursive; font-size: 13px;
+    padding: 11px 22px; letter-spacing: .12em; text-transform: uppercase;
+    cursor: default;
+  }
+  .cta.primary { background: var(--ink); color: var(--paper); border: 1.5px solid var(--ink);}
+  .cta.primary.gold { background: var(--gold); border-color: var(--gold); color: #fff;}
+  .cta.ghost { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+  .cta.link {
+    background: transparent; border: 0;
+    border-bottom: 1.5px solid var(--ink); padding: 4px 0; letter-spacing: .14em;
+  }
+
+  .marker {
+    position: absolute; top: -10px; left: -10px;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--paper); border: 1.5px solid var(--ink);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Caveat', cursive; font-size: 18px; font-weight: 600;
+    z-index: 2;
+  }
+
+  /* Common section frame */
+  .sec {
+    position: relative; padding: 24px;
+  }
+  .sec + .sec { border-top: 1px dashed var(--rule); }
+
+  /* topbar mockup (nav igual al sitio actual) */
+  .nav-mock {
+    display: flex; align-items: center; padding: 16px 28px;
+    border-bottom: 1px solid var(--rule);
+    font-family: 'Architects Daughter', cursive; font-size: 11px;
+    gap: 20px; color: var(--ink-2);
+    background: rgba(28,28,28,.04);
+  }
+  .nav-mock .lang { width: 36px; }
+  .nav-mock .logo {
+    margin: 0 auto;
+    font-family: 'Caveat', cursive; font-size: 22px; font-weight: 600;
+    color: var(--ink); letter-spacing: .04em;
+  }
+  .nav-mock .links { display: flex; gap: 14px; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
+  .nav-mock .icons { display: flex; gap: 10px; }
+  .nav-mock .icons i { width: 14px; height: 14px; border: 1.2px solid var(--ink); display: block; border-radius: 50%; }
+  .nav-mock .icons i.sq { border-radius: 0;}
+  .topbar-strip {
+    background: #2a3528; color: #f4ede0;
+    text-align: center; padding: 6px 0;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: .25em;
+  }
+
+  /* Inline grids */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .g4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+  .g5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+  .gAside { display: grid; grid-template-columns: 1.2fr 1fr; gap: 18px; align-items: center; }
+
+  /* ── Global notes (final card) ────────────────────── */
+  .notes {
+    max-width: 1280px; margin: 80px auto 0; padding: 0 36px;
+  }
+  .notes h2 {
+    font-family: 'Caveat', cursive; font-size: 44px; margin: 0 0 8px; font-weight: 600;
+  }
+  .notes .sub {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: .18em; text-transform: uppercase; margin-bottom: 28px;
+  }
+  .notes-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px;
+  }
+  .card {
+    border: 1.5px solid var(--ink); padding: 22px 22px 24px;
+    background: #fbf7ec;
+    box-shadow: 4px 4px 0 rgba(28,28,28,.08);
+  }
+  .card h4 {
+    font-family: 'Caveat', cursive; font-size: 26px; margin: 0 0 6px; font-weight: 600;
+  }
+  .card .tag {
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    letter-spacing: .15em; color: var(--gold); text-transform: uppercase; margin-bottom: 10px;
+  }
+  .card p, .card li {
+    font-family: 'Architects Daughter', cursive; font-size: 14px;
+    line-height: 1.55; color: var(--ink-2); margin: 0 0 8px;
+  }
+  .card ul { padding-left: 18px; margin: 0; }
+
+  /* Footer of doc */
+  .doc-foot {
+    max-width: 1280px; margin: 80px auto 0; padding: 28px 36px;
+    border-top: 1px solid var(--rule);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--muted); letter-spacing: .1em;
+    display: flex; justify-content: space-between;
+  }
+
+  /* ── PRINT ────────────────────────────────────────── */
+  @page { size: A3 landscape; margin: 12mm; }
+  @media print {
+    html, body {
+      background: #fff !important;
+      background-image: none !important;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .app-bar { display: none !important; }
+    .direction { display: block !important; padding: 0 !important; }
+    .direction + .direction { break-before: page; }
+    .direction-head { break-after: avoid; page-break-after: avoid; margin-bottom: 24px !important; }
+    .row {
+      break-inside: avoid; page-break-inside: avoid;
+      margin-bottom: 28px !important;
+      grid-template-columns: 760px 1fr !important;
+      gap: 36px !important;
+    }
+    .notes { break-before: page; }
+    .notes-grid { break-inside: auto; }
+    .card { break-inside: avoid; page-break-inside: avoid; }
+    .wire { box-shadow: none !important; }
+    .doc-foot { break-before: avoid; }
+  }
+
+  /* Helpers */
+  .stack > * + * { margin-top: 8px;}
+  .center { text-align: center; }
+  .row-mini { display: flex; gap: 8px; flex-wrap: wrap; }
+  .swatch { display: inline-flex; align-items: center; gap: 6px; font-family: 'JetBrains Mono', monospace; font-size: 10px; }
+  .swatch i { width: 14px; height: 14px; border: 1px solid var(--ink); display:inline-block;}
+</style>
+</head>
+<body>
+
+<div class="app-bar">
+  <div class="brand">Casa Murguía <small>WIREFRAMES · LANDING v0.1 · DESKTOP 1440</small></div>
+  <span class="meta">2 direcciones · ES-MX · Lo-fi</span>
+  <div class="tabs" role="tablist">
+    <button class="tab active" data-dir="a" role="tab">Dirección A · Editorial Vertical</button>
+    <button class="tab" data-dir="b" role="tab">Dirección B · Showroom Discovery</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     DIRECCIÓN A · EDITORIAL VERTICAL
+     ════════════════════════════════════════════════════ -->
+<section class="direction active" data-dir="a" data-screen-label="Direccion A">
+
+  <div class="direction-head">
+    <div>
+      <div class="kicker">Dirección A — Premium clásico</div>
+      <h1>Editorial Vertical</h1>
+    </div>
+    <div>
+      <p>Jerarquía apilada, máxima respiración, una decisión por momento. La página se lee como una revista de lujo: cada sección defiende una sola idea con una sola acción. <b>Conversión por claridad</b>, no por fricción.</p>
+      <div class="pillars">
+        <span class="pill">Aire generoso</span>
+        <span class="pill">Una idea por scroll</span>
+        <span class="pill">CTAs jerarquizados</span>
+        <span class="pill">Fotografía protagonista</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 01 HERO -->
+  <div class="row">
+    <div class="wire">
+      <div class="browser-bar"><div class="dots"><i></i><i></i><i></i></div><span class="url">murguia.com / inicio</span></div>
+      <div class="topbar-strip">DIAMANTES CERTIFICADOS · GIA · HRD · IGI</div>
+      <div class="nav-mock">
+        <div class="lang">ES · EN</div>
+        <div class="links"><span>Novios</span><span>Catálogo</span><span>Marcas</span><span>Alta Joyería</span><span>Hogar</span></div>
+        <div class="logo">Murguía</div>
+        <div class="links"><span>Boutiques</span><span>Cita</span></div>
+        <div class="icons"><i></i><i class="sq"></i><i></i></div>
+      </div>
+      <!-- Hero image -->
+      <div class="ph" style="height: 460px; margin: 0; border-left: 0; border-right: 0;">
+        <span>HERO · foto cinematográfica fullbleed · 1920×1080<br/>(modelo · anillo · luz cálida lateral)</span>
+      </div>
+      <div style="padding: 28px 40px 36px; text-align: center;" class="stack">
+        <div class="lbl">Desde 1910</div>
+        <div class="head-line" style="font-size: 38px;">El detalle es nuestra herencia.<br/>Tu historia, nuestro oficio.</div>
+        <div class="body-line" style="font-size: 14px; max-width: 480px; margin: 8px auto 0;">Anillos de compromiso y alta joyería creados a mano en nuestro taller.</div>
+        <div style="margin-top: 18px; display: flex; gap: 14px; justify-content: center;">
+          <span class="cta primary gold">Agendar Asesoría</span>
+          <span class="cta ghost">Explorar Colección</span>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">01</span> Hero</div>
+      <h3>Una sola promesa, dos puertas</h3>
+      <p class="why">El hero hereda la nav del sitio actual <b>sin tocarla</b>. Debajo: foto cinematográfica fullbleed + headline editorial. <b>Dos CTAs jerarquizados</b>: dorado (alta intención · agendar) y outline (baja intención · explorar). No competimos.</p>
+      <ul>
+        <li>Headline en serif (Vesper Libre 56–72px)</li>
+        <li>Sub-claim corto; máximo 14 palabras</li>
+        <li>CTA primario dorado destaca sin saturar</li>
+        <li>Topstrip oscuro con certificaciones = confianza inmediata</li>
+        <li>Sin carousels: una imagen, un mensaje</li>
+      </ul>
+      <div class="ux-note">El hero del sitio actual tiene 5 puntos de bullets visibles. Aquí los suprimimos: cada idea respira mejor en su propia sección. Más impacto, mismo SEO.</div>
+    </div>
+  </div>
+
+  <!-- 02 CATEGORIES -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div class="lbl" style="text-align: center; margin-bottom: 8px;">02 · CATEGORÍAS DESTACADAS</div>
+        <div class="head-line center" style="font-size: 32px; margin-bottom: 4px;">Explora por categoría</div>
+        <div class="body-line center" style="font-size: 13px; margin-bottom: 24px;">Cinco caminos. Una sola firma.</div>
+        <div class="g5">
+          <div>
+            <div class="ph" style="aspect-ratio: 3/4;"><span>Anillos<br/>Compromiso</span></div>
+            <div class="center" style="margin-top: 8px;"><span class="lbl">Anillos · Compromiso</span></div>
+          </div>
+          <div>
+            <div class="ph" style="aspect-ratio: 3/4;"><span>Argollas<br/>Matrimoniales</span></div>
+            <div class="center" style="margin-top: 8px;"><span class="lbl">Argollas</span></div>
+          </div>
+          <div>
+            <div class="ph" style="aspect-ratio: 3/4;"><span>Alta<br/>Joyería</span></div>
+            <div class="center" style="margin-top: 8px;"><span class="lbl">Alta Joyería</span></div>
+          </div>
+          <div>
+            <div class="ph" style="aspect-ratio: 3/4;"><span>Diamantes<br/>Sueltos</span></div>
+            <div class="center" style="margin-top: 8px;"><span class="lbl">Diamantes</span></div>
+          </div>
+          <div>
+            <div class="ph" style="aspect-ratio: 3/4;"><span>Colecciones<br/>Exclusivas</span></div>
+            <div class="center" style="margin-top: 8px;"><span class="lbl">Colecciones</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">02</span> Categorías</div>
+      <h3>Cinco puertas, mismo aire</h3>
+      <p class="why">Grid 5-col con cards verticales 3:4 (proporción editorial). Imagen 100% protagonista, label inferior fina, sin precios ni hover-noise. <b>Cada card es un CTA visual</b>; al hover, la imagen sube 4px y la línea inferior se vuelve dorada.</p>
+      <ul>
+        <li>Sin precios — esta sección NO vende, navega</li>
+        <li>Spacing entre cards: 14px (intenta lectura horizontal)</li>
+        <li>Click = ir a PLP de la categoría</li>
+        <li>Mobile: scroll horizontal 1.4 cards visibles</li>
+      </ul>
+      <div class="ux-note">En el sitio actual estas categorías están enterradas en mega-menu. Subirlas a primer scroll baja el bounce y guía al usuario indeciso.</div>
+    </div>
+  </div>
+
+  <!-- 03 ENGAGEMENT DEDICADO -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div class="lbl" style="margin-bottom: 14px;">03 · ANILLOS DE COMPROMISO · SECCIÓN DEDICADA</div>
+        <div class="gAside">
+          <div class="ph" style="aspect-ratio: 4/5;"><span>Foto editorial · pareja<br/>o detalle del anillo<br/>(luz suave, mood emocional)</span></div>
+          <div class="stack">
+            <div class="lbl">Sección clave</div>
+            <div class="head-line" style="font-size: 40px;">Anillos de<br/>compromiso</div>
+            <div class="body-line" style="font-size: 14px;">Diseñados pieza por pieza en nuestro taller. Diamantes certificados por GIA, HRD e IGI. Acompañamiento personalizado de inicio a fin.</div>
+            <div class="row-mini" style="margin-top: 10px;">
+              <span class="cta primary gold">Diseñar mi anillo</span>
+              <span class="cta link">Conocer las 4Cs &rarr;</span>
+            </div>
+            <div style="margin-top: 18px; display:flex; gap: 24px;" class="lbl">
+              <div>★ 4,500+ parejas</div>
+              <div>★ Certificación GIA</div>
+              <div>★ Garantía de por vida</div>
+            </div>
+          </div>
+        </div>
+        <!-- Filtros rápidos -->
+        <div style="margin-top: 28px; border-top: 1px dashed var(--rule); padding-top: 18px;">
+          <div class="lbl" style="margin-bottom: 10px;">EXPLORACIÓN RÁPIDA</div>
+          <div class="g5" style="gap: 10px;">
+            <div class="ph" style="aspect-ratio: 1/1;"><span>Solitario</span></div>
+            <div class="ph" style="aspect-ratio: 1/1;"><span>Halo</span></div>
+            <div class="ph" style="aspect-ratio: 1/1;"><span>Pavé</span></div>
+            <div class="ph" style="aspect-ratio: 1/1;"><span>Tres<br/>piedras</span></div>
+            <div class="ph" style="aspect-ratio: 1/1;"><span>A medida</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">03</span> Anillos de compromiso</div>
+      <h3>El motor de conversión</h3>
+      <p class="why">Sección con peso de landing propia. Imagen vertical 4:5 a la izq + bloque editorial a la der. CTA primario dorado <b>"Diseñar mi anillo"</b> (alta intención emocional, mejor que "comprar"). Debajo, <b>5 estilos clickeables</b> en proporción cuadrada para descubrir sin filtros.</p>
+      <ul>
+        <li>Confianza visible: trust-badges contextuales (no genéricos)</li>
+        <li>"4Cs" como link educativo, no botón — para curiosos</li>
+        <li>Filtros visuales reducen fricción vs sidebar tradicional</li>
+        <li>Sección anclada en URL: /anillos-compromiso (SEO)</li>
+      </ul>
+      <div class="ux-note">Vs Brilliant Earth: en lugar de meter al usuario al configurador de inmediato, lo recibimos con narrativa + opción visual. Menos abrumador, más Murguía.</div>
+    </div>
+  </div>
+
+  <!-- 04 BENEFICIOS -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div class="lbl" style="text-align: center; margin-bottom: 8px;">04 · EXPERIENCIA PREMIUM</div>
+        <div class="head-line center" style="font-size: 28px; margin-bottom: 4px;">La experiencia Murguía</div>
+        <div class="body-line center" style="font-size: 13px; margin-bottom: 22px;">Seis razones para confiar tu pieza única.</div>
+        <div class="g3" style="gap: 24px;">
+          <div class="stack center">
+            <div style="width: 40px; height: 40px; border: 1.2px solid var(--ink); border-radius: 50%; margin: 0 auto 8px;"></div>
+            <div class="lbl">CERTIFICADOS GIA</div>
+            <div class="body-line" style="font-size: 12px;">Cada diamante > 0.30ct con certificación internacional</div>
+          </div>
+          <div class="stack center">
+            <div style="width: 40px; height: 40px; border: 1.2px solid var(--ink); margin: 0 auto 8px;"></div>
+            <div class="lbl">ASESORÍA PRIVADA</div>
+            <div class="body-line" style="font-size: 12px;">Especialistas en boutique o videollamada</div>
+          </div>
+          <div class="stack center">
+            <div style="width: 40px; height: 40px; border: 1.2px solid var(--ink); transform: rotate(45deg); margin: 0 auto 8px;"></div>
+            <div class="lbl">GARANTÍA DE POR VIDA</div>
+            <div class="body-line" style="font-size: 12px;">Mantenimiento y limpieza ilimitados</div>
+          </div>
+          <div class="stack center">
+            <div style="width: 40px; height: 40px; border: 1.2px solid var(--ink); border-radius: 50%; margin: 0 auto 8px;"></div>
+            <div class="lbl">DISEÑO A MEDIDA</div>
+            <div class="body-line" style="font-size: 12px;">De boceto a pieza terminada en 4–6 semanas</div>
+          </div>
+          <div class="stack center">
+            <div style="width: 40px; height: 40px; border: 1.2px solid var(--ink); margin: 0 auto 8px;"></div>
+            <div class="lbl">ENVÍO ASEGURADO</div>
+            <div class="body-line" style="font-size: 12px;">Cobertura total puerta a puerta</div>
+          </div>
+          <div class="stack center">
+            <div style="width: 40px; height: 40px; border: 1.2px solid var(--ink); transform: rotate(45deg); margin: 0 auto 8px;"></div>
+            <div class="lbl">FINANCIAMIENTO</div>
+            <div class="body-line" style="font-size: 12px;">Planes de hasta 12 meses sin intereses</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">04</span> Experiencia premium</div>
+      <h3>Confianza, en bloque</h3>
+      <p class="why">Bloque de 6 beneficios en grid 3×2. Iconografía geométrica minimalista (círculos, cuadrados, rombos — placeholders ahora). <b>Sin animación al hover</b>: estos elementos venden estabilidad y reposo, no movimiento.</p>
+      <ul>
+        <li>Líneas 1.2px, never bold — sensación premium</li>
+        <li>Cada beneficio = anchor a página dedicada</li>
+        <li>Orden estratégico: certificación primero, financiamiento al final</li>
+      </ul>
+      <div class="ux-note">El sitio actual no agrupa los beneficios. Verlos juntos da un efecto de "casa seria" que apuntala la decisión emocional del hero.</div>
+    </div>
+  </div>
+
+  <!-- 05 PRODUCTOS DESTACADOS -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div class="lbl" style="margin-bottom: 12px;">05 · PRODUCTOS DESTACADOS</div>
+        <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 18px;">
+          <div>
+            <div class="head-line" style="font-size: 30px;">Piezas que destacan</div>
+            <div class="body-line" style="font-size: 13px;">Lo más buscado de esta temporada</div>
+          </div>
+          <div style="display:flex; gap: 18px;" class="lbl">
+            <span style="border-bottom: 1.5px solid var(--ink); padding-bottom: 2px;">Anillos</span>
+            <span>Aretes</span>
+            <span>Pulseras</span>
+            <span>Collares</span>
+          </div>
+        </div>
+        <div class="g4">
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 1/1;"><span>Pieza<br/>01</span></div>
+            <div class="body-line" style="font-size: 12px;">Anillo solitario clásico</div>
+            <div class="lbl">USD 3,708</div>
+          </div>
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 1/1;"><span>Pieza<br/>02</span></div>
+            <div class="body-line" style="font-size: 12px;">Solitario halo 0.50ct</div>
+            <div class="lbl">USD 4,200</div>
+          </div>
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 1/1;"><span>Pieza<br/>03</span></div>
+            <div class="body-line" style="font-size: 12px;">Trilogía oro blanco</div>
+            <div class="lbl">USD 5,890</div>
+          </div>
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 1/1;"><span>Pieza<br/>04</span></div>
+            <div class="body-line" style="font-size: 12px;">Pavé eternity</div>
+            <div class="lbl">USD 2,990</div>
+          </div>
+        </div>
+        <div class="center" style="margin-top: 24px;">
+          <span class="cta ghost">Ver tienda completa</span>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">05</span> Productos destacados</div>
+      <h3>Vitrina con filtro suave</h3>
+      <p class="why">Grid de 4 piezas con tab-filter superior (Anillos · Aretes · Pulseras · Collares). <b>Quick-view al hover</b>: la card se eleva levemente y aparece un círculo "+". Click = drawer lateral con detalle, no nueva pantalla.</p>
+      <ul>
+        <li>Imágenes 1:1 sobre fondo neutro, no estilizadas</li>
+        <li>Precio visible — usuario informado, mejor conversión</li>
+        <li>Drawer en lugar de PDP = menos abandono</li>
+        <li>CTA inferior "Ver tienda completa" — outline, baja prioridad</li>
+      </ul>
+      <div class="ux-note">El sitio actual lista 8 piezas. Mostramos 4. La ley de Hick: menos opciones = decisión más rápida y emocional.</div>
+    </div>
+  </div>
+
+  <!-- 06 EDITORIAL HISTORIA -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="background: #2a3528; color: #f4ede0; padding: 36px;">
+        <div class="lbl" style="color: rgba(244,237,224,.5); margin-bottom: 14px;">06 · HISTORIA · ARTESANÍA</div>
+        <div class="gAside" style="grid-template-columns: 1fr 1.1fr; align-items: start;">
+          <div class="stack">
+            <div class="lbl" style="color: var(--gold);">DESDE 1910</div>
+            <div class="head-line" style="font-size: 44px; color: #f4ede0;">Donde florece<br/>el tiempo</div>
+            <div class="body-line" style="font-size: 14px; color: rgba(244,237,224,.8); line-height: 1.7;">
+              Más de un siglo construyendo el detalle. Cada pieza nace de un boceto, pasa por las manos de nuestros maestros joyeros, y se entrega cuando está lista para durar generaciones.
+            </div>
+            <div class="body-line" style="font-size: 14px; color: rgba(244,237,224,.8); line-height: 1.7;">
+              Cuatro generaciones, un mismo gesto: el de hacer las cosas bien.
+            </div>
+            <div style="margin-top: 14px;">
+              <span class="cta" style="border: 1.5px solid var(--gold); color: var(--gold); background: transparent;">Conoce nuestra historia</span>
+            </div>
+          </div>
+          <div class="g2" style="gap: 10px;">
+            <div class="ph" style="aspect-ratio: 3/4; background: #1f2820; border-color: rgba(244,237,224,.3); color: rgba(244,237,224,.5);"><span>Manos del<br/>maestro</span></div>
+            <div class="ph" style="aspect-ratio: 3/4; background: #1f2820; border-color: rgba(244,237,224,.3); color: rgba(244,237,224,.5); margin-top: 30px;"><span>Boceto<br/>original</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">06</span> Historia · Artesanía</div>
+      <h3>El respiro emocional</h3>
+      <p class="why">Fondo <b>verde Murguía</b> (#192E1D, el del Figma) que rompe el ritmo claro. Layout asimétrico: copy a la izq, dos imágenes desfasadas a la der. <b>Sin CTA primario</b>: aquí se respira, no se vende. Acento dorado en el botón ghost.</p>
+      <ul>
+        <li>Tipografía 44px Caveat/Vesper Libre — momento editorial</li>
+        <li>Imágenes desfasadas (offset vertical) = ritmo de revista</li>
+        <li>Esta sección refuerza el "1910" y la herencia, pilar de marca</li>
+        <li>Funciona como ancla emocional antes del CTA fuerte de cita</li>
+      </ul>
+      <div class="ux-note">Esta sección la heredamos de "CASA MURGUÍA, FUNDADA EN 1910" que ya existe pero está dispersa. Aquí concentramos su poder narrativo.</div>
+    </div>
+  </div>
+
+  <!-- 07 AGENDA CITA -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div class="lbl" style="margin-bottom: 14px;">07 · AGENDAR CITA · ALTA INTENCIÓN</div>
+        <div class="gAside">
+          <div class="ph" style="aspect-ratio: 4/3;"><span>Boutique<br/>interior</span></div>
+          <div class="stack">
+            <div class="lbl">VISITA PRIVADA</div>
+            <div class="head-line" style="font-size: 36px;">Agenda tu visita</div>
+            <div class="body-line" style="font-size: 14px; line-height: 1.6;">Una asesoría privada con nuestros especialistas. En boutique o por videollamada.</div>
+            <div style="margin-top: 14px;" class="lbl stack">
+              <div>★ Boutiques · San Isidro · Miraflores · Jockey Plaza</div>
+              <div>★ Lunes a Viernes · 10:00 a 19:00</div>
+              <div>★ Sábados · cita previa</div>
+            </div>
+            <div class="row-mini" style="margin-top: 18px;">
+              <span class="cta primary gold">Reservar cita</span>
+              <span class="cta ghost">WhatsApp</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">07</span> Agendar cita</div>
+      <h3>La conversión calmada</h3>
+      <p class="why">Sección de alta intención. Foto de boutique interior, no producto. <b>Doble CTA</b>: cita formal (dorado) y WhatsApp inmediato (ghost). Cubre dos perfiles: el planeador y el impulsivo.</p>
+      <ul>
+        <li>Información práctica visible sin abrir nada</li>
+        <li>WhatsApp = canal real para LATAM premium</li>
+        <li>Cita = embudo formal con calendario</li>
+        <li>Mobile: WhatsApp pasa a sticky inferior</li>
+      </ul>
+      <div class="ux-note">Es la pieza con más peso de conversión de toda la página. Va antes del CTA final emocional para no canibalizarlo.</div>
+    </div>
+  </div>
+
+  <!-- 08 TESTIMONIOS -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div class="lbl" style="text-align: center; margin-bottom: 18px;">08 · TESTIMONIOS · SOCIAL PROOF</div>
+        <div class="g3" style="gap: 28px;">
+          <div class="stack">
+            <div style="font-family: 'Caveat'; font-size: 38px; color: var(--gold); line-height: 0.7;">"</div>
+            <div class="body-line" style="font-size: 14px; line-height: 1.65;">"El proceso fue tan personal como la pieza. Diseñaron exactamente lo que tenía en mente, y aún más."</div>
+            <div class="lbl" style="margin-top: 8px;">— Camila R. · Cliente desde 2024</div>
+          </div>
+          <div class="stack">
+            <div style="font-family: 'Caveat'; font-size: 38px; color: var(--gold); line-height: 0.7;">"</div>
+            <div class="body-line" style="font-size: 14px; line-height: 1.65;">"Cada visita a Murguía se siente como entrar a una casa, no a una tienda. Eso vale más que cualquier diamante."</div>
+            <div class="lbl" style="margin-top: 8px;">— Andrés &amp; Sofía</div>
+          </div>
+          <div class="stack">
+            <div style="font-family: 'Caveat'; font-size: 38px; color: var(--gold); line-height: 0.7;">"</div>
+            <div class="body-line" style="font-size: 14px; line-height: 1.65;">"Han hecho los anillos de tres generaciones de mi familia. Confianza absoluta."</div>
+            <div class="lbl" style="margin-top: 8px;">— Familia Mendoza</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">08</span> Testimonios</div>
+      <h3>Pruebas sin pesar</h3>
+      <p class="why">Sin avatares, sin cajas. Tres testimonios en columnas, comilla dorada decorativa, atribución mínima. <b>Cero estrellas amazónicas</b>: la marca lo cuenta como una conversación.</p>
+      <ul>
+        <li>Selección curada, no auto-feed de reviews</li>
+        <li>Testimonios largos > rating numérico para premium</li>
+        <li>"Familia Mendoza" refuerza herencia generacional</li>
+      </ul>
+      <div class="ux-note">Brilliant Earth muestra rating numérico (4.9★). Aquí no — apela a marca masiva. Murguía es de "casa": narrativa &gt; métrica.</div>
+    </div>
+  </div>
+
+  <!-- 09 CTA FINAL + NEWSLETTER -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="background: #2a3528; color: #f4ede0; padding: 48px 36px; text-align: center;">
+        <div class="lbl" style="color: rgba(244,237,224,.5); margin-bottom: 12px;">09 · CTA FINAL · NEWSLETTER</div>
+        <div class="head-line" style="font-size: 40px; color: #f4ede0;">-10% en tu primera compra</div>
+        <div class="body-line" style="font-size: 14px; color: rgba(244,237,224,.7); margin-top: 8px;">Suscríbete y recibe primero nuestras nuevas colecciones.</div>
+        <div style="max-width: 460px; margin: 22px auto 0; display: flex; border-bottom: 1px solid rgba(244,237,224,.4); padding-bottom: 6px;">
+          <span style="flex:1; font-family: 'Architects Daughter'; font-size: 13px; color: rgba(244,237,224,.5); text-align: left;">tu@correo.com</span>
+          <span style="font-family: 'JetBrains Mono'; font-size: 11px; letter-spacing: .18em; color: var(--gold);">SUSCRIBIRME &rarr;</span>
+        </div>
+        <div class="body-line" style="font-size: 11px; color: rgba(244,237,224,.4); margin-top: 14px;">Sin spam. Una pieza, una historia, cada mes.</div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">09</span> CTA final + Newsletter</div>
+      <h3>Cerrar el círculo</h3>
+      <p class="why">Banda oscura final con un solo elemento: <b>captura de email con incentivo claro</b>. Input minimalista (línea, no caja). El descuento es la cuña, pero el copy reposiciona el valor: "una pieza, una historia, cada mes".</p>
+      <ul>
+        <li>Sin distractores: una sola acción</li>
+        <li>Disclaimer "Sin spam" baja fricción</li>
+        <li>Reaparece el verde Murguía cerrando el ritmo cromático</li>
+      </ul>
+      <div class="ux-note">El sitio actual tiene el descuento sin valor narrativo. Aquí decimos el "qué recibirás" para subir tasa de suscripción real.</div>
+    </div>
+  </div>
+
+  <!-- 10 FOOTER -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="padding: 36px;">
+        <div class="lbl" style="margin-bottom: 18px;">10 · FOOTER PREMIUM</div>
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr; gap: 32px;">
+          <div class="stack">
+            <div style="font-family: 'Caveat'; font-size: 32px;">Murguía</div>
+            <div class="body-line" style="font-size: 12px; line-height: 1.55;">Desde 1910 brindando momentos especiales representados en piezas únicas.</div>
+            <div class="lbl" style="margin-top: 6px;">ES · EN</div>
+          </div>
+          <div class="stack">
+            <div class="lbl">Nuestra empresa</div>
+            <div class="body-line" style="font-size: 12px;">Nosotros</div>
+            <div class="body-line" style="font-size: 12px;">Blog</div>
+            <div class="body-line" style="font-size: 12px;">Contacto</div>
+            <div class="body-line" style="font-size: 12px;">Libro de reclamaciones</div>
+          </div>
+          <div class="stack">
+            <div class="lbl">Tiendas</div>
+            <div class="body-line" style="font-size: 12px;">San Isidro</div>
+            <div class="body-line" style="font-size: 12px;">Miraflores</div>
+            <div class="body-line" style="font-size: 12px;">Jockey Plaza</div>
+          </div>
+          <div class="stack">
+            <div class="lbl">Pagos</div>
+            <div style="display: flex; gap: 6px; margin-top: 4px;">
+              <div style="width: 32px; height: 20px; border: 1px solid var(--ink);"></div>
+              <div style="width: 32px; height: 20px; border: 1px solid var(--ink);"></div>
+              <div style="width: 32px; height: 20px; border: 1px solid var(--ink);"></div>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="lbl">Síguenos</div>
+            <div style="display: flex; gap: 8px; margin-top: 4px;">
+              <div style="width: 22px; height: 22px; border: 1px solid var(--ink); border-radius: 50%;"></div>
+              <div style="width: 22px; height: 22px; border: 1px solid var(--ink); border-radius: 50%;"></div>
+              <div style="width: 22px; height: 22px; border: 1px solid var(--ink); border-radius: 50%;"></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top: 28px; padding-top: 14px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between;" class="lbl">
+          <span>© 2026 Casa Murguía. Todos los derechos reservados.</span>
+          <span>Política de privacidad · Cookies · Términos</span>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">10</span> Footer</div>
+      <h3>Cierre limpio, no inventario</h3>
+      <p class="why">Cinco columnas con jerarquía clara: marca a la izq con peso narrativo, columnas funcionales a la der. <b>Logos de pago como wireframes monocromáticos</b> — confianza sin saturación visual.</p>
+      <ul>
+        <li>Bloque legal en una sola línea inferior</li>
+        <li>No repetir el newsletter (ya está arriba)</li>
+        <li>Tiendas físicas visibles = trust local</li>
+      </ul>
+      <div class="ux-note">El footer actual tiene 8 columnas. Reducir a 5 evita el efecto "directorio" y mantiene la elegancia hasta el último pixel.</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     DIRECCIÓN B · SHOWROOM DISCOVERY
+     ════════════════════════════════════════════════════ -->
+<section class="direction" data-dir="b" data-screen-label="Direccion B">
+
+  <div class="direction-head">
+    <div>
+      <div class="kicker">Dirección B — Conversión activa</div>
+      <h1>Showroom Discovery</h1>
+    </div>
+    <div>
+      <p>Orientada a <b>conversión y descubrimiento desde el primer scroll</b>. Hero con entry-points visibles, módulos editoriales asimétricos, varios "ring builders" ligeros distribuidos en el flujo. Más densa visualmente, pero con espacio para respirar entre módulos.</p>
+      <div class="pillars">
+        <span class="pill">Discovery agresivo</span>
+        <span class="pill">CTAs distribuidos</span>
+        <span class="pill">Composición editorial</span>
+        <span class="pill">Quizzes &amp; builders</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- B01 HERO SPLIT -->
+  <div class="row">
+    <div class="wire">
+      <div class="browser-bar"><div class="dots"><i></i><i></i><i></i></div><span class="url">murguia.com / inicio</span></div>
+      <div class="topbar-strip">DIAMANTES CERTIFICADOS · GIA · HRD · IGI · ENVÍO ASEGURADO</div>
+      <div class="nav-mock">
+        <div class="lang">ES · EN</div>
+        <div class="links"><span>Novios</span><span>Catálogo</span><span>Marcas</span><span>Alta Joyería</span><span>Hogar</span></div>
+        <div class="logo">Murguía</div>
+        <div class="links"><span>Boutiques</span><span>Cita</span></div>
+        <div class="icons"><i></i><i class="sq"></i><i></i></div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1.2fr 1fr; min-height: 480px;">
+        <div class="ph" style="border-left: 0; border-bottom: 0;"><span>HERO IMAGE · 60% width<br/>(modelo · luz natural)</span></div>
+        <div style="background: #fbf7ec; padding: 56px 40px; display: flex; flex-direction: column; justify-content: center; border-bottom: 1px solid var(--ink);">
+          <div class="lbl" style="margin-bottom: 10px;">DESDE 1910 · CASA MURGUÍA</div>
+          <div class="head-line" style="font-size: 52px; line-height: 1;">Crea el<br/>anillo de su<br/>vida.</div>
+          <div class="body-line" style="font-size: 14px; margin-top: 14px;">Tres pasos. Diamante, montura, metal. Acompañamiento personal de inicio a fin.</div>
+          <div style="margin-top: 24px; display: flex; gap: 10px;">
+            <span class="cta primary gold">Empezar el diseño</span>
+            <span class="cta ghost">Ver Anillos</span>
+          </div>
+          <div style="margin-top: 22px;" class="lbl">o &nbsp; <span style="border-bottom: 1px solid var(--ink);">Hacer el quiz · 60 seg ↗</span></div>
+        </div>
+      </div>
+      <!-- 3-step shortcut -->
+      <div style="border-top: 1px solid var(--ink); padding: 22px 28px; display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; background: var(--paper-2);">
+        <div class="stack">
+          <div class="lbl">PASO 01</div>
+          <div class="body-line" style="font-size: 14px;">Elige tu diamante</div>
+          <div class="lbl" style="opacity:.6;">230+ certificados disponibles</div>
+        </div>
+        <div class="stack">
+          <div class="lbl">PASO 02</div>
+          <div class="body-line" style="font-size: 14px;">Elige la montura</div>
+          <div class="lbl" style="opacity:.6;">12 estilos editoriales</div>
+        </div>
+        <div class="stack">
+          <div class="lbl">PASO 03</div>
+          <div class="body-line" style="font-size: 14px;">Asesoría con experto</div>
+          <div class="lbl" style="opacity:.6;">Boutique o videollamada</div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">01</span> Hero split + Pasos</div>
+      <h3>Vender el camino, no la pieza</h3>
+      <p class="why">Hero split 60/40: imagen emocional + bloque-acción. Headline más directo, primer CTA es el <b>builder</b>. Tira inferior de 3 pasos visualiza el flujo completo: convierte la complejidad en confianza.</p>
+      <ul>
+        <li>"Quiz · 60 seg" para usuarios indecisos — entry secundario</li>
+        <li>Strip-pasos siempre visible en mobile como sticky-stepper</li>
+        <li>Topstrip con 2 trust-signals (certif. + envío)</li>
+      </ul>
+      <div class="ux-note">Brilliant Earth empuja al builder de inmediato. Aquí lo replanteamos como un camino narrado, no un formulario. Mejor para LATAM premium donde la decisión es más emocional.</div>
+    </div>
+  </div>
+
+  <!-- B02 RING BUILDER WIDGET -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="background: #fbf7ec;">
+        <div class="lbl" style="margin-bottom: 14px;">02 · RING BUILDER · MÓDULO EMPOTRADO</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; border: 1.5px solid var(--ink);">
+          <div style="padding: 28px 20px; border-right: 1px solid var(--ink); text-align: center;">
+            <div style="width: 60px; height: 60px; margin: 0 auto 10px; border: 1.5px solid var(--ink); transform: rotate(45deg);"></div>
+            <div class="lbl">01 · DIAMANTE</div>
+            <div class="body-line" style="font-size: 12px; margin-top: 4px;">Forma, quilataje, claridad</div>
+          </div>
+          <div style="padding: 28px 20px; border-right: 1px solid var(--ink); text-align: center;">
+            <div style="width: 60px; height: 60px; margin: 0 auto 10px; border: 1.5px solid var(--ink); border-radius: 50%;"></div>
+            <div class="lbl">02 · MONTURA</div>
+            <div class="body-line" style="font-size: 12px; margin-top: 4px;">Solitario, halo, pavé...</div>
+          </div>
+          <div style="padding: 28px 20px; border-right: 1px solid var(--ink); text-align: center;">
+            <div style="width: 60px; height: 60px; margin: 0 auto 10px; border: 1.5px solid var(--ink);"></div>
+            <div class="lbl">03 · METAL</div>
+            <div class="body-line" style="font-size: 12px; margin-top: 4px;">Oro blanco, amarillo, rosa, platino</div>
+          </div>
+          <div style="padding: 28px 20px; text-align: center; background: var(--ink); color: var(--paper);">
+            <div style="width: 60px; height: 60px; margin: 0 auto 10px; border: 1.5px solid var(--gold); background: var(--gold);"></div>
+            <div class="lbl" style="color: var(--gold);">04 · PIEZA FINAL</div>
+            <div class="body-line" style="font-size: 12px; margin-top: 4px; color: rgba(244,237,224,.8);">Listo en 4–6 semanas</div>
+          </div>
+        </div>
+        <div class="center" style="margin-top: 22px;">
+          <span class="cta primary gold">Empezar a diseñar</span>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">02</span> Ring Builder · entry</div>
+      <h3>El builder, sin abrir</h3>
+      <p class="why">Módulo visual de 4 cuadros que explica el proceso. <b>El último cuadro es la pieza final</b> (oscuro + dorado) — cierre visual que ancla expectativa. Click en cualquiera = abrir builder en ese paso.</p>
+      <ul>
+        <li>4 pasos &gt; 3 pasos: agregar "metal" lo hace más completo</li>
+        <li>Estado activo dorado vs estados grises</li>
+        <li>Sustituye el "configurador opaco" del sitio actual</li>
+      </ul>
+      <div class="ux-note">El usuario entiende el flujo sin haber empezado. Reduce ansiedad de "¿esto va a tomarme una hora?".</div>
+    </div>
+  </div>
+
+  <!-- B03 CATEGORÍAS ASIMÉTRICAS -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div class="lbl" style="margin-bottom: 14px;">03 · CATEGORÍAS · COMPOSICIÓN ASIMÉTRICA</div>
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 280px 240px; gap: 12px;">
+          <div class="ph" style="grid-row: 1 / span 2;"><span>Anillos<br/>de Compromiso<br/>(hero categoría)</span></div>
+          <div class="ph"><span>Argollas</span></div>
+          <div class="ph"><span>Alta Joyería</span></div>
+          <div class="ph"><span>Diamantes</span></div>
+          <div class="ph"><span>Colecciones</span></div>
+        </div>
+        <div style="margin-top: 14px; display: flex; justify-content: space-between;" class="lbl">
+          <span>Hover: subtítulo + flecha</span>
+          <span>Click: PLP de categoría</span>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">03</span> Categorías editoriales</div>
+      <h3>Mosaico con peso</h3>
+      <p class="why">Composición tipo revista: <b>Anillos de Compromiso</b> ocupa la doble altura (mensaje claro de prioridad comercial). 4 categorías secundarias ordenadas a la derecha en grid 2×2. Foto manda; texto es etiqueta.</p>
+      <ul>
+        <li>El protagonismo visual = prioridad de negocio</li>
+        <li>Imágenes aspect-ratio respeta intención (vertical vs cuadrada)</li>
+        <li>Mobile: stack vertical, anillos arriba siempre</li>
+      </ul>
+      <div class="ux-note">Vs Dirección A (grid uniforme 5-col), aquí jerarquizamos visualmente lo que más convierte. Es más editorial y más persuasivo.</div>
+    </div>
+  </div>
+
+  <!-- B04 CONFIANZA HORIZONTAL -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="background: var(--paper-2); padding: 36px 24px;">
+        <div class="lbl center" style="margin-bottom: 18px;">04 · CONFIANZA · BANDA HORIZONTAL</div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center;">
+          <div>
+            <div style="font-family: 'Caveat'; font-size: 36px; line-height: 1;">115+</div>
+            <div class="lbl" style="margin-top: 4px;">AÑOS DE HISTORIA</div>
+          </div>
+          <div>
+            <div style="font-family: 'Caveat'; font-size: 36px; line-height: 1;">4,500+</div>
+            <div class="lbl" style="margin-top: 4px;">PAREJAS · 2024</div>
+          </div>
+          <div>
+            <div style="font-family: 'Caveat'; font-size: 36px; line-height: 1;">GIA</div>
+            <div class="lbl" style="margin-top: 4px;">HRD · IGI CERTIFICADOS</div>
+          </div>
+          <div>
+            <div style="font-family: 'Caveat'; font-size: 36px; line-height: 1;">3</div>
+            <div class="lbl" style="margin-top: 4px;">BOUTIQUES EN LIMA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">04</span> Banda de confianza</div>
+      <h3>Trust en una sola tira</h3>
+      <p class="why">Banda compacta de 4 cifras. Fondo crema sutil, tipografía grande Caveat/Vesper para los números. <b>Sin iconos</b>: las cifras hablan solas. Aparece después del builder para reforzar la decisión.</p>
+      <ul>
+        <li>Posición estratégica: justo antes del catálogo</li>
+        <li>"GIA · HRD · IGI" educa sin sobreexplicar</li>
+        <li>Esto reemplaza el grid de 6 beneficios de la Dirección A</li>
+      </ul>
+      <div class="ux-note">Más rápido de digerir que un grid de 6 cards. La Dirección B prioriza ritmo sobre detalle exhaustivo.</div>
+    </div>
+  </div>
+
+  <!-- B05 PRODUCTOS · CAROUSEL EDITORIAL -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 18px;">
+          <div>
+            <div class="lbl">05 · BESTSELLERS</div>
+            <div class="head-line" style="font-size: 32px;">Lo que más se elige</div>
+          </div>
+          <div class="row-mini">
+            <div style="width: 36px; height: 36px; border: 1.2px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 12px;">←</div>
+            <div style="width: 36px; height: 36px; border: 1.2px solid var(--ink); display: flex; align-items: center; justify-content: center; font-size: 12px; background: var(--ink); color: var(--paper);">→</div>
+          </div>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 1/1; position: relative;"><span>01</span><div style="position: absolute; top: 8px; left: 8px; font-family: 'JetBrains Mono'; font-size: 9px; background: var(--ink); color: var(--paper); padding: 2px 6px;">BESTSELLER</div></div>
+            <div class="body-line" style="font-size: 12px;">Solitario Aurora 0.50ct</div>
+            <div class="lbl">USD 4,200</div>
+            <div class="lbl" style="color: var(--gold);">↗ Quick view</div>
+          </div>
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 1/1;"><span>02</span></div>
+            <div class="body-line" style="font-size: 12px;">Halo Verbena</div>
+            <div class="lbl">USD 3,890</div>
+            <div class="lbl" style="color: var(--gold);">↗ Quick view</div>
+          </div>
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 1/1; position: relative;"><span>03</span><div style="position: absolute; top: 8px; left: 8px; font-family: 'JetBrains Mono'; font-size: 9px; background: var(--gold); color: #fff; padding: 2px 6px;">NUEVO</div></div>
+            <div class="body-line" style="font-size: 12px;">Trilogía Brisa</div>
+            <div class="lbl">USD 5,890</div>
+            <div class="lbl" style="color: var(--gold);">↗ Quick view</div>
+          </div>
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 1/1;"><span>04</span></div>
+            <div class="body-line" style="font-size: 12px;">Pavé eternity</div>
+            <div class="lbl">USD 2,990</div>
+            <div class="lbl" style="color: var(--gold);">↗ Quick view</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">05</span> Bestsellers · carousel</div>
+      <h3>Vitrina con ritmo</h3>
+      <p class="why">Carousel con navegación visible (flechas top-right). Cada card tiene <b>quick-view dorado</b> que abre drawer sin recargar. Badges discretos (BESTSELLER en negro, NUEVO en dorado).</p>
+      <ul>
+        <li>Click en imagen = PDP. Click en quick-view = drawer.</li>
+        <li>Badges limitados: máximo 1 cada 3 cards</li>
+        <li>Carousel continuo: 4 visibles, 8 totales</li>
+      </ul>
+      <div class="ux-note">Quick view es el truco anti-fricción. El usuario examina sin perder contexto del scroll — clave para sesiones de comparación.</div>
+    </div>
+  </div>
+
+  <!-- B06 EDITORIAL DOBLE (artesanía + colección) -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec">
+        <div class="lbl" style="margin-bottom: 14px;">06 · DOBLE EDITORIAL · ARTESANÍA + COLECCIÓN</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div class="stack">
+            <div class="ph" style="aspect-ratio: 4/5;"><span>Manos<br/>del maestro</span></div>
+            <div class="lbl" style="margin-top: 10px;">ARTESANÍA</div>
+            <div class="head-line" style="font-size: 28px;">Hecho a mano,<br/>desde 1910</div>
+            <div class="body-line" style="font-size: 13px;">Cuatro generaciones perfeccionando un mismo gesto.</div>
+            <div><span class="cta link">Conoce el proceso</span></div>
+          </div>
+          <div class="stack" style="padding-top: 60px;">
+            <div class="ph" style="aspect-ratio: 4/5;"><span>Pieza<br/>QANTU</span></div>
+            <div class="lbl" style="margin-top: 10px;">COLECCIÓN QANTU</div>
+            <div class="head-line" style="font-size: 28px;">Piezas inspiradas<br/>en lo nuestro</div>
+            <div class="body-line" style="font-size: 13px;">Una colección que celebra raíces y modernidad.</div>
+            <div><span class="cta link">Ver la colección</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">06</span> Doble editorial</div>
+      <h3>Dos historias, una página</h3>
+      <p class="why">Layout en dos columnas <b>desfasadas verticalmente</b> (ritmo de revista). Izquierda: artesanía (alma). Derecha: colección destacada (negocio). Cada una con su CTA link discreto.</p>
+      <ul>
+        <li>Offset vertical 60px da la sensación editorial</li>
+        <li>Ambas con foto vertical 4:5</li>
+        <li>QANTU ya existe en el Figma — la rescatamos</li>
+      </ul>
+      <div class="ux-note">Mata dos pájaros: branding + comercial en el mismo espacio. La Dirección A separaba ambas en secciones distintas.</div>
+    </div>
+  </div>
+
+  <!-- B07 BOUTIQUES + AGENDA -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="padding: 36px 24px; background: var(--paper-2);">
+        <div class="lbl" style="margin-bottom: 14px;">07 · BOUTIQUES + AGENDA · DOBLE CANAL</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px;">
+          <div class="stack" style="background: #fbf7ec; padding: 18px; border: 1px solid var(--ink);">
+            <div class="ph" style="aspect-ratio: 4/3;"><span>San Isidro</span></div>
+            <div class="lbl" style="margin-top: 8px;">SAN ISIDRO</div>
+            <div class="body-line" style="font-size: 12px;">Av. Conquistadores 1010</div>
+            <div class="body-line" style="font-size: 12px;">Lun–Vie 10:00–19:00</div>
+          </div>
+          <div class="stack" style="background: #fbf7ec; padding: 18px; border: 1px solid var(--ink);">
+            <div class="ph" style="aspect-ratio: 4/3;"><span>Miraflores</span></div>
+            <div class="lbl" style="margin-top: 8px;">MIRAFLORES</div>
+            <div class="body-line" style="font-size: 12px;">Av. Larco 345</div>
+            <div class="body-line" style="font-size: 12px;">Lun–Sáb 11:00–20:00</div>
+          </div>
+          <div class="stack" style="background: #fbf7ec; padding: 18px; border: 1px solid var(--ink);">
+            <div class="ph" style="aspect-ratio: 4/3;"><span>Jockey Plaza</span></div>
+            <div class="lbl" style="margin-top: 8px;">JOCKEY PLAZA</div>
+            <div class="body-line" style="font-size: 12px;">Nivel 2, Local 215</div>
+            <div class="body-line" style="font-size: 12px;">Lun–Dom 10:00–22:00</div>
+          </div>
+        </div>
+        <div style="margin-top: 24px; padding: 20px; background: var(--ink); color: var(--paper); display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <div class="head-line" style="font-size: 24px; color: var(--paper);">¿Prefieres una asesoría privada?</div>
+            <div class="body-line" style="font-size: 13px; color: rgba(244,237,224,.7);">Boutique, videollamada o WhatsApp con tu especialista asignado.</div>
+          </div>
+          <div class="row-mini">
+            <span class="cta primary gold">Reservar cita</span>
+            <span class="cta" style="border: 1.5px solid var(--paper); color: var(--paper); background: transparent;">WhatsApp</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">07</span> Boutiques + Cita</div>
+      <h3>Trust físico + canal cálido</h3>
+      <p class="why">Tres cards de boutiques (foto + dirección + horario) + banda oscura inferior con doble CTA. <b>Los datos prácticos no necesitan abrir nada</b>: confianza inmediata. La banda oscura cierra con conversión.</p>
+      <ul>
+        <li>Foto del interior, no del exterior</li>
+        <li>Click en card = Google Maps</li>
+        <li>WhatsApp como segunda puerta, no principal</li>
+      </ul>
+      <div class="ux-note">Combinamos los dos bloques que la Dirección A separó. Más denso, pero más eficiente para el usuario que está a punto de decidir.</div>
+    </div>
+  </div>
+
+  <!-- B08 TESTIMONIOS EN LÍNEA -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="text-align: center;">
+        <div class="lbl" style="margin-bottom: 8px;">08 · TESTIMONIOS · CINTA HORIZONTAL</div>
+        <div class="head-line" style="font-size: 28px; margin-bottom: 28px;">Las historias que diseñamos</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+          <div class="stack" style="text-align: left;">
+            <div style="font-family: 'Caveat'; font-size: 38px; color: var(--gold); line-height: 0.7;">"</div>
+            <div class="body-line" style="font-size: 14px; line-height: 1.65;">"Llegamos con una foto en el celular. Salimos con la pieza más personal que tenemos. Eso es Murguía."</div>
+            <div class="lbl" style="margin-top: 8px;">— Lucía &amp; Diego · diciembre 2024</div>
+          </div>
+          <div class="stack" style="text-align: left;">
+            <div style="font-family: 'Caveat'; font-size: 38px; color: var(--gold); line-height: 0.7;">"</div>
+            <div class="body-line" style="font-size: 14px; line-height: 1.65;">"Tres anillos en mi familia. Los tres siguen brillando como el primer día. La diferencia se nota en los detalles."</div>
+            <div class="lbl" style="margin-top: 8px;">— María Elena G.</div>
+          </div>
+        </div>
+        <div style="margin-top: 22px; display: flex; justify-content: center; gap: 6px;">
+          <div style="width: 24px; height: 2px; background: var(--ink);"></div>
+          <div style="width: 8px; height: 2px; background: rgba(28,28,28,.3);"></div>
+          <div style="width: 8px; height: 2px; background: rgba(28,28,28,.3);"></div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">08</span> Testimonios</div>
+      <h3>Cinta narrada, no muro</h3>
+      <p class="why">Dos testimonios visibles + paginación lineal sutil (no dots). Selección curada de 6–8 piezas, rotación manual. <b>Sin estrellas, sin métricas</b>: relato y atribución mínima.</p>
+      <ul>
+        <li>Comilla dorada decorativa abre el texto</li>
+        <li>Auto-rotate cada 8s; pausa en hover</li>
+        <li>Indicador linear es más editorial que dots</li>
+      </ul>
+      <div class="ux-note">Igual filosofía que en A pero más compacto. Aquí dos testimonios bastan porque ya hubo banda de cifras antes.</div>
+    </div>
+  </div>
+
+  <!-- B09 CTA EMOCIONAL FINAL -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="padding: 0;">
+        <div style="position: relative; min-height: 420px;">
+          <div class="ph" style="position: absolute; inset: 0; border: 0;"><span>FONDO EMOCIONAL · pareja al atardecer<br/>(overlay oscuro 50%)</span></div>
+          <div style="position: absolute; inset: 0; background: linear-gradient(to right, rgba(28,28,28,.7) 0%, rgba(28,28,28,.3) 60%, transparent 100%);"></div>
+          <div style="position: relative; padding: 80px 48px; max-width: 540px; color: var(--paper);">
+            <div class="lbl" style="color: var(--gold); margin-bottom: 14px;">EL MOMENTO ES AHORA</div>
+            <div class="head-line" style="font-size: 48px; line-height: 1; color: var(--paper);">Crea la pieza<br/>que contará<br/>su historia.</div>
+            <div class="body-line" style="font-size: 14px; color: rgba(244,237,224,.8); margin-top: 16px; line-height: 1.6;">Empieza con una asesoría privada o explora nuestra colección de anillos firmados.</div>
+            <div style="margin-top: 24px; display: flex; gap: 12px;">
+              <span class="cta primary gold">Agendar Asesoría</span>
+              <span class="cta" style="border: 1.5px solid var(--paper); color: var(--paper); background: transparent;">Ver Colección</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">09</span> CTA emocional final</div>
+      <h3>El cierre con peso</h3>
+      <p class="why">Banner fullbleed con foto cinematográfica + overlay gradiente. Copy en bloque izq, dos CTAs (alta intención dorado + exploración ghost claro). <b>Es el último empujón emocional antes del footer</b>.</p>
+      <ul>
+        <li>Headline en serif 48–56px, máximo 3 líneas</li>
+        <li>Gradiente solo en lado del texto (preserva imagen)</li>
+        <li>Mobile: overlay sólido inferior, no lateral</li>
+      </ul>
+      <div class="ux-note">Reemplaza el "-10%" de la Dirección A. Aquí va la emoción antes que el descuento — Newsletter pasa al footer.</div>
+    </div>
+  </div>
+
+  <!-- B10 FOOTER COMPACTO -->
+  <div class="row">
+    <div class="wire">
+      <div class="sec" style="padding: 36px; background: #1c1c1c; color: var(--paper);">
+        <div class="lbl" style="color: rgba(244,237,224,.4); margin-bottom: 18px;">10 · FOOTER COMPACTO</div>
+        <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 28px;">
+          <div class="stack">
+            <div style="font-family: 'Caveat'; font-size: 32px; color: var(--paper);">Murguía</div>
+            <div class="body-line" style="font-size: 12px; color: rgba(244,237,224,.7); line-height: 1.55;">Desde 1910. Casa fundada por Don Antonio Murguía.</div>
+            <div style="margin-top: 14px; display: flex; gap: 8px;">
+              <input type="text" placeholder="tu@correo.com" style="flex:1; background: transparent; border: 0; border-bottom: 1px solid rgba(244,237,224,.4); color: var(--paper); padding: 6px 0; font-family: 'Architects Daughter'; font-size: 12px;" />
+              <span class="lbl" style="color: var(--gold); align-self: end;">→</span>
+            </div>
+          </div>
+          <div class="stack">
+            <div class="lbl" style="color: rgba(244,237,224,.5);">EXPLORAR</div>
+            <div class="body-line" style="font-size: 12px; color: rgba(244,237,224,.85);">Anillos · Argollas · Alta Joyería · Diamantes</div>
+          </div>
+          <div class="stack">
+            <div class="lbl" style="color: rgba(244,237,224,.5);">CASA</div>
+            <div class="body-line" style="font-size: 12px; color: rgba(244,237,224,.85);">Nosotros · Blog · Contacto · Reclamaciones</div>
+          </div>
+          <div class="stack">
+            <div class="lbl" style="color: rgba(244,237,224,.5);">VISÍTANOS</div>
+            <div class="body-line" style="font-size: 12px; color: rgba(244,237,224,.85);">San Isidro · Miraflores · Jockey Plaza</div>
+          </div>
+        </div>
+        <div style="margin-top: 28px; padding-top: 14px; border-top: 1px solid rgba(244,237,224,.2); display: flex; justify-content: space-between;" class="lbl">
+          <span style="color: rgba(244,237,224,.5);">© 2026 Casa Murguía · Todos los derechos reservados</span>
+          <span style="color: rgba(244,237,224,.5);">ES · EN · Política · Cookies</span>
+        </div>
+      </div>
+    </div>
+    <div class="annot">
+      <div class="section-tag"><span class="num">10</span> Footer oscuro</div>
+      <h3>Cerrar en sombra</h3>
+      <p class="why">Footer oscuro (no verde) para un cierre más arquitectónico. <b>Newsletter integrado aquí</b> ya que el CTA final fue emocional. Columnas en bloque corrido (no listas verticales) para densidad controlada.</p>
+      <ul>
+        <li>Input newsletter en línea, sin caja</li>
+        <li>Vínculos en bloque corrido = menos visual debt</li>
+        <li>Idioma + legal en una sola tira</li>
+      </ul>
+      <div class="ux-note">Direccion A tiene footer claro y bloque oscuro arriba. Aquí invertimos: el cierre es la sombra, da clausura.</div>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════
+     NOTAS GLOBALES
+     ════════════════════════════════════════════════════ -->
+<div class="notes">
+  <h2>Notas que aplican a ambas direcciones</h2>
+  <div class="sub">SISTEMA · ESPACIADOS · MEJORAS VS SITIO ACTUAL</div>
+
+  <div class="notes-grid">
+
+    <div class="card">
+      <div class="tag">JERARQUÍA DE CTA</div>
+      <h4>Una primaria por sección</h4>
+      <p>Solo <b>un CTA dorado</b> por sección. Los secundarios son ghost o link. Esto evita el efecto "carrito de supermercado" del sitio actual donde todos los botones compiten.</p>
+      <ul>
+        <li>Primario · dorado #a88a5c · alta intención</li>
+        <li>Secundario · outline ink · exploración</li>
+        <li>Terciario · link subrayado · educativo</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">SISTEMA DE ESPACIADO</div>
+      <h4>Escala de respiración</h4>
+      <p>Base 8px. Espaciado vertical entre secciones: <b>120px desktop / 72px mobile</b>. Padding interno de sección: 64px. Aire entre headline y body: 16px. Aire entre body y CTA: 24px.</p>
+      <ul>
+        <li>Section gap: 120 / 96 / 72 / 48</li>
+        <li>Container: 1280px, gutter 36px</li>
+        <li>Grid: 12 columnas, gap 24px</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">SISTEMA TIPOGRÁFICO</div>
+      <h4>Pareja decidida</h4>
+      <p>Serif headline: <b>Vesper Libre</b> (heredado del Figma — se mantiene la firma). Sans body: <b>Inter</b> o <b>Albert Sans</b> (ya presente). Display alternativo: <b>Copperplate Light</b> para labels uppercase. Sustituimos Tiro Bangla por Inter para mejor lectura en desktop/mobile.</p>
+      <ul>
+        <li>H1: 56–72px · Vesper Libre</li>
+        <li>H2: 36–44px · Vesper Libre</li>
+        <li>Body: 16px · Inter 400 · line-height 1.65</li>
+        <li>Labels: 11px · Copperplate · letter-spacing .14em</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">PALETA</div>
+      <h4>Crema · Tinta · Dorado</h4>
+      <p>Mantenemos identidad con tres acentos clave. Cualquier nuevo color futuro debe negociarse contra esta paleta — sin azules ni rosas pastel.</p>
+      <div class="row-mini" style="margin-top: 8px;">
+        <span class="swatch"><i style="background:#f8f5f0;"></i>#F8F5F0 crema</span>
+        <span class="swatch"><i style="background:#0a0a0a;"></i>#0A0A0A tinta</span>
+        <span class="swatch"><i style="background:#a88a5c;"></i>#A88A5C dorado</span>
+        <span class="swatch"><i style="background:#192E1D;"></i>#192E1D verde Murguía</span>
+      </div>
+      <p style="margin-top: 8px;">El verde se reserva para bandas y momentos editoriales — no para fondos masivos.</p>
+    </div>
+
+    <div class="card">
+      <div class="tag">MICROINTERACCIONES · NOTAS</div>
+      <h4>Sutiles, sólo donde aportan</h4>
+      <ul>
+        <li><b>Hover card:</b> imagen sube 4px, línea inferior dorada 200ms ease</li>
+        <li><b>Hover CTA:</b> swap inverso (dorado→ink) 150ms</li>
+        <li><b>Scroll reveal:</b> fade-up 24px, stagger 80ms entre hijos</li>
+        <li><b>Image lazy:</b> blur-up 600ms</li>
+        <li><b>Quick view:</b> drawer lateral 320ms ease-out</li>
+        <li><b>Nav scroll:</b> topbar pierde topstrip a partir de 80px scroll</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">MEJORAS VS SITIO ACTUAL</div>
+      <h4>10 cambios clave</h4>
+      <ul>
+        <li>Hero: de bullets a una sola promesa</li>
+        <li>Categorías subidas al primer scroll</li>
+        <li>Sección dedicada a Compromiso (motor del negocio)</li>
+        <li>Quick-view en lugar de PDP completa</li>
+        <li>Jerarquía clara de CTAs (1 primario por sección)</li>
+        <li>Banda de confianza con cifras, no íconos</li>
+        <li>Newsletter con valor explícito ("una pieza al mes")</li>
+        <li>Footer reducido de 8 a 5 columnas</li>
+        <li>WhatsApp como segundo canal, no principal</li>
+        <li>Verde Murguía sólo en momentos editoriales</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">ESTRATEGIA DE CONVERSIÓN</div>
+      <h4>Tres rampas, no un embudo</h4>
+      <p>La landing ofrece <b>tres caminos paralelos</b> según el momento del usuario:</p>
+      <ul>
+        <li><b>Inspiración →</b> Hero · Categorías · Editorial</li>
+        <li><b>Comparación →</b> Productos · Quick-view · Bestsellers</li>
+        <li><b>Decisión →</b> Builder · Asesoría · WhatsApp</li>
+      </ul>
+      <p style="margin-top:8px;">Cada rampa converge en "Agendar cita" o "Empezar diseño". No competimos canales: los ordenamos por intención.</p>
+    </div>
+
+    <div class="card">
+      <div class="tag">RECOMENDACIONES ELEMENTOR · WP</div>
+      <h4>Pensar en bloques</h4>
+      <ul>
+        <li>Cada sección = template Elementor independiente</li>
+        <li>Hero, Categorías y Productos como secciones globales</li>
+        <li>Imágenes en WebP, lazy-load nativo</li>
+        <li>Tipos de letra precargados (font-display: swap)</li>
+        <li>Animaciones via CSS, no plugin (rendimiento)</li>
+        <li>Grid CSS nativo > Elementor flexbox cuando se pueda</li>
+        <li>Sticky nav controlada por theme.json o CSS, no JS</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">FOTOGRAFÍA · BRIEFING</div>
+      <h4>Qué pedir al fotógrafo</h4>
+      <ul>
+        <li>Hero: pareja real, luz cálida lateral, mood emocional</li>
+        <li>Producto: fondo crema sólido, top-down y 3/4</li>
+        <li>Artesanía: manos en acción, herramienta, boceto</li>
+        <li>Boutique: interior con cliente real, no estilizado</li>
+        <li>Aspect ratios: 3/4 categorías · 1/1 producto · 4/5 editorial · 16/9 hero</li>
+        <li>Procesado uniforme: grano sutil, no HDR</li>
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+<div class="doc-foot">
+  <span>Wireframes Murguía · v0.1 · desktop · 2 direcciones</span>
+  <span>Siguiente: hi-fi de la dirección elegida + mobile</span>
+</div>
+
+<script>
+  // Auto-print after fonts + layout settle
+  window.addEventListener('load', () => {
+    const go = () => setTimeout(() => window.print(), 500);
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(go);
+    } else {
+      go();
+    }
+  });
+</script>
+
+</body>
+</html>

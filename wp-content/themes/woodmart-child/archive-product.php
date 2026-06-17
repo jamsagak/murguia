@@ -192,6 +192,9 @@ if ( $f_min !== '' || $f_max !== '' ) {
 	$price_label = 'S/ ' . ( $f_min !== '' ? number_format( $f_min, 0 ) : '0' ) . ' – S/ ' . ( $f_max !== '' ? number_format( $f_max, 0 ) : number_format( $price_max, 0 ) );
 	$active_filters[] = [ 'label' => $price_label, 'param' => 'price' ];
 }
+if ( $f_search ) {
+	$active_filters[] = [ 'label' => 'Búsqueda: ' . $f_search, 'param' => 's' ];
+}
 
 // Build current filter URL
 function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
@@ -231,7 +234,6 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			<button class="murg-sidebar__close" id="murg-sidebar-close" type="button" aria-label="Cerrar filtros">&times;</button>
 		</div>
 
-		<?php if ( ! $f_cat ) : ?>
 		<div class="murg-sidebar__count">
 			<?php echo (int) $total; ?> Resultado<?php echo $total !== 1 ? 's' : ''; ?>
 		</div>
@@ -250,7 +252,6 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 			</a>
 			<?php endif; ?>
 		</div>
-		<?php endif; ?>
 		<?php endif; ?>
 
 		<!-- Precio -->
@@ -450,7 +451,13 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 				<span class="murg-shop-topbar__count"><?php echo (int) $total; ?> producto<?php echo $total !== 1 ? 's' : ''; ?></span>
 			</div>
 			<div class="murg-shop-topbar__right">
-				<div class="murg-eyebrow"><?php echo esc_html( $sh_eyebrow ); ?></div>
+				<div class="murg-eyebrow">
+					<?php if ( $f_search ) : ?>
+						Búsqueda: «<?php echo esc_html( $f_search ); ?>»
+					<?php else : ?>
+						<?php echo esc_html( $sh_eyebrow ); ?>
+					<?php endif; ?>
+				</div>
 			</div>
 		</div>
 

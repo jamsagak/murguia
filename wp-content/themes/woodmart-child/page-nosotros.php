@@ -9,42 +9,99 @@ defined( 'ABSPATH' ) || exit;
 
 $about_img_base = get_stylesheet_directory_uri() . '/assets/img/nosotros/';
 
-$history_blocks = [
-	[
-		'image'   => $about_img_base . 'new-nosotros-2.jpg',
-		'alt'     => 'Zettel y Murguía en Jirón de la Unión',
-		'caption' => 'Zettel y Murguía (Jirón de la Unión)',
-		'copy'    => [
-			'En el año 1910, hace ya más de 100 años, fue fundada la Joyería por Don Manuel Murguía.',
-			'Inicialmente se llamó Joyería La Esmeralda y luego alrededor de los años 20 se creó la sociedad Zettle – Murguía. En 1936, en el Jirón de la Unión, que era ya, para ese entonces, el centro del comercio y vida social de Lima, fue creada M. Murguía S. A.',
-		],
-	],
-	[
-		'image'   => $about_img_base . 'new-nosotros-3.jpg',
-		'alt'     => 'José Jiménez Casabone',
-		'caption' => 'José Jiménez Casabone',
-		'copy'    => [
-			'En el año 1956 fallece Don Manuel Murguía y la joyería queda a cargo del señor José Jiménez Casabonne. En esta etapa se importan desde Europa marcas tan importantes como cristales Baccarat, Lalique, Daum; porcelanas Heinrich, las famosas perlas Mikimoto y joyería de Italia y Francia.',
-			'Es tal el éxito que en los años 60 se construye un nuevo local de 5 pisos en el Jirón de la Unión. Alrededor de los años 70 el Centro de Lima comenzó a declinar y el auge empezó en los nuevos distritos de San Isidro y Miraflores. Joyería Murguía abrió 3 nuevas tiendas; 2 de ellas en los distritos mencionados y otra en la urbanización Chacarilla.',
-			'Actualmente Joyería Murguía es reconocida en Lima, no solo por sus años de trayectoria, sino también por estar a la vanguardia con sus novedosos diseños en joyería, relojes y artículos para regalo.',
-		],
-	],
-];
+// 1. Hero
+$hero_img = murguia_ajuste( 'ab_hero_imagen', '', 'nosotros' );
+$hero_img_url = is_array( $hero_img ) ? $hero_img['url'] : ( is_string( $hero_img ) ? $hero_img : '' );
+if ( ! $hero_img_url ) {
+	$hero_img_url = $about_img_base . 'new-nosotros-1.jpg';
+}
 
-$values = [
-	[
-		'title' => 'Nuestra Misión',
-		'image' => $about_img_base . 'new-nosotros-4.jpg',
-		'alt'   => 'Misión de Joyería Murguía',
-		'copy'  => 'Brindar a nuestros clientes momentos especiales, representados en finas piezas de joyería que representarán sentimientos importantes de su vida.',
-	],
-	[
-		'title' => 'Nuestra Visión',
-		'image' => $about_img_base . 'new-nosotros-5.jpg',
-		'alt'   => 'Visión de Joyería Murguía',
-		'copy'  => 'Mantenernos como la primera joyería del Perú para nuestros clientes y ser la primera opción para las nuevas generaciones de compradores.',
-	],
-];
+// 2. Historia
+$acf_history = murguia_ajuste( 'ab_history_blocks', [], 'nosotros' );
+$history_blocks = [];
+
+if ( ! empty( $acf_history ) && is_array( $acf_history ) ) {
+	foreach ( $acf_history as $row ) {
+		$img_url = '';
+		if ( ! empty( $row['imagen'] ) ) {
+			$img_url = is_array( $row['imagen'] ) ? $row['imagen']['url'] : $row['imagen'];
+		}
+		
+		$copy_paragraphs = [];
+		if ( ! empty( $row['copy'] ) ) {
+			// Dividir por saltos de línea para renderizar como párrafos individuales
+			$copy_paragraphs = array_filter( array_map( 'trim', explode( "\n", str_replace( "\r", "", $row['copy'] ) ) ) );
+		}
+		
+		$history_blocks[] = [
+			'image'   => $img_url,
+			'alt'     => ! empty( $row['alt'] ) ? $row['alt'] : ( ! empty( $row['caption'] ) ? $row['caption'] : 'Historia Joyería Murguía' ),
+			'caption' => $row['caption'] ?? '',
+			'copy'    => $copy_paragraphs,
+		];
+	}
+}
+
+if ( empty( $history_blocks ) ) {
+	$history_blocks = [
+		[
+			'image'   => $about_img_base . 'new-nosotros-2.jpg',
+			'alt'     => 'Zettel y Murguía en Jirón de la Unión',
+			'caption' => 'Zettel y Murguía (Jirón de la Unión)',
+			'copy'    => [
+				'En el año 1910, hace ya más de 100 años, fue fundada la Joyería por Don Manuel Murguía.',
+				'Inicialmente se llamó Joyería La Esmeralda y luego alrededor de los años 20 se creó la sociedad Zettle – Murguía. En 1936, en el Jirón de la Unión, que era ya, para ese entonces, el centro del comercio y vida social de Lima, fue creada M. Murguía S. A.',
+			],
+		],
+		[
+			'image'   => $about_img_base . 'new-nosotros-3.jpg',
+			'alt'     => 'José Jiménez Casabone',
+			'caption' => 'José Jiménez Casabonne',
+			'copy'    => [
+				'En el año 1956 fallece Don Manuel Murguía y la joyería queda a cargo del señor José Jiménez Casabonne. En esta etapa se importan desde Europa marcas tan importantes como cristales Baccarat, Lalique, Daum; porcelanas Heinrich, las famosas perlas Mikimoto y joyería de Italia y Francia.',
+				'Es tal el éxito que en los años 60 se construye un nuevo local de 5 pisos en el Jirón de la Unión. Alrededor de los años 70 el Centro de Lima comenzó a declinar y el auge empezó en los nuevos distritos de San Isidro y Miraflores. Joyería Murguía abrió 3 nuevas tiendas; 2 de ellas en los distritos mencionados y otra en la urbanización Chacarilla.',
+				'Actualmente Joyería Murguía es reconocida en Lima, no solo por sus años de trayectoria, sino también por estar a la vanguardia con sus novedosos diseños en joyería, relojes y artículos para regalo.',
+			],
+		],
+	];
+}
+
+// 3. Misión y Visión
+$acf_values = murguia_ajuste( 'ab_values', [], 'nosotros' );
+$values = [];
+
+if ( ! empty( $acf_values ) && is_array( $acf_values ) ) {
+	foreach ( $acf_values as $row ) {
+		$img_url = '';
+		if ( ! empty( $row['imagen'] ) ) {
+			$img_url = is_array( $row['imagen'] ) ? $row['imagen']['url'] : $row['imagen'];
+		}
+		
+		$values[] = [
+			'title' => $row['titulo'] ?? '',
+			'image' => $img_url,
+			'alt'   => $row['titulo'] ?? '',
+			'copy'  => $row['copy'] ?? '',
+		];
+	}
+}
+
+if ( empty( $values ) ) {
+	$values = [
+		[
+			'title' => 'Nuestra Misión',
+			'image' => $about_img_base . 'new-nosotros-4.jpg',
+			'alt'   => 'Misión de Joyería Murguía',
+			'copy'  => 'Brindar a nuestros clientes momentos especiales, representados en finas piezas de joyería que representarán sentimientos importantes de su vida.',
+		],
+		[
+			'title' => 'Nuestra Visión',
+			'image' => $about_img_base . 'new-nosotros-5.jpg',
+			'alt'   => 'Visión de Joyería Murguía',
+			'copy'  => 'Mantenernos como la primera joyería del Perú para nuestros clientes y ser la primera opción para las nuevas generaciones de compradores.',
+		],
+	];
+}
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -61,7 +118,7 @@ $values = [
 <main class="murg-about">
 
 	<section class="murg-about-hero" aria-label="Nosotros">
-		<img src="<?php echo esc_url( $about_img_base . 'new-nosotros-1.jpg' ); ?>" alt="Joyería Murguía" class="murg-about-hero__img" fetchpriority="high">
+		<img src="<?php echo esc_url( $hero_img_url ); ?>" alt="Joyería Murguía" class="murg-about-hero__img" fetchpriority="high">
 	</section>
 
 	<section class="murg-about-section">

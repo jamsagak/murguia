@@ -32,10 +32,15 @@ $departamentos = [
 		<header class="murg-legal__header">
 			<div class="murg-eyebrow"><?php bloginfo( 'name' ); ?></div>
 			<div class="murg-reclamos__icon" aria-hidden="true">
-				<svg viewBox="0 0 64 64" fill="none">
-					<path d="M14 8h26l10 10v38H14V8Z" stroke="currentColor" stroke-width="2"/>
-					<path d="M40 8v12h10M22 28h20M22 36h20M22 44h14" stroke="currentColor" stroke-width="2"/>
-					<path d="M18 58h32" stroke="currentColor" stroke-width="2"/>
+				<svg width="180" height="50" viewBox="0 0 180 50" fill="none" class="murg-reclamos-regulatory-logo">
+					<rect width="180" height="50" rx="4" fill="#0c2340" stroke="#C9A84C" stroke-width="1.5"/>
+					<g transform="translate(12, 13)" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" fill="#C9A84C"/>
+						<path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" fill="#C9A84C"/>
+					</g>
+					<text x="46" y="21" fill="white" font-family="'Inter', sans-serif" font-size="9" font-weight="600" letter-spacing="1">LIBRO DE</text>
+					<text x="46" y="34" fill="white" font-family="'Inter', sans-serif" font-size="11" font-weight="800" letter-spacing="0.5">RECLAMACIONES</text>
+					<text x="46" y="43" fill="#C9A84C" font-family="'Inter', sans-serif" font-size="7" font-weight="700" letter-spacing="0.5">VIRTUAL</text>
 				</svg>
 			</div>
 			<h1 class="murg-legal__title">Libro de Reclamaciones</h1>

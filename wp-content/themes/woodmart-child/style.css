@@ -1136,7 +1136,7 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
 .murg-product__meta {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
   margin-bottom: 8px;
 }
 
@@ -1571,9 +1571,10 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
 }
 .murg-floating-whatsapp svg {
   display: block;
-  width: 19px;
-  height: 19px;
-  fill: currentColor;
+  width: 26px;
+  height: 26px;
+  fill: #F5F0E8 !important;
+  stroke: none !important;
 }
 @media (max-width: 640px) {
   .murg-floating-whatsapp {
@@ -2995,45 +2996,360 @@ body.murg-filter-open { overflow: hidden; }
 /* ============================================================
    CONTACT PAGE (standalone)
    ============================================================ */
-.murg-contact--page { padding-top: 140px; min-height: 100vh; }
+.murg-contact-layout {
+  background: var(--murg-cream);
+  min-height: 100vh;
+}
 
-.murg-contact__details {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px 24px;
-  margin-top: 32px;
-  font-size: 13px;
+/* 1. Hero Section */
+.murg-contact-hero {
+  position: relative;
+  background: linear-gradient(to bottom, rgba(25, 46, 29, 0.82), rgba(25, 46, 29, 0.92)), url('../../uploads/2026/05/miraflores-hero.webp') no-repeat center center / cover;
+  padding: 160px clamp(24px, 6vw, 96px) 100px;
+  text-align: center;
+  color: var(--murg-cream);
+  min-height: 40vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.murg-contact__details dt {
-  font-size: 10px;
-  letter-spacing: 0.2em;
+.murg-contact-hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, transparent, var(--murg-cream));
+  pointer-events: none;
+}
+.murg-contact-hero__inner {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+.murg-contact-hero h1 {
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  font-size: clamp(32px, 4vw, 56px);
+  color: #ffffff !important;
+  margin: 16px 0 20px;
   text-transform: uppercase;
-  color: var(--murg-muted);
-  padding-top: 2px;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
 }
-.murg-contact__details a {
+.murg-contact-hero__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(15px, 1.2vw, 18px);
+  color: rgba(245,240,232,0.9);
+  line-height: 1.8;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* 2. Boutiques Grid */
+.murg-contact-stores {
+  padding: clamp(64px, 8vw, 100px) clamp(24px, 6vw, 96px);
+  background: #ffffff;
+}
+.murg-contact-stores__head {
+  max-width: 600px;
+  margin-bottom: 56px;
+}
+.murg-contact-stores__head h2 {
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+  font-size: clamp(28px, 3vw, 42px);
+  color: var(--murg-ink);
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+.murg-contact-stores__head p {
+  color: var(--murg-muted);
+  font-size: 15px;
+  line-height: 1.7;
+  margin-top: 12px;
+}
+.murg-contact-stores__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+.murg-contact-store-card {
+  border: 1px solid var(--murg-line);
+  background: var(--murg-cream);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+}
+.murg-contact-store-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--murg-gold);
+  box-shadow: 0 12px 30px rgba(25, 46, 29, 0.08);
+}
+.murg-contact-store-card__img-wrap {
+  position: relative;
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--murg-line);
+  background: var(--murg-cream-deep);
+}
+.murg-contact-store-card__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.murg-contact-store-card:hover .murg-contact-store-card__img {
+  transform: scale(1.05);
+}
+.murg-contact-store-card__content {
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+.murg-contact-store-card__num {
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  color: var(--murg-gold);
+  letter-spacing: 0.15em;
+}
+.murg-contact-store-card h3 {
+  font-family: 'Cinzel', serif;
+  font-size: 22px;
+  font-weight: 400;
+  margin: 12px 0 24px;
+  color: var(--murg-ink);
+}
+.murg-contact-store-card__details {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--murg-ink);
+  margin-bottom: 32px;
+}
+.murg-contact-store-card__details p {
+  margin: 0 0 12px;
+}
+.murg-contact-store-card__details p strong {
+  font-family: 'Cinzel', serif;
+  font-weight: 400;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--murg-muted);
+  display: block;
+  margin-bottom: 4px;
+}
+.murg-contact-store-card__phone a {
   color: var(--murg-ink);
   text-decoration: none;
-  transition: color 0.2s;
+  font-weight: 500;
 }
-.murg-contact__details a:hover { color: var(--murg-gold); }
+.murg-contact-store-card__phone a:hover {
+  color: var(--murg-gold);
+}
+.murg-contact-store-card__actions {
+  display: flex;
+  gap: 20px;
+  border-top: 1px solid var(--murg-line);
+  padding-top: 20px;
+}
+.murg-contact-store-card__link {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--murg-ink);
+  text-decoration: none;
+  font-weight: 500;
+  border-bottom: 1px solid var(--murg-gold);
+  padding-bottom: 2px;
+  transition: all 0.3s ease;
+}
+.murg-contact-store-card__link:hover {
+  color: var(--murg-gold);
+  border-bottom-color: var(--murg-forest);
+}
 
-.murg-contact__servicios {
-  margin-top: 40px;
-  padding-top: 32px;
+/* 3. Appointment Form Section */
+.murg-contact-form-section {
+  padding: clamp(64px, 8vw, 120px) clamp(24px, 6vw, 96px);
+  background: var(--murg-cream);
   border-top: 1px solid var(--murg-line);
 }
-.murg-contact__servicios ul { list-style: none; margin-top: 12px; }
-.murg-contact__servicios li {
-  padding: 8px 0;
-  border-bottom: 1px solid var(--murg-line);
-  font-size: 13px;
+.murg-contact-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 80px;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: center;
 }
-.murg-contact__serv-sub {
-  margin-top: 12px;
-  font-size: 11px;
-  letter-spacing: 0.12em;
+.murg-contact-form-info h2 {
+  font-family: 'Cinzel', serif;
+  font-weight: 300;
+  font-size: clamp(28px, 3vw, 48px);
+  color: var(--murg-ink);
+  margin-top: 10px;
+  text-transform: uppercase;
+}
+.murg-contact-form-info__text {
+  font-size: 15px;
+  line-height: 1.8;
   color: var(--murg-muted);
+  margin: 24px 0 40px;
+}
+.murg-contact-form-info__perks {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+}
+.murg-perk-item h4 {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--murg-gold);
+  margin: 0 0 8px;
+}
+.murg-perk-item p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--murg-muted);
+  margin: 0;
+}
+
+.murg-contact-form-card {
+  background: #ffffff;
+  border: 1px solid var(--murg-line);
+  padding: 48px;
+  box-shadow: 0 16px 40px rgba(25, 46, 29, 0.03);
+}
+.murg-contact-form {
+  display: flex;
+  flex-direction: column;
+}
+.murg-contact-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.22);
+  padding-bottom: 10px;
+  transition: border-color 0.3s;
+}
+.murg-contact-field:focus-within {
+  border-color: var(--murg-gold);
+}
+.murg-contact-field label {
+  font-family: 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--murg-muted);
+}
+.murg-contact-field input,
+.murg-contact-field select,
+.murg-contact-field textarea {
+  border: none;
+  background: transparent;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  color: var(--murg-ink) !important;
+  font-weight: 400;
+  outline: none;
+  width: 100%;
+  padding: 4px 0;
+}
+.murg-contact-field select {
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='%236e6a62' d='M0 0l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  background-size: 10px 6px;
+  padding-right: 24px;
+}
+.murg-contact-field select option {
+  background: #ffffff;
+  color: var(--murg-ink);
+  font-family: 'Inter', sans-serif;
+}
+.murg-contact-field textarea {
+  resize: vertical;
+}
+.murg-contact-field input::placeholder,
+.murg-contact-field textarea::placeholder {
+  color: rgba(110, 106, 98, 0.55);
+  opacity: 1;
+}
+.murg-contact-form__actions {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 16px;
+  margin-top: 24px;
+}
+.murg-contact-form__actions .murg-btn {
+  width: 100%;
+  padding: 16px;
+  font-size: 11px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Custom button overrides for the contact form to ensure perfect visibility & luxury styling */
+.murg-contact-form__actions .murg-btn--gold {
+  background: var(--murg-gold);
+  color: #0A0A0A !important;
+  border-color: var(--murg-gold);
+  font-weight: 500;
+}
+.murg-contact-form__actions .murg-btn--gold:hover {
+  background: var(--murg-forest);
+  color: #ffffff !important;
+  border-color: var(--murg-forest);
+}
+.murg-contact-form__actions .murg-btn--gold .murg-whatsapp-dot {
+  background: var(--murg-forest);
+  transition: background 0.25s;
+}
+.murg-contact-form__actions .murg-btn--gold:hover .murg-whatsapp-dot {
+  background: var(--murg-gold);
+}
+
+/* Responsive Overrides */
+@media (max-width: 1024px) {
+  .murg-contact-stores__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .murg-contact-form-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
+@media (max-width: 768px) {
+  .murg-contact-hero {
+    padding-top: 120px;
+  }
+  .murg-contact-stores__grid {
+    grid-template-columns: 1fr;
+  }
+  .murg-contact-form-card {
+    padding: 32px 24px;
+  }
+  .murg-contact-form__actions {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ============================================================
@@ -6057,6 +6373,84 @@ button.murg-piezas__tab:hover {
 /* ============================================================
    HOME FROM NOVIOS DOWN - Figma sequence, web scale
    ============================================================ */
+/* ============================================================
+   DIAMOND SHAPES — interactive section
+   ============================================================ */
+.murg-diamond-shapes {
+  background: var(--murg-parchment);
+  padding: clamp(60px, 5vw, 100px) clamp(24px, 4vw, 80px);
+  text-align: center;
+}
+.murg-diamond-shapes__inner {
+  max-width: 900px;
+  margin: 0 auto;
+}
+.murg-diamond-shapes__title {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+  font-size: clamp(26px, 2.4vw, 38px);
+  font-weight: 400;
+  color: var(--murg-forest);
+  margin: 0 0 10px;
+  letter-spacing: 0.02em;
+}
+.murg-diamond-shapes__sub {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: var(--murg-muted);
+  margin: 0 0 clamp(32px, 3vw, 50px);
+  letter-spacing: 0.03em;
+}
+.murg-diamond-shapes__grid {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 2.5vw, 40px);
+  flex-wrap: wrap;
+}
+.murg-diamond-shapes__card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--murg-forest);
+  cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              color 0.3s ease;
+  padding: 16px 12px;
+  border-radius: 6px;
+}
+.murg-diamond-shapes__card:hover {
+  transform: translateY(-6px);
+  color: var(--murg-gold, #C9A84C);
+}
+.murg-diamond-shapes__icon {
+  width: clamp(56px, 5vw, 72px);
+  height: clamp(56px, 5vw, 72px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  padding: 10px;
+  transition: border-color 0.3s ease,
+              background 0.3s ease;
+}
+.murg-diamond-shapes__card:hover .murg-diamond-shapes__icon {
+  border-color: var(--murg-gold, #C9A84C);
+  background: rgba(201, 168, 76, 0.06);
+}
+.murg-diamond-shapes__icon svg {
+  width: 100%;
+  height: 100%;
+}
+.murg-diamond-shapes__label {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .murg-icon-strip {
   background: var(--murg-parchment);
   padding: clamp(54px, 4.98vw, 86px) clamp(24px, 3.59vw, 62px) clamp(42px, 3.7vw, 64px);
@@ -6066,7 +6460,7 @@ button.murg-piezas__tab:hover {
   display: grid;
   column-gap: clamp(28px, 4.05vw, 70px);
   row-gap: clamp(20px, 2.31vw, 40px);
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   margin: 0 auto;
   max-width: 1389px;
   width: 100%;
@@ -6379,7 +6773,7 @@ button.murg-piezas__tab:hover {
   }
 
   .murg-icon-strip__inner {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     min-width: 480px;
     overflow-x: auto;
   }
@@ -7062,19 +7456,13 @@ button.murg-piezas__tab:hover {
 }
 
 .murg-reclamos__icon {
-  width: 72px;
-  height: 72px;
-  margin: 0 auto 20px;
   display: flex;
-  align-items: center;
   justify-content: center;
-  color: var(--murg-forest);
-  border: 1px solid rgba(25,46,29,0.22);
-  border-radius: 50%;
+  margin: 0 auto 24px;
 }
-.murg-reclamos__icon svg {
-  width: 42px;
-  height: 42px;
+.murg-reclamos-regulatory-logo {
+  display: block;
+  max-width: 100%;
 }
 .murg-reclamos__section {
   border: none;
@@ -8875,13 +9263,13 @@ body.murg-modal-open {
   padding: 160px clamp(24px, 6vw, 96px) 88px;
   background:
     linear-gradient(90deg, rgba(25,46,29,0.86), rgba(25,46,29,0.42)),
-    url('/wp-content/uploads/2026/05/hero.jpg') center / cover no-repeat;
+    url('../../uploads/2026/05/hero.jpg') center / cover no-repeat;
   color: var(--murg-cream);
 }
 .murg-design-flow--bands .murg-design-flow__hero {
   background:
     linear-gradient(90deg, rgba(25,46,29,0.88), rgba(25,46,29,0.46)),
-    url('/wp-content/uploads/2026/05/novios.jpg') center / cover no-repeat;
+    url('../../uploads/2026/05/novios.jpg') center / cover no-repeat;
 }
 .murg-design-flow__inner { max-width: 720px; }
 .murg-design-flow__inner h1,
@@ -8894,6 +9282,7 @@ body.murg-modal-open {
   margin: 14px 0 18px;
   font-size: clamp(36px, 5vw, 72px);
   line-height: 1.02;
+  color: #ffffff !important;
 }
 .murg-design-flow__inner p {
   max-width: 560px;
@@ -8916,15 +9305,19 @@ body.murg-modal-open {
   gap: 14px;
   margin-top: 34px;
 }
-.murg-design-ring-page .murg-design-flow__actions .murg-btn--ghost {
-  color: var(--murg-cream);
-  border-color: rgba(245,240,232,0.78);
-  background: rgba(245,240,232,0.08);
+.murg-design-flow__hero .murg-btn--dark:hover {
+  color: #ffffff !important;
+  border-color: #ffffff !important;
 }
-.murg-design-ring-page .murg-design-flow__actions .murg-btn--ghost:hover {
-  color: var(--murg-forest);
-  border-color: var(--murg-cream);
-  background: var(--murg-cream);
+.murg-design-flow__actions .murg-btn--ghost {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.78) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+}
+.murg-design-flow__actions .murg-btn--ghost:hover {
+  color: var(--murg-forest) !important;
+  border-color: #ffffff !important;
+  background: #ffffff !important;
 }
 .murg-design-config {
   padding: clamp(64px, 8vw, 120px) clamp(22px, 5vw, 80px);

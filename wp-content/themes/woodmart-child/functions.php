@@ -102,28 +102,35 @@ function murguia_handle_newsletter_subscribe() {
 		exit;
 	}
 
+	// 1. Send email to admin as backup
 	$to      = get_option( 'admin_email' );
 	$subject = '[Murguía] Nueva suscripción al newsletter';
 	$body    = sprintf( "Correo: %s\nOrigen: %s", $email, esc_url_raw( wp_get_referer() ?: home_url( '/' ) ) );
 	wp_mail( $to, $subject, $body, [ 'Content-Type: text/plain; charset=UTF-8' ] );
+
+	// 2. Background Mailchimp integration
+	$action     = trim( (string) murguia_ajuste( 'hp_mailchimp_action', '', 'pagina-de-inicio' ) );
+	$email_name = trim( (string) murguia_ajuste( 'hp_mailchimp_email_name', 'EMAIL', 'pagina-de-inicio' ) );
+
+	if ( $action ) {
+		$body_args = [
+			$email_name => $email,
+		];
+		wp_remote_post( $action, [
+			'method'    => 'POST',
+			'body'      => $body_args,
+			'timeout'   => 15,
+			'headers'   => [
+				'User-Agent' => 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ),
+			],
+		] );
+	}
 
 	wp_safe_redirect( add_query_arg( 'newsletter', 'ok', wp_get_referer() ?: home_url( '/' ) ) );
 	exit;
 }
 
 function murguia_newsletter_form_config() {
-	$action     = trim( (string) murguia_ajuste( 'hp_mailchimp_action', '', 'pagina-de-inicio' ) );
-	$email_name = trim( (string) murguia_ajuste( 'hp_mailchimp_email_name', 'EMAIL', 'pagina-de-inicio' ) );
-
-	if ( $action ) {
-		return [
-			'action'     => esc_url( $action ),
-			'method'     => 'post',
-			'email_name' => $email_name ?: 'EMAIL',
-			'external'   => true,
-		];
-	}
-
 	return [
 		'action'     => esc_url( admin_url( 'admin-post.php' ) ),
 		'method'     => 'post',
@@ -154,9 +161,28 @@ function murguia_capture_checkout_newsletter_optin( $order_id, $posted_data, $or
 		return;
 	}
 
+	// 1. Send email to admin as backup
 	$subject = '[Murguia] Suscripcion newsletter desde checkout';
 	$message = "Email: {$email}\nPedido: #{$order_id}\nOrigen: checkout";
 	wp_mail( get_option( 'admin_email' ), $subject, $message );
+
+	// 2. Background Mailchimp integration
+	$action     = trim( (string) murguia_ajuste( 'hp_mailchimp_action', '', 'pagina-de-inicio' ) );
+	$email_name = trim( (string) murguia_ajuste( 'hp_mailchimp_email_name', 'EMAIL', 'pagina-de-inicio' ) );
+
+	if ( $action ) {
+		$body_args = [
+			$email_name => $email,
+		];
+		wp_remote_post( $action, [
+			'method'    => 'POST',
+			'body'      => $body_args,
+			'timeout'   => 15,
+			'headers'   => [
+				'User-Agent' => 'WordPress/' . get_bloginfo( 'version' ) . '; ' . get_bloginfo( 'url' ),
+			],
+		] );
+	}
 }
 
 add_action( 'wp_footer', 'murguia_render_floating_whatsapp', 30 );
@@ -169,7 +195,7 @@ function murguia_render_floating_whatsapp() {
 	}
 	?>
 	<a class="murg-floating-whatsapp" href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp">
-		<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.52 3.48A11.78 11.78 0 0 0 12.13 0C5.61 0 .32 5.29.32 11.81c0 2.08.54 4.11 1.58 5.9L.22 23.84l6.28-1.65a11.76 11.76 0 0 0 5.63 1.43h.01c6.52 0 11.81-5.29 11.81-11.81 0-3.15-1.23-6.12-3.43-8.33ZM12.14 21.62h-.01a9.8 9.8 0 0 1-5-1.37l-.36-.21-3.73.98 1-3.64-.23-.37a9.77 9.77 0 0 1-1.5-5.2C2.31 6.39 6.72 1.98 12.14 1.98a9.75 9.75 0 0 1 6.98 2.9 9.79 9.79 0 0 1 2.88 6.93c0 5.42-4.41 9.81-9.86 9.81Zm5.39-7.34c-.29-.15-1.74-.86-2.01-.96-.27-.1-.47-.15-.67.15-.2.29-.77.96-.95 1.16-.17.2-.35.22-.64.07-.29-.15-1.24-.46-2.36-1.46-.87-.78-1.46-1.74-1.63-2.03-.17-.29-.02-.45.13-.6.13-.13.29-.35.44-.52.15-.17.2-.29.29-.49.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.29-1.04 1.02-1.04 2.48s1.06 2.87 1.21 3.07c.15.2 2.09 3.2 5.07 4.49.71.31 1.26.49 1.69.63.71.23 1.36.2 1.87.12.57-.08 1.74-.71 1.99-1.4.25-.69.25-1.28.17-1.4-.07-.13-.27-.2-.56-.35Z"/></svg>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" aria-hidden="true"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.635.78-.12.136-.232.149-.432.05-.2-.099-.878-.308-1.662-.962-.61-.503-1.026-1.15-1.14-1.352-.115-.203-.02-.32.096-.437.104-.103.235-.29.356-.437.121-.147.158-.29.236-.483.078-.192.032-.284-.019-.413-.05-.129-.444-1.15-.607-1.575-.156-.404-.316-.344-.432-.35h-.385c-.133 0-.348.05-.526.244-.18.197-.693.677-.693 1.649 0 .972.705 1.913.803 2.045.097.133 1.38 2.127 3.352 2.98.396.174.69.289.931.37.487.153.924.128 1.272.08.349-.048 1.17-.4 1.34-.791.17-.39.17-.723.113-.79-.057-.067-.19-.125-.396-.227z"/></svg>
 		<span>WhatsApp</span>
 	</a>
 	<?php
@@ -324,6 +350,7 @@ function murguia_ensure_ajustes_defaults() {
 		[ 'post_title' => 'Anillos de Compromiso', 'post_name' => 'anillos-compromiso-page' ],
 		[ 'post_title' => 'Alta Joyería',      'post_name' => 'alta-joyeria-page' ],
 		[ 'post_title' => 'Las 4Cs',            'post_name' => 'las-4cs-page' ],
+		[ 'post_title' => 'Sobre Nosotros',    'post_name' => 'nosotros' ],
 	];
 
 	foreach ( $secciones as $data ) {
@@ -395,6 +422,15 @@ function murguia_register_homepage_fields() {
 						'type'          => 'image',
 						'return_format' => 'array',
 						'preview_size'  => 'medium',
+					],
+					[
+						'key'           => 'field_murg_hp_hero_slide_img_mobile',
+						'label'         => 'Imagen mobile (opcional)',
+						'name'          => 'imagen_mobile',
+						'type'          => 'image',
+						'return_format' => 'array',
+						'preview_size'  => 'medium',
+						'instructions'  => 'Opcional. Si se deja vacío, se usará la imagen de escritorio. Recomendado: proporción vertical (9:16 o similar).',
 					],
 					[
 						'key'   => 'field_murg_hp_hero_slide_video_url',
@@ -1330,6 +1366,16 @@ function murguia_override_shop_template( $template ) {
 		if ( file_exists( $custom ) ) return $custom;
 	}
 
+	// Sobre Nosotros
+	if ( is_page() && 'page-nosotros.php' === get_page_template_slug() ) {
+		$custom = get_stylesheet_directory() . '/page-nosotros.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+	if ( is_page( 'nosotros' ) ) {
+		$custom = get_stylesheet_directory() . '/page-nosotros.php';
+		if ( file_exists( $custom ) ) return $custom;
+	}
+
 	return $template;
 }
 
@@ -1390,6 +1436,13 @@ function murguia_is_custom_template() {
 	}
 	// Página de contacto por slug, si no se asignó la plantilla
 	if ( is_page( 'contacto' ) ) {
+		return true;
+	}
+	// Página con plantilla "Nosotros" (page-nosotros.php)
+	if ( is_page() && 'page-nosotros.php' === get_page_template_slug() ) {
+		return true;
+	}
+	if ( is_page( 'nosotros' ) ) {
 		return true;
 	}
 	// Página con plantilla "Alta Joyería"
@@ -2110,6 +2163,133 @@ function murguia_register_4cs_fields() {
 			[ 'key' => 'field_murg_4cs_cta_principal_url', 'label' => 'Boton principal - URL', 'name' => 'c4_cta_principal_url', 'type' => 'url' ],
 			[ 'key' => 'field_murg_4cs_cta_secundario_texto', 'label' => 'Boton secundario - texto', 'name' => 'c4_cta_secundario_texto', 'type' => 'text' ],
 			[ 'key' => 'field_murg_4cs_cta_secundario_url', 'label' => 'Boton secundario - URL', 'name' => 'c4_cta_secundario_url', 'type' => 'url' ],
+		],
+	] );
+}
+
+/* ------------------------------------------------------------------
+   ACF FIELD GROUP — Sobre Nosotros
+   Prefijo: ab_   |   Ajuste slug: nosotros
+   ------------------------------------------------------------------ */
+add_action( 'acf/init', 'murguia_register_about_fields' );
+
+function murguia_register_about_fields() {
+	if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
+	$id = murguia_ajuste_id( 'nosotros' );
+	if ( ! $id ) return;
+
+	acf_add_local_field_group( [
+		'key'             => 'group_murg_about',
+		'title'           => 'Sobre Nosotros — Contenido',
+		'location'        => [
+			[ [ 'param' => 'post', 'operator' => '==', 'value' => $id ] ],
+		],
+		'menu_order'      => 0,
+		'position'        => 'normal',
+		'style'           => 'default',
+		'label_placement' => 'top',
+		'fields'          => [
+			// ── Tab Hero ──
+			[
+				'key'   => 'field_ab_tab_hero',
+				'label' => '🎬 Hero',
+				'name'  => '',
+				'type'  => 'tab',
+			],
+			[
+				'key'           => 'field_ab_hero_imagen',
+				'label'         => 'Imagen de fondo',
+				'name'          => 'ab_hero_imagen',
+				'type'          => 'image',
+				'return_format' => 'array',
+				'preview_size'  => 'medium',
+				'instructions'  => 'Imagen de banner para la sección superior. Recomendado: WebP/JPG de 1920×1080px.',
+			],
+
+			// ── Tab Historia ──
+			[
+				'key'   => 'field_ab_tab_historia',
+				'label' => '📖 Historia',
+				'name'  => '',
+				'type'  => 'tab',
+			],
+			[
+				'key'          => 'field_ab_history_blocks',
+				'label'        => 'Bloques de Historia',
+				'name'         => 'ab_history_blocks',
+				'type'         => 'repeater',
+				'layout'       => 'block',
+				'button_label' => 'Agregar bloque',
+				'sub_fields'   => [
+					[
+						'key'           => 'field_ab_historia_img',
+						'label'         => 'Imagen',
+						'name'          => 'imagen',
+						'type'          => 'image',
+						'return_format' => 'array',
+						'preview_size'  => 'medium',
+					],
+					[
+						'key'   => 'field_ab_historia_alt',
+						'label' => 'Alt de imagen',
+						'name'  => 'alt',
+						'type'  => 'text',
+					],
+					[
+						'key'   => 'field_ab_historia_caption',
+						'label' => 'Subtítulo / Leyenda de imagen',
+						'name'  => 'caption',
+						'type'  => 'text',
+					],
+					[
+						'key'         => 'field_ab_history_copy',
+						'label'       => 'Texto descriptivo',
+						'name'        => 'copy',
+						'type'        => 'textarea',
+						'rows'        => 6,
+						'instructions'=> 'Puedes separar párrafos con saltos de línea.',
+					],
+				],
+			],
+
+			// ── Tab Valores (Misión y Visión) ──
+			[
+				'key'   => 'field_ab_tab_valores',
+				'label' => '✦ Misión y Visión',
+				'name'  => '',
+				'type'  => 'tab',
+			],
+			[
+				'key'          => 'field_ab_values',
+				'label'        => 'Misión y Visión',
+				'name'         => 'ab_values',
+				'type'         => 'repeater',
+				'layout'       => 'block',
+				'button_label' => 'Agregar bloque de valor',
+				'sub_fields'   => [
+					[
+						'key'   => 'field_ab_valor_titulo',
+						'label' => 'Título',
+						'name'  => 'titulo',
+						'type'  => 'text',
+					],
+					[
+						'key'           => 'field_ab_valor_img',
+						'label'         => 'Imagen',
+						'name'          => 'imagen',
+						'type'          => 'image',
+						'return_format' => 'array',
+						'preview_size'  => 'medium',
+					],
+					[
+						'key'   => 'field_ab_valor_copy',
+						'label' => 'Texto descriptivo',
+						'name'  => 'copy',
+						'type'  => 'textarea',
+						'rows'  => 4,
+					],
+				],
+			],
 		],
 	] );
 }
