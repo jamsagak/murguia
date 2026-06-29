@@ -33,50 +33,52 @@ if ( ! $aj_whatsapp ) {
 }
 $aj_whatsapp_clean = preg_replace( '/[^0-9]/', '', (string) $aj_whatsapp );
 
-$aj_query = new WP_Query( [
-	'post_type'      => 'product',
-	'post_status'    => 'publish',
-	'posts_per_page' => -1,
-	'tax_query'      => [ [
-		'taxonomy' => 'product_cat',
-		'field'    => 'slug',
-		'terms'    => 'alta-joyeria',
-	] ],
-	'meta_key'       => 'total_sales',
-	'orderby'        => 'meta_value_num',
-	'order'          => 'DESC',
-] );
-
 $aj_products = [];
-if ( $aj_query->have_posts() ) {
-	while ( $aj_query->have_posts() ) {
-		$aj_query->the_post();
-		$pid = get_the_ID();
-		$p   = wc_get_product( $pid );
-		if ( ! $p ) {
-			continue;
+if ( function_exists( 'wc_get_product' ) ) {
+	$aj_query = new WP_Query( [
+		'post_type'      => 'product',
+		'post_status'    => 'publish',
+		'posts_per_page' => -1,
+		'tax_query'      => [ [
+			'taxonomy' => 'product_cat',
+			'field'    => 'slug',
+			'terms'    => 'alta-joyeria',
+		] ],
+		'meta_key'       => 'total_sales',
+		'orderby'        => 'meta_value_num',
+		'order'          => 'DESC',
+	] );
+
+	if ( $aj_query->have_posts() ) {
+		while ( $aj_query->have_posts() ) {
+			$aj_query->the_post();
+			$pid = get_the_ID();
+			$p   = wc_get_product( $pid );
+			if ( ! $p ) {
+				continue;
+			}
+
+			$img_id      = $p->get_image_id();
+			$gallery_ids = $p->get_gallery_image_ids();
+			$gallery_url = ! empty( $gallery_ids ) ? wp_get_attachment_image_url( $gallery_ids[0], 'large' ) : '';
+			$sku         = $p->get_sku();
+			$mat         = get_post_meta( $pid, '_murguia_material', true );
+			$ref         = array_filter( [ $sku ? 'Ref. ' . $sku : '', $mat ] );
+			$desc        = $p->get_short_description() ?: $p->get_description();
+
+			$aj_products[] = [
+				'id'   => $pid,
+				'name' => $p->get_name(),
+				'url'  => $p->get_permalink(),
+				'img'  => $img_id ? wp_get_attachment_image_url( $img_id, 'large' ) : '',
+				'img2' => $gallery_url,
+				'alt'  => $img_id ? get_post_meta( $img_id, '_wp_attachment_image_alt', true ) : $p->get_name(),
+				'ref'  => $ref ? implode( ' · ', $ref ) : '',
+				'desc' => $desc ? wp_strip_all_tags( $desc ) : '',
+			];
 		}
-
-		$img_id      = $p->get_image_id();
-		$gallery_ids = $p->get_gallery_image_ids();
-		$gallery_url = ! empty( $gallery_ids ) ? wp_get_attachment_image_url( $gallery_ids[0], 'large' ) : '';
-		$sku         = $p->get_sku();
-		$mat         = get_post_meta( $pid, '_murguia_material', true );
-		$ref         = array_filter( [ $sku ? 'Ref. ' . $sku : '', $mat ] );
-		$desc        = $p->get_short_description() ?: $p->get_description();
-
-		$aj_products[] = [
-			'id'   => $pid,
-			'name' => $p->get_name(),
-			'url'  => $p->get_permalink(),
-			'img'  => $img_id ? wp_get_attachment_image_url( $img_id, 'large' ) : '',
-			'img2' => $gallery_url,
-			'alt'  => $img_id ? get_post_meta( $img_id, '_wp_attachment_image_alt', true ) : $p->get_name(),
-			'ref'  => $ref ? implode( ' · ', $ref ) : '',
-			'desc' => $desc ? wp_strip_all_tags( $desc ) : '',
-		];
+		wp_reset_postdata();
 	}
-	wp_reset_postdata();
 }
 
 $hero_bg = ! empty( $aj_hero_imagen['url'] ) ? $aj_hero_imagen['url'] : $aj_hero_fallback;

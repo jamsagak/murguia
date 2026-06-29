@@ -11,6 +11,10 @@
  *
  * Se obtiene el producto desde global (get_template_part no pasa scope).
  */
+if ( ! class_exists( 'WC_Product' ) || ! function_exists( 'wc_get_product' ) || ! function_exists( 'wc_get_page_id' ) ) {
+	return;
+}
+
 global $product;
 if ( ! $product instanceof WC_Product ) {
 	$product = wc_get_product( get_queried_object_id() );
