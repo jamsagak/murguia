@@ -46,7 +46,30 @@ $departamentos = [
 			<h1 class="murg-legal__title">Libro de Reclamaciones</h1>
 		</header>
 
-		<form class="murg-reclamos" id="murg-reclamos-form" method="post">
+		<?php
+		$rc_status = isset( $_GET['reclamo'] ) ? sanitize_key( wp_unslash( $_GET['reclamo'] ) ) : '';
+		$rc_codigo = isset( $_GET['codigo'] )  ? sanitize_text_field( wp_unslash( $_GET['codigo'] ) ) : '';
+		if ( 'ok' === $rc_status ) :
+		?>
+			<div class="murg-reclamos__alert murg-reclamos__alert--ok" role="status">
+				<strong>Recibimos tu solicitud.</strong>
+				<?php if ( $rc_codigo ) : ?>
+					Codigo de seguimiento: <code><?php echo esc_html( $rc_codigo ); ?></code>.
+				<?php endif; ?>
+				Te enviamos una copia por correo. Nos comunicaremos contigo dentro de los plazos establecidos por INDECOPI.
+			</div>
+		<?php elseif ( 'error' === $rc_status ) : ?>
+			<div class="murg-reclamos__alert murg-reclamos__alert--error" role="alert">
+				No pudimos procesar tu reclamacion. Revisa los campos obligatorios y vuelve a intentarlo.
+			</div>
+		<?php elseif ( 'privacidad' === $rc_status ) : ?>
+			<div class="murg-reclamos__alert murg-reclamos__alert--error" role="alert">
+				Debes aceptar la Politica de Privacidad para enviar tu reclamacion.
+			</div>
+		<?php endif; ?>
+
+		<form class="murg-reclamos" id="murg-reclamos-form" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+			<input type="hidden" name="action" value="murg_reclamo">
 			<?php wp_nonce_field( 'murg_reclamo', 'murg_reclamo_nonce' ); ?>
 
 			<!-- 1. Identificación del consumidor -->

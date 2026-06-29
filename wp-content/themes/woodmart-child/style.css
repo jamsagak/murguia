@@ -7464,6 +7464,31 @@ button.murg-piezas__tab:hover {
   display: block;
   max-width: 100%;
 }
+.murg-reclamos__alert {
+  margin: 24px 0;
+  padding: 16px 20px;
+  border-radius: 4px;
+  font-size: 14px;
+  line-height: 1.6;
+  border-left: 3px solid;
+}
+.murg-reclamos__alert--ok {
+  background: rgba(201, 168, 76, 0.08);
+  border-left-color: var(--murg-gold, #C9A84C);
+  color: var(--murg-black, #0A0A0A);
+}
+.murg-reclamos__alert--error {
+  background: rgba(180, 30, 30, 0.06);
+  border-left-color: #b41e1e;
+  color: #7a1414;
+}
+.murg-reclamos__alert code {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
 .murg-reclamos__section {
   border: none;
   padding: 0;
