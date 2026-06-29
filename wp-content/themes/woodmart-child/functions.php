@@ -534,6 +534,14 @@ function murguia_ensure_ajustes_defaults() {
 		[ 'post_title' => 'Sobre Nosotros',    'post_name' => 'nosotros' ],
 	];
 
+	// Version-keyed gate: only runs the queries when this list changes.
+	// Bumping the section list automatically invalidates the cached fingerprint.
+	$fingerprint = md5( wp_json_encode( wp_list_pluck( $secciones, 'post_name' ) ) );
+	$marker_key  = 'murguia_ajustes_defaults_ok';
+	if ( get_option( $marker_key ) === $fingerprint ) {
+		return;
+	}
+
 	foreach ( $secciones as $data ) {
 		if ( ! get_page_by_path( $data['post_name'], OBJECT, 'murguia_ajustes' ) ) {
 			wp_insert_post( [
@@ -544,6 +552,8 @@ function murguia_ensure_ajustes_defaults() {
 			] );
 		}
 	}
+
+	update_option( $marker_key, $fingerprint, true );
 }
 
 /* ------------------------------------------------------------------
