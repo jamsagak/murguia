@@ -124,7 +124,7 @@ if ( empty( $values ) ) {
 	<section class="murg-about-section">
 		<div class="murg-about-container">
 			<header class="murg-about-heading">
-				<p class="murg-about-heading__label">Nuestra historia</p>
+				<p class="murg-about-heading__label"><?php echo esc_html( murguia_ajuste( 'ab_history_label', 'Nuestra historia', 'nosotros' ) ); ?></p>
 			</header>
 
 			<div class="murg-about-history">

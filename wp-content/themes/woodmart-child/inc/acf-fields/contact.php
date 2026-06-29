@@ -123,6 +123,26 @@ function murguia_register_contact_fields() {
 				'type'        => 'text',
 				'placeholder' => 'Presupuesto sin costo',
 			],
+
+			/* ---- TAB: Sección Cita (form) ---- */
+			[ 'key' => 'field_murg_ct_tab_form', 'label' => '🗓️ Sección Cita', 'name' => '', 'type' => 'tab', 'placement' => 'top' ],
+			[ 'key' => 'field_murg_ct_form_eyebrow', 'label' => 'Eyebrow', 'name' => 'ct_form_eyebrow', 'type' => 'text', 'default_value' => 'Agende una cita' ],
+			[ 'key' => 'field_murg_ct_form_titulo',  'label' => 'Título',  'name' => 'ct_form_titulo',  'type' => 'text', 'default_value' => 'Planifique su visita' ],
+			[ 'key' => 'field_murg_ct_form_texto',   'label' => 'Texto',   'name' => 'ct_form_texto',   'type' => 'textarea', 'rows' => 3, 'default_value' => 'Le sugerimos agendar una cita previa para brindarle una atención exclusiva, privada y sin prisas en nuestro atelier. Especialmente recomendado para el diseño de anillos de compromiso, aros de matrimonio y piezas de alta joyería a medida.' ],
+			[
+				'key' => 'field_murg_ct_perks', 'label' => 'Beneficios destacados', 'name' => 'ct_perks',
+				'type' => 'repeater', 'layout' => 'block', 'button_label' => 'Agregar beneficio',
+				'sub_fields' => [
+					[ 'key' => 'field_murg_ct_perk_titulo', 'label' => 'Título', 'name' => 'titulo', 'type' => 'text' ],
+					[ 'key' => 'field_murg_ct_perk_texto',  'label' => 'Texto',  'name' => 'texto',  'type' => 'textarea', 'rows' => 2 ],
+				],
+			],
+
+			/* ---- TAB: Boutiques ---- */
+			[ 'key' => 'field_murg_ct_tab_boutiques', 'label' => '🏬 Boutiques', 'name' => '', 'type' => 'tab', 'placement' => 'top' ],
+			[ 'key' => 'field_murg_ct_boutiques_eyebrow', 'label' => 'Eyebrow', 'name' => 'ct_boutiques_eyebrow', 'type' => 'text', 'default_value' => 'Nuestras boutiques' ],
+			[ 'key' => 'field_murg_ct_boutiques_titulo',  'label' => 'Título',  'name' => 'ct_boutiques_titulo',  'type' => 'text', 'default_value' => 'Puntos de encuentro' ],
+			[ 'key' => 'field_murg_ct_boutiques_texto',   'label' => 'Texto',   'name' => 'ct_boutiques_texto',   'type' => 'textarea', 'rows' => 2, 'default_value' => 'Visite nuestros espacios físicos para conocer las colecciones de cerca y recibir asistencia directa de nuestros asesores.' ],
 		],
 	] );
 }

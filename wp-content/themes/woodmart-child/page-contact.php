@@ -65,6 +65,36 @@ usort( $stores, function ( $a, $b ) {
 } );
 
 $wa_general = murguia_ajuste( 'ac_whatsapp_url', 'https://wa.me/51114218800', 'anillos-compromiso-page' );
+
+/* Editorial content from SCF — hero, form section and boutiques header. */
+$_ct = 'contacto';
+$ct_hero_eyebrow = murguia_ajuste( 'ct_eyebrow', 'Atención Exclusiva',          $_ct );
+$ct_hero_titulo  = murguia_ajuste( 'ct_titulo',  'Visítenos o agende una cita', $_ct );
+$ct_hero_texto   = murguia_ajuste( 'ct_texto',   'Le recibimos en nuestras boutiques en Lima para brindarle una asesoría personalizada y a la medida de sus momentos especiales.', $_ct );
+
+$ct_form_eyebrow = murguia_ajuste( 'ct_form_eyebrow', 'Agende una cita',     $_ct );
+$ct_form_titulo  = murguia_ajuste( 'ct_form_titulo',  'Planifique su visita', $_ct );
+$ct_form_texto   = murguia_ajuste( 'ct_form_texto',   'Le sugerimos agendar una cita previa para brindarle una atención exclusiva, privada y sin prisas en nuestro atelier. Especialmente recomendado para el diseño de anillos de compromiso, aros de matrimonio y piezas de alta joyería a medida.', $_ct );
+
+$ct_perks_default = [
+	[ 'titulo' => 'Asesoría GIA',       'texto' => 'Evaluación y selección de diamantes con certificación internacional.' ],
+	[ 'titulo' => 'Diseños Exclusivos', 'texto' => 'Conceptualización y modelado en 3D de su pieza soñada.' ],
+];
+$ct_perks_raw = murguia_ajuste( 'ct_perks', [], $_ct );
+$ct_perks = [];
+if ( is_array( $ct_perks_raw ) && ! empty( $ct_perks_raw ) ) {
+	foreach ( $ct_perks_raw as $row ) {
+		$tit = isset( $row['titulo'] ) ? trim( (string) $row['titulo'] ) : '';
+		$tex = isset( $row['texto'] )  ? trim( (string) $row['texto'] )  : '';
+		if ( ! $tit && ! $tex ) continue;
+		$ct_perks[] = [ 'titulo' => $tit, 'texto' => $tex ];
+	}
+}
+if ( empty( $ct_perks ) ) $ct_perks = $ct_perks_default;
+
+$ct_bout_eyebrow = murguia_ajuste( 'ct_boutiques_eyebrow', 'Nuestras boutiques',  $_ct );
+$ct_bout_titulo  = murguia_ajuste( 'ct_boutiques_titulo',  'Puntos de encuentro', $_ct );
+$ct_bout_texto   = murguia_ajuste( 'ct_boutiques_texto',   'Visite nuestros espacios físicos para conocer las colecciones de cerca y recibir asistencia directa de nuestros asesores.', $_ct );
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -84,31 +114,31 @@ $wa_general = murguia_ajuste( 'ac_whatsapp_url', 'https://wa.me/51114218800', 'a
 	<!-- ── 1. Hero Section ── -->
 	<section class="murg-contact-hero">
 		<div class="murg-contact-hero__inner" data-reveal>
-			<p class="murg-eyebrow">Atención Exclusiva</p>
-			<h1>Visítenos o agende una cita</h1>
-			<p class="murg-contact-hero__sub">Le recibimos en nuestras boutiques en Lima para brindarle una asesoría personalizada y a la medida de sus momentos especiales.</p>
+			<p class="murg-eyebrow"><?php echo esc_html( $ct_hero_eyebrow ); ?></p>
+			<h1><?php echo wp_kses( $ct_hero_titulo, [ 'em' => [] ] ); ?></h1>
+			<p class="murg-contact-hero__sub"><?php echo esc_html( $ct_hero_texto ); ?></p>
 		</div>
 	</section>
 
 	<!-- ── 2. Appointment / Contact Form Section ── -->
 	<section class="murg-contact-form-section" id="formulario-cita">
 		<div class="murg-contact-form-grid">
-			
+
 			<div class="murg-contact-form-info" data-reveal>
-				<p class="murg-eyebrow">Agende una cita</p>
-				<h2>Planifique su visita</h2>
-				<p class="murg-contact-form-info__text">Le sugerimos agendar una cita previa para brindarle una atención exclusiva, privada y sin prisas en nuestro atelier. Especialmente recomendado para el diseño de anillos de compromiso, aros de matrimonio y piezas de alta joyería a medida.</p>
-				
+				<p class="murg-eyebrow"><?php echo esc_html( $ct_form_eyebrow ); ?></p>
+				<h2><?php echo esc_html( $ct_form_titulo ); ?></h2>
+				<p class="murg-contact-form-info__text"><?php echo esc_html( $ct_form_texto ); ?></p>
+
+				<?php if ( ! empty( $ct_perks ) ) : ?>
 				<div class="murg-contact-form-info__perks">
+					<?php foreach ( $ct_perks as $_perk ) : ?>
 					<div class="murg-perk-item">
-						<h4>Asesoría GIA</h4>
-						<p>Evaluación y selección de diamantes con certificación internacional.</p>
+						<?php if ( ! empty( $_perk['titulo'] ) ) : ?><h4><?php echo esc_html( $_perk['titulo'] ); ?></h4><?php endif; ?>
+						<?php if ( ! empty( $_perk['texto'] ) ) : ?><p><?php echo esc_html( $_perk['texto'] ); ?></p><?php endif; ?>
 					</div>
-					<div class="murg-perk-item">
-						<h4>Diseños Exclusivos</h4>
-						<p>Conceptualización y modelado en 3D de su pieza soñada.</p>
-					</div>
+					<?php endforeach; ?>
 				</div>
+				<?php endif; ?>
 			</div>
 
 			<div class="murg-contact-form-card" data-reveal>
@@ -175,9 +205,9 @@ $wa_general = murguia_ajuste( 'ac_whatsapp_url', 'https://wa.me/51114218800', 'a
 	<!-- ── 3. Boutiques Section (Physical Stores Reference) ── -->
 	<section class="murg-contact-stores" aria-label="Nuestras Boutiques">
 		<div class="murg-contact-stores__head" data-reveal>
-			<p class="murg-eyebrow">Nuestras boutiques</p>
-			<h2>Puntos de encuentro</h2>
-			<p>Visite nuestros espacios físicos para conocer las colecciones de cerca y recibir asistencia directa de nuestros asesores.</p>
+			<p class="murg-eyebrow"><?php echo esc_html( $ct_bout_eyebrow ); ?></p>
+			<h2><?php echo esc_html( $ct_bout_titulo ); ?></h2>
+			<p><?php echo esc_html( $ct_bout_texto ); ?></p>
 		</div>
 		
 		<div class="murg-contact-stores__grid">

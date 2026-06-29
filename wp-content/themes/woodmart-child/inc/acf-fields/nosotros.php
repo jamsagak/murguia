@@ -47,6 +47,13 @@ function murguia_register_about_fields() {
 				'type'  => 'tab',
 			],
 			[
+				'key'           => 'field_ab_history_label',
+				'label'         => 'Etiqueta de sección',
+				'name'          => 'ab_history_label',
+				'type'          => 'text',
+				'default_value' => 'Nuestra historia',
+			],
+			[
 				'key'          => 'field_ab_history_blocks',
 				'label'        => 'Bloques de Historia',
 				'name'         => 'ab_history_blocks',
