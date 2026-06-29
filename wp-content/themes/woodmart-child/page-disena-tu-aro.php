@@ -22,29 +22,87 @@ $hero_title   = murguia_ajuste( 'aro_hero_titulo',  'Aros de matrimonio hechos p
 $hero_intro   = murguia_ajuste( 'aro_hero_intro',   'Configura el modelo, metal, ancho y grabado de tu aro. Al finalizar te enviamos la cotización por WhatsApp con todos los detalles.', 'aros-matrimonio-page' );
 $hero_note    = murguia_ajuste( 'aro_hero_nota',    'Cada aro se trabaja a pedido. Los plazos de producción se confirman al cotizar.', 'aros-matrimonio-page' );
 
-$models = [
-	[
-		'label' => 'Media caña',
-		'desc'  => 'Superficie curva clásica, cómoda para uso diario.',
-	],
-	[
-		'label' => 'Cinta',
-		'desc'  => 'Perfil plano y arquitectónico, ideal para grabado.',
-	],
-];
+$_dar_section = 'aros-matrimonio-page';
 
-$metals = [
+/* Modelos del aro */
+$models_default = [
+	[ 'label' => 'Media caña', 'desc' => 'Superficie curva clásica, cómoda para uso diario.' ],
+	[ 'label' => 'Cinta',      'desc' => 'Perfil plano y arquitectónico, ideal para grabado.' ],
+];
+$models_raw = murguia_ajuste( 'dar_modelos', [], $_dar_section );
+if ( is_array( $models_raw ) && ! empty( $models_raw ) ) {
+	$models = [];
+	foreach ( $models_raw as $row ) {
+		$label = isset( $row['label'] ) ? trim( (string) $row['label'] ) : '';
+		if ( ! $label ) continue;
+		$models[] = [ 'label' => $label, 'desc' => isset( $row['desc'] ) ? (string) $row['desc'] : '' ];
+	}
+	if ( empty( $models ) ) $models = $models_default;
+} else {
+	$models = $models_default;
+}
+
+/* Metales */
+$metals_default = [
 	[ 'label' => 'Oro amarillo 18K', 'color' => '#d4a843' ],
 	[ 'label' => 'Oro blanco 18K',   'color' => '#e8e4dc' ],
 	[ 'label' => 'Oro rosado 18K',   'color' => '#e8b4a0' ],
 ];
+$metals_raw = murguia_ajuste( 'dar_metales', [], $_dar_section );
+if ( is_array( $metals_raw ) && ! empty( $metals_raw ) ) {
+	$metals = [];
+	foreach ( $metals_raw as $row ) {
+		$label = isset( $row['label'] ) ? trim( (string) $row['label'] ) : '';
+		$color = isset( $row['color'] ) ? trim( (string) $row['color'] ) : '';
+		if ( ! $label ) continue;
+		$metals[] = [ 'label' => $label, 'color' => $color ?: '#cccccc' ];
+	}
+	if ( empty( $metals ) ) $metals = $metals_default;
+} else {
+	$metals = $metals_default;
+}
 
-$sizes = [ '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11' ];
+/* Tallas */
+$sizes_default = [ '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11' ];
+$sizes_raw = murguia_ajuste( 'dar_tallas', [], $_dar_section );
+if ( is_array( $sizes_raw ) && ! empty( $sizes_raw ) ) {
+	$sizes = array_values( array_filter( array_map( function ( $row ) {
+		return isset( $row['valor'] ) ? trim( (string) $row['valor'] ) : '';
+	}, $sizes_raw ) ) );
+	if ( empty( $sizes ) ) $sizes = $sizes_default;
+} else {
+	$sizes = $sizes_default;
+}
 
-$tipografias = [
+/* Tipografías de grabado */
+$tipografias_default = [
 	[ 'slug' => 'imprenta', 'label' => 'Imprenta', 'sample' => 'AMOR' ],
 	[ 'slug' => 'cursiva',  'label' => 'Cursiva',  'sample' => 'amor' ],
 ];
+$tipografias_raw = murguia_ajuste( 'dar_tipografias', [], $_dar_section );
+if ( is_array( $tipografias_raw ) && ! empty( $tipografias_raw ) ) {
+	$tipografias = [];
+	foreach ( $tipografias_raw as $row ) {
+		$slug   = isset( $row['slug'] )   ? sanitize_key( (string) $row['slug'] ) : '';
+		$label  = isset( $row['label'] )  ? trim( (string) $row['label'] )   : '';
+		$sample = isset( $row['sample'] ) ? trim( (string) $row['sample'] )  : '';
+		if ( ! $slug || ! $label ) continue;
+		$tipografias[] = [ 'slug' => $slug, 'label' => $label, 'sample' => $sample ?: $label ];
+	}
+	if ( empty( $tipografias ) ) $tipografias = $tipografias_default;
+} else {
+	$tipografias = $tipografias_default;
+}
+
+/* Rango de ancho del aro */
+$_ancho_min     = (float) murguia_ajuste( 'dar_ancho_min',     2.0, $_dar_section );
+$_ancho_max     = (float) murguia_ajuste( 'dar_ancho_max',    10.0, $_dar_section );
+$_ancho_default = (float) murguia_ajuste( 'dar_ancho_default', 4.0, $_dar_section );
+$_ancho_step    = (float) murguia_ajuste( 'dar_ancho_step',    0.5, $_dar_section );
+
+/* Grabado */
+$_grabado_max         = (int)    murguia_ajuste( 'dar_grabado_max',         32, $_dar_section );
+$_grabado_placeholder = (string) murguia_ajuste( 'dar_grabado_placeholder', 'Ej. Para siempre — 14/02/2027', $_dar_section );
 ?>
 <!DOCTYPE html>
 <html <?php language_attributes(); ?>>
@@ -104,10 +162,10 @@ $tipografias = [
 					<span class="murg-design-config__step">03</span>
 					<div class="murg-builder-range__head">
 						<h2>Ancho del aro</h2>
-						<strong><span data-builder-output="Ancho">4.0</span> mm</strong>
+						<strong><span data-builder-output="Ancho"><?php echo esc_html( number_format( $_ancho_default, 1 ) ); ?></span> mm</strong>
 					</div>
-					<input class="murg-builder-range" type="range" min="2.0" max="10.0" step="0.5" value="4.0" data-builder-range="Ancho" data-decimals="1" data-suffix=" mm">
-					<div class="murg-builder-range__scale"><span>2.0 mm</span><span>10.0 mm</span></div>
+					<input class="murg-builder-range" type="range" min="<?php echo esc_attr( $_ancho_min ); ?>" max="<?php echo esc_attr( $_ancho_max ); ?>" step="<?php echo esc_attr( $_ancho_step ); ?>" value="<?php echo esc_attr( $_ancho_default ); ?>" data-builder-range="Ancho" data-decimals="1" data-suffix=" mm">
+					<div class="murg-builder-range__scale"><span><?php echo esc_html( number_format( $_ancho_min, 1 ) ); ?> mm</span><span><?php echo esc_html( number_format( $_ancho_max, 1 ) ); ?> mm</span></div>
 					<p class="murg-builder-help">El ancho típico va de 3 a 6 mm. Anchos mayores son frecuentes en aros masculinos.</p>
 				</section>
 
@@ -137,8 +195,8 @@ $tipografias = [
 					<span class="murg-design-config__step">05</span>
 					<h2>Grabado interior</h2>
 					<div class="murg-builder-engrave">
-						<input type="text" class="murg-builder-engrave__input" maxlength="32" placeholder="Ej. Para siempre — 14/02/2027" data-builder-engraving="Grabado">
-						<p class="murg-builder-engrave__hint">Hasta 32 caracteres. Opcional.</p>
+						<input type="text" class="murg-builder-engrave__input" maxlength="<?php echo esc_attr( $_grabado_max ); ?>" placeholder="<?php echo esc_attr( $_grabado_placeholder ); ?>" data-builder-engraving="Grabado">
+						<p class="murg-builder-engrave__hint">Hasta <?php echo (int) $_grabado_max; ?> caracteres. Opcional.</p>
 						<div class="murg-builder-options murg-builder-options--two" data-builder-group="Tipografia">
 							<?php foreach ( $tipografias as $index => $tipo ) : ?>
 							<button type="button" class="murg-builder-option<?php echo 0 === $index ? ' is-selected' : ''; ?>" data-value="<?php echo esc_attr( $tipo['slug'] ); ?>">
