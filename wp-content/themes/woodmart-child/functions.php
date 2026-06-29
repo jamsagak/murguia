@@ -1295,7 +1295,7 @@ add_filter( 'template_include', 'murguia_override_shop_template', 99999 );
 function murguia_override_shop_template( $template ) {
 	$is_product_search = is_search() && isset( $_GET['post_type'] ) && 'product' === $_GET['post_type'];
 
-	if ( is_shop() || is_product_taxonomy() || $is_product_search ) {
+	if ( function_exists( 'is_shop' ) && ( is_shop() || ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) || $is_product_search ) ) {
 		$custom = get_stylesheet_directory() . '/archive-product.php';
 		if ( file_exists( $custom ) ) {
 			return $custom;
@@ -1423,7 +1423,7 @@ function murguia_is_custom_template() {
 		return true;
 	}
 	// Shop y archivos de productos
-	if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {
+	if ( function_exists( 'is_shop' ) && ( is_shop() || ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) ) ) {
 		return true;
 	}
 	// Producto individual (tenemos single-product.php)

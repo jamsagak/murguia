@@ -420,7 +420,7 @@ $feat_price_html = '';
 $feat_url       = '';
 $feat_images    = [];
 
-if ( $feat_product ) {
+if ( $feat_product && function_exists( 'wc_get_product' ) ) {
 	$wc = wc_get_product( $feat_product->ID );
 	if ( $wc ) {
 		$feat_title      = $wc->get_name();

@@ -22,9 +22,21 @@ defined( 'ABSPATH' ) || exit;
 		<span class="murg-404__code">404</span>
 		<h1 class="murg-404__title">Página no encontrada</h1>
 		<p class="murg-404__text">Lo sentimos, la página que buscas no existe o fue movida.</p>
+		<?php
+		$murg_shop_url = home_url( '/' );
+		if ( function_exists( 'wc_get_page_id' ) ) {
+			$murg_shop_id = wc_get_page_id( 'shop' );
+			if ( $murg_shop_id > 0 ) {
+				$murg_shop_permalink = get_permalink( $murg_shop_id );
+				if ( $murg_shop_permalink ) {
+					$murg_shop_url = $murg_shop_permalink;
+				}
+			}
+		}
+		?>
 		<div class="murg-404__actions">
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="murg-404__btn">Volver al inicio</a>
-			<a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>" class="murg-404__btn murg-404__btn--outline">Ver tienda</a>
+			<a href="<?php echo esc_url( $murg_shop_url ); ?>" class="murg-404__btn murg-404__btn--outline">Ver tienda</a>
 		</div>
 	</div>
 </main>
