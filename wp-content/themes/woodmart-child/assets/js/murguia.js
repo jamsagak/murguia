@@ -1419,48 +1419,49 @@
 	}
 
 	/* ------------------------------------------------------------------
-	   DISEÑA TU ANILLO — configurador consultivo
+	   BUILDER GENÉRICO — usado por "Diseña tu anillo" y "Diseña tu aro"
 	   ------------------------------------------------------------------ */
-	var ringBuilder = document.getElementById( 'murg-ring-builder' );
-	if ( ringBuilder ) {
+	var MURG_METAL_COLORS = {
+		'Oro amarillo 18K': '#d4a843',
+		'Oro blanco 18K':   '#e8e4dc',
+		'Oro rosado 18K':   '#e8b4a0',
+		'Platino':          '#c9c9c9'
+	};
+
+	function murgInitBuilder( builderEl, formatWaLines ) {
 		var summaryFields = {};
-		ringBuilder.querySelectorAll( '[data-summary]' ).forEach( function ( el ) {
-			summaryFields[ el.dataset.summary ] = el;
+		builderEl.querySelectorAll( '[data-summary]' ).forEach( function ( el ) {
+			summaryFields[ el.dataset.summary ] = {
+				el: el,
+				suffix: el.dataset.summarySuffix || ''
+			};
 		} );
 
-		var notesSummary = ringBuilder.querySelector( '[data-summary-notes]' );
-		var waBtn = ringBuilder.querySelector( '[data-builder-whatsapp]' );
-		var stickySummary = ringBuilder.querySelector( '.murg-builder-summary' );
-		var ringPreview = ringBuilder.querySelector( '[data-ring-preview]' );
-		var waNumber = ringBuilder.dataset.waNumber || '51114218800';
-		var builderState = {};
-		var metalColors = {
-			'Oro amarillo 18K': '#d4a843',
-			'Oro blanco 18K': '#e8e4dc',
-			'Oro rosado 18K': '#e8b4a0',
-			'Platino': '#c9c9c9'
-		};
+		var notesSummary  = builderEl.querySelector( '[data-summary-notes]' );
+		var waBtn         = builderEl.querySelector( '[data-builder-whatsapp]' );
+		var stickySummary = builderEl.querySelector( '.murg-builder-summary' );
+		var ringPreview   = builderEl.querySelector( '[data-ring-preview]' );
+		var engravePrev   = builderEl.querySelector( '[data-engrave-preview]' );
+		var waNumber      = builderEl.dataset.waNumber || '51114218800';
+		var builderState  = {};
 
 		function setBuilderValue( key, value ) {
 			builderState[ key ] = value;
 			if ( summaryFields[ key ] ) {
-				summaryFields[ key ].textContent = key === 'Quilates' ? value + ' ct' : value;
+				summaryFields[ key ].el.textContent = ( value || '-' ) + summaryFields[ key ].suffix;
 			}
 			updateRingPreview();
+			updateEngravePreview();
 			updateBuilderWhatsapp();
 		}
 
 		function updateRingPreview() {
 			if ( ! ringPreview ) return;
-			if ( builderState.Modelo ) {
-				ringPreview.dataset.model = builderState.Modelo;
-			}
-			if ( builderState.Forma ) {
-				ringPreview.dataset.shape = builderState.Forma;
-			}
+			if ( builderState.Modelo ) ringPreview.dataset.model = builderState.Modelo;
+			if ( builderState.Forma )  ringPreview.dataset.shape = builderState.Forma;
 			if ( builderState.Metal ) {
 				ringPreview.dataset.metal = builderState.Metal;
-				ringPreview.style.setProperty( '--builder-metal', metalColors[ builderState.Metal ] || '#e8e4dc' );
+				ringPreview.style.setProperty( '--builder-metal', MURG_METAL_COLORS[ builderState.Metal ] || '#e8e4dc' );
 			}
 			if ( builderState.Quilates ) {
 				var carat = parseFloat( builderState.Quilates ) || 1;
@@ -1468,32 +1469,35 @@
 				ringPreview.dataset.carat = builderState.Quilates;
 				ringPreview.style.setProperty( '--stone-size', size + 'px' );
 			}
+			if ( builderState.Ancho ) {
+				var ancho = parseFloat( builderState.Ancho ) || 4;
+				var bandW = Math.max( 8, Math.min( 28, 8 + ( ancho * 1.8 ) ) );
+				ringPreview.dataset.width = builderState.Ancho;
+				ringPreview.style.setProperty( '--band-width', bandW + 'px' );
+			}
+		}
+
+		function updateEngravePreview() {
+			if ( ! engravePrev ) return;
+			engravePrev.textContent = builderState.Grabado || engravePrev.dataset.placeholder || '';
+			engravePrev.classList.toggle( 'is-empty', ! builderState.Grabado );
+			if ( builderState.Tipografia ) {
+				engravePrev.dataset.font = builderState.Tipografia;
+			}
 		}
 
 		function updateBuilderWhatsapp() {
 			if ( ! waBtn ) return;
-			var lines = [
-				'Hola, quisiera solicitar una cotizacion para un anillo de compromiso.',
-				'Modelo: ' + ( builderState.Modelo || '-' ),
-				'Forma: ' + ( builderState.Forma || '-' ),
-				'Metal: ' + ( builderState.Metal || '-' ),
-				'Quilates aproximados: ' + ( builderState.Quilates || '-' ) + ' ct',
-				'Origen: ' + ( builderState.Origen || '-' ),
-				'Talla estimada: ' + ( builderState.Talla || '-' )
-			];
-			if ( builderState.Notas ) {
-				lines.push( 'Notas: ' + builderState.Notas );
-			}
+			var lines = formatWaLines( builderState );
 			waBtn.href = 'https://wa.me/' + waNumber + '?text=' + encodeURIComponent( lines.join( '\n' ) );
 		}
 
-		ringBuilder.querySelectorAll( '[data-builder-group]' ).forEach( function ( group ) {
+		builderEl.querySelectorAll( '[data-builder-group]' ).forEach( function ( group ) {
 			var key = group.dataset.builderGroup;
 			var selected = group.querySelector( '.is-selected[data-value]' );
 			if ( selected ) {
 				setBuilderValue( key, selected.dataset.value );
 			}
-
 			group.querySelectorAll( '[data-value]' ).forEach( function ( btn ) {
 				btn.addEventListener( 'click', function () {
 					group.querySelectorAll( '.is-selected' ).forEach( function ( current ) {
@@ -1505,11 +1509,12 @@
 			} );
 		} );
 
-		ringBuilder.querySelectorAll( '[data-builder-range]' ).forEach( function ( range ) {
+		builderEl.querySelectorAll( '[data-builder-range]' ).forEach( function ( range ) {
 			var key = range.dataset.builderRange;
-			var out = ringBuilder.querySelector( '[data-builder-output="' + key + '"]' );
+			var out = builderEl.querySelector( '[data-builder-output="' + key + '"]' );
+			var decimals = parseInt( range.dataset.decimals || '2', 10 );
 			var syncRange = function () {
-				var value = parseFloat( range.value ).toFixed(2);
+				var value = parseFloat( range.value ).toFixed( decimals );
 				if ( out ) out.textContent = value;
 				setBuilderValue( key, value );
 			};
@@ -1517,7 +1522,20 @@
 			syncRange();
 		} );
 
-		var notes = ringBuilder.querySelector( '[data-builder-notes]' );
+		var engraveInput = builderEl.querySelector( '[data-builder-engraving]' );
+		if ( engraveInput ) {
+			var engraveKey = engraveInput.dataset.builderEngraving;
+			var maxLen = parseInt( engraveInput.getAttribute( 'maxlength' ) || '32', 10 );
+			engraveInput.addEventListener( 'input', function () {
+				var value = engraveInput.value.slice( 0, maxLen ).trim();
+				setBuilderValue( engraveKey, value );
+			} );
+			if ( engraveInput.value ) {
+				setBuilderValue( engraveKey, engraveInput.value.trim() );
+			}
+		}
+
+		var notes = builderEl.querySelector( '[data-builder-notes]' );
 		if ( notes ) {
 			notes.addEventListener( 'input', function () {
 				var value = notes.value.trim();
@@ -1541,9 +1559,8 @@
 				stickySummary.style.zIndex = '';
 				return;
 			}
-
 			var topGap = 96;
-			var layout = ringBuilder.querySelector( '.murg-ring-builder__layout' ) || ringBuilder;
+			var layout = builderEl.querySelector( '.murg-ring-builder__layout, .murg-aro-builder__layout' ) || builderEl;
 			var builderRect = layout.getBoundingClientRect();
 			var summaryRect = stickySummary.getBoundingClientRect();
 			var isFixed = stickySummary.style.position === 'fixed';
@@ -1561,7 +1578,6 @@
 			var naturalHeight = summaryRect.height;
 			var maxHeight = window.innerHeight - topGap - 20;
 			var shouldFix = builderRect.top <= topGap && builderRect.bottom > topGap + Math.min( naturalHeight, maxHeight );
-
 			if ( shouldFix ) {
 				stickySummary.style.position = 'fixed';
 				stickySummary.style.top = topGap + 'px';
@@ -1582,6 +1598,52 @@
 		window.addEventListener( 'resize', syncBuilderSticky );
 		syncBuilderSticky();
 		updateBuilderWhatsapp();
+	}
+
+	/* ------------------------------------------------------------------
+	   DISEÑA TU ANILLO — configurador consultivo
+	   ------------------------------------------------------------------ */
+	var ringBuilder = document.getElementById( 'murg-ring-builder' );
+	if ( ringBuilder ) {
+		murgInitBuilder( ringBuilder, function ( state ) {
+			var lines = [
+				'Hola, quisiera solicitar una cotizacion para un anillo de compromiso.',
+				'Modelo: ' + ( state.Modelo || '-' ),
+				'Forma: ' + ( state.Forma || '-' ),
+				'Metal: ' + ( state.Metal || '-' ),
+				'Quilates aproximados: ' + ( state.Quilates || '-' ) + ' ct',
+				'Origen: ' + ( state.Origen || '-' ),
+				'Talla estimada: ' + ( state.Talla || '-' )
+			];
+			if ( state.Notas ) lines.push( 'Notas: ' + state.Notas );
+			return lines;
+		} );
+	}
+
+	/* ------------------------------------------------------------------
+	   DISEÑA TU ARO — configurador consultivo (aros de matrimonio)
+	   ------------------------------------------------------------------ */
+	var aroBuilder = document.getElementById( 'murg-aro-builder' );
+	if ( aroBuilder ) {
+		murgInitBuilder( aroBuilder, function ( state ) {
+			var lines = [
+				'Hola, quisiera solicitar una cotizacion para aros de matrimonio.',
+				'Modelo: ' + ( state.Modelo || '-' ),
+				'Metal: ' + ( state.Metal || '-' ),
+				'Ancho aproximado: ' + ( state.Ancho || '-' ) + ' mm'
+			];
+			if ( state.Talla ) {
+				lines.push( 'Talla: ' + state.Talla );
+			} else {
+				lines.push( 'Talla: por confirmar' );
+			}
+			if ( state.Grabado ) {
+				lines.push( 'Grabado: ' + state.Grabado );
+				if ( state.Tipografia ) lines.push( 'Tipografia: ' + state.Tipografia );
+			}
+			if ( state.Notas ) lines.push( 'Notas: ' + state.Notas );
+			return lines;
+		} );
 	}
 
 	/* ------------------------------------------------------------------

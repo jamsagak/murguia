@@ -9551,6 +9551,53 @@ body.murg-modal-open {
   min-width: 54px;
   text-align: center;
 }
+
+/* Opciones con label + descripción + sample (modelos de aro / tipografías) */
+.murg-builder-option:has(.murg-builder-option__desc),
+.murg-builder-option:has(.murg-builder-option__sample) {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  text-align: left;
+  padding: 14px 18px;
+  min-width: 180px;
+  line-height: 1.35;
+}
+.murg-builder-option__label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  color: var(--murg-forest);
+}
+.murg-builder-option__desc {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: rgba(25,46,29,0.65);
+  line-height: 1.5;
+}
+.murg-builder-option__sample {
+  display: block;
+  font-size: 22px;
+  line-height: 1;
+  color: var(--murg-ink, #2a2a2a);
+  align-self: center;
+  margin-top: 2px;
+}
+.murg-builder-option__sample--imprenta {
+  font-family: 'Cinzel', 'Inter', serif;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+.murg-builder-option__sample--cursiva {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
 .murg-builder-metal {
   display: inline-flex;
   align-items: center;
@@ -9668,6 +9715,65 @@ body.murg-modal-open {
   outline: 1px solid var(--murg-gold);
   border-color: rgba(201,168,76,0.75);
 }
+
+/* Grabado — input + preview con dos tipografías */
+.murg-builder-engrave {
+  display: grid;
+  gap: 12px;
+}
+.murg-builder-engrave__input {
+  width: 100%;
+  padding: 14px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--murg-forest);
+  background: rgba(255,255,255,0.55);
+  border: 1px solid rgba(25,46,29,0.32);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.35);
+}
+.murg-builder-engrave__input:focus {
+  outline: 1px solid var(--murg-gold);
+  border-color: rgba(201,168,76,0.75);
+}
+.murg-builder-engrave__hint {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  color: rgba(25,46,29,0.6);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+.murg-builder-engrave-preview {
+  margin-top: 6px;
+  padding: 28px 20px;
+  border: 1px dashed rgba(25,46,29,0.22);
+  background: linear-gradient(180deg, rgba(255,255,255,0.55) 0%, rgba(245,240,232,0.4) 100%);
+  text-align: center;
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.2;
+  color: var(--murg-ink, #2a2a2a);
+  letter-spacing: 0.04em;
+  min-height: 78px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s ease;
+}
+.murg-builder-engrave-preview.is-empty {
+  color: rgba(25,46,29,0.32);
+  font-style: italic;
+}
+.murg-builder-engrave-preview[data-font="imprenta"] {
+  font-family: 'Cinzel', 'Inter', serif;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.murg-builder-engrave-preview[data-font="cursiva"] {
+  font-family: 'Cormorant Garamond', 'Times New Roman', serif;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
 .murg-builder-summary {
   position: -webkit-sticky;
   position: sticky !important;
