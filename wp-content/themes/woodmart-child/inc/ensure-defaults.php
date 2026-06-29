@@ -242,3 +242,96 @@ function murguia_seed_tiendas_y_4cs() {
 	murguia_update_editable_field( 'c4_cta_secundario_texto', 'Ver anillos', $c4_id );
 	murguia_update_editable_field( 'c4_cta_secundario_url', home_url( '/anillos-compromiso/' ), $c4_id );
 }
+
+/* ------------------------------------------------------------------
+   SEED — Configuradores (Diseña tu Anillo + Diseña tu Aro)
+   Precarga repeaters con los valores actuales para que el cliente
+   los vea desde el primer login. Las imágenes de formas se omiten
+   porque dependen de attachments propios — el template usa el
+   fallback hardcoded mientras estén vacías.
+   ------------------------------------------------------------------ */
+add_action( 'init', 'murguia_seed_configuradores', 1010 );
+
+function murguia_seed_configuradores() {
+	if ( ! post_type_exists( 'murguia_ajustes' ) ) return;
+
+	$fingerprint = 'v1-2026-06-29';
+	$marker      = 'murguia_seed_configuradores_ok';
+	if ( get_option( $marker ) === $fingerprint ) return;
+
+	/* ── Diseña tu Anillo ── */
+	$da_id = murguia_ajuste_id( 'anillos-compromiso-page' );
+	if ( $da_id ) {
+		murguia_update_editable_field( 'da_modelos', [
+			[ 'label' => 'Solitario clásico' ],
+			[ 'label' => 'Hidden halo' ],
+			[ 'label' => 'Halo' ],
+			[ 'label' => 'Tres piedras' ],
+			[ 'label' => 'Pavé' ],
+			[ 'label' => 'Diseño personalizado' ],
+		], $da_id );
+		murguia_update_editable_field( 'da_metales', [
+			[ 'label' => 'Oro amarillo 18K', 'color' => '#d4a843' ],
+			[ 'label' => 'Oro blanco 18K',   'color' => '#e8e4dc' ],
+			[ 'label' => 'Oro rosado 18K',   'color' => '#e8b4a0' ],
+			[ 'label' => 'Platino',          'color' => '#c9c9c9' ],
+		], $da_id );
+		murguia_update_editable_field( 'da_tallas', array_map( function ( $v ) {
+			return [ 'valor' => $v ];
+		}, [ '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11' ] ), $da_id );
+		murguia_update_editable_field( 'da_origenes', [
+			[ 'label' => 'Natural' ],
+			[ 'label' => 'Laboratorio' ],
+		], $da_id );
+		murguia_update_editable_field( 'da_quilates_min',     0.30, $da_id );
+		murguia_update_editable_field( 'da_quilates_max',     3.00, $da_id );
+		murguia_update_editable_field( 'da_quilates_default', 1.00, $da_id );
+		murguia_update_editable_field( 'da_quilates_step',    0.10, $da_id );
+	}
+
+	/* ── Diseña tu Aro ── */
+	$dar_id = murguia_ajuste_id( 'aros-matrimonio-page' );
+	if ( $dar_id ) {
+		murguia_update_editable_field( 'dar_modelos', [
+			[ 'label' => 'Media caña', 'desc' => 'Superficie curva clásica, cómoda para uso diario.' ],
+			[ 'label' => 'Cinta',      'desc' => 'Perfil plano y arquitectónico, ideal para grabado.' ],
+		], $dar_id );
+		murguia_update_editable_field( 'dar_metales', [
+			[ 'label' => 'Oro amarillo 18K', 'color' => '#d4a843' ],
+			[ 'label' => 'Oro blanco 18K',   'color' => '#e8e4dc' ],
+			[ 'label' => 'Oro rosado 18K',   'color' => '#e8b4a0' ],
+		], $dar_id );
+		murguia_update_editable_field( 'dar_tallas', array_map( function ( $v ) {
+			return [ 'valor' => $v ];
+		}, [ '4', '4.5', '5', '5.5', '6', '6.5', '7', '7.5', '8', '8.5', '9', '9.5', '10', '10.5', '11' ] ), $dar_id );
+		murguia_update_editable_field( 'dar_tipografias', [
+			[ 'slug' => 'imprenta', 'label' => 'Imprenta', 'sample' => 'AMOR' ],
+			[ 'slug' => 'cursiva',  'label' => 'Cursiva',  'sample' => 'amor' ],
+		], $dar_id );
+		murguia_update_editable_field( 'dar_ancho_min',     2.0,  $dar_id );
+		murguia_update_editable_field( 'dar_ancho_max',     10.0, $dar_id );
+		murguia_update_editable_field( 'dar_ancho_default', 4.0,  $dar_id );
+		murguia_update_editable_field( 'dar_ancho_step',    0.5,  $dar_id );
+		murguia_update_editable_field( 'dar_grabado_max',   32,   $dar_id );
+		murguia_update_editable_field( 'dar_grabado_placeholder', 'Ej. Para siempre — 14/02/2027', $dar_id );
+
+		/* Pasos de la landing /aros-matrimonio/ */
+		murguia_update_editable_field( 'aml_pasos', [
+			[ 'titulo' => 'Modelo',  'texto' => 'Clásico, media caña, plano, comfort fit o diseño personalizado.' ],
+			[ 'titulo' => 'Metal',   'texto' => 'Oro amarillo, blanco, rosado o combinaciones especiales.' ],
+			[ 'titulo' => 'Talla',   'texto' => 'Validamos medida y comodidad antes de confirmar la pieza final.' ],
+			[ 'titulo' => 'Grabado', 'texto' => 'Iniciales, fechas o mensajes breves para una pieza personal.' ],
+		], $dar_id );
+	}
+
+	/* Beneficios del bloque de cita en /contacto/ */
+	$ct_id = murguia_ajuste_id( 'contacto' );
+	if ( $ct_id ) {
+		murguia_update_editable_field( 'ct_perks', [
+			[ 'titulo' => 'Asesoría GIA',       'texto' => 'Evaluación y selección de diamantes con certificación internacional.' ],
+			[ 'titulo' => 'Diseños Exclusivos', 'texto' => 'Conceptualización y modelado en 3D de su pieza soñada.' ],
+		], $ct_id );
+	}
+
+	update_option( $marker, $fingerprint, true );
+}
