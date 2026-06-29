@@ -50,7 +50,25 @@ $cita_texto  = murguia_ajuste( 'prod_cita_texto',  '¿Preguntas? Solicite una ci
 // -----------------------------------------------------------------
 $specs = [];
 
-// Atributos de taxonomía (pa_*)
+// -----------------------------------------------------------------
+// Atributos de taxonomía (pa_*).
+// Reglas pedidas por el cliente en la ficha (filtros del catalogo intactos):
+//   - Ocultar: "piedra sola" y "disponibilidad"
+//   - "Corte" se muestra con la forma entre parentesis: "Esmeralda (rectangular)"
+//   - Orden visible: Corte (forma), Color (diamante), Claridad, resto, Referencia
+// -----------------------------------------------------------------
+$hidden_attrs   = [ 'piedra-sola', 'disponibilidad' ];
+$corte_slugs    = [ 'corte', 'corte-piedra', 'corte-de-piedra', 'corte-diamante' ];
+$forma_slugs    = [ 'forma', 'forma-piedra', 'forma-de-piedra', 'forma-diamante' ];
+$color_d_slugs  = [ 'color', 'color-piedra', 'color-diamante', 'color-de-piedra', 'color-de-diamante' ];
+$claridad_slugs = [ 'claridad', 'claridad-piedra', 'claridad-diamante' ];
+
+$corte_attr    = null;
+$forma_attr    = null;
+$color_d_attr  = null;
+$claridad_attr = null;
+$resto_attrs   = [];
+
 foreach ( $product->get_attributes() as $attr_key => $attr ) {
 	if ( ! is_object( $attr ) || ! $attr->get_visible() ) {
 		continue;
@@ -66,13 +84,52 @@ foreach ( $product->get_attributes() as $attr_key => $attr ) {
 			$values[] = $val;
 		}
 	}
-	if ( ! empty( $values ) ) {
-		$label_name = wc_attribute_label( $attr->get_name(), $product );
-		$specs[] = [
-			'label' => $label_name,
-			'value' => implode( ', ', $values ),
-		];
+	if ( empty( $values ) ) {
+		continue;
 	}
+
+	$slug_norm = preg_replace( '/^pa_/', '', $attr->get_name() );
+	$entry     = [
+		'label' => wc_attribute_label( $attr->get_name(), $product ),
+		'value' => implode( ', ', $values ),
+	];
+
+	if ( in_array( $slug_norm, $hidden_attrs, true ) ) {
+		continue;
+	}
+	if ( in_array( $slug_norm, $corte_slugs, true ) ) {
+		$corte_attr = $entry;
+		continue;
+	}
+	if ( in_array( $slug_norm, $forma_slugs, true ) ) {
+		$forma_attr = $entry;
+		continue;
+	}
+	if ( in_array( $slug_norm, $color_d_slugs, true ) ) {
+		$color_d_attr = $entry;
+		continue;
+	}
+	if ( in_array( $slug_norm, $claridad_slugs, true ) ) {
+		$claridad_attr = $entry;
+		continue;
+	}
+	$resto_attrs[] = $entry;
+}
+
+// Componer corte con forma entre parentesis si ambas existen.
+if ( $corte_attr ) {
+	if ( $forma_attr ) {
+		$corte_attr['value'] .= ' (' . $forma_attr['value'] . ')';
+	}
+	$specs[] = $corte_attr;
+} elseif ( $forma_attr ) {
+	// Sin corte declarado, mostramos la forma sola como fallback.
+	$specs[] = $forma_attr;
+}
+if ( $color_d_attr )  $specs[] = $color_d_attr;
+if ( $claridad_attr ) $specs[] = $claridad_attr;
+foreach ( $resto_attrs as $entry ) {
+	$specs[] = $entry;
 }
 
 // Peso y dimensiones si están configurados
@@ -304,7 +361,7 @@ function murg_prod_trust_icon( $name ) {
 
 		<!-- Specs table -->
 		<?php
-		// Construir la lista completa (atributos + SKU + disponibilidad)
+		// Specs ya viene ordenado (corte+forma, color, claridad, resto). Cerramos con Referencia.
 		$specs_display = $specs;
 		if ( $product_sku ) {
 			$specs_display[] = [
@@ -312,12 +369,6 @@ function murg_prod_trust_icon( $name ) {
 				'value' => strtoupper( $product_sku ),
 			];
 		}
-		$specs_display[] = [
-			'label' => 'Disponibilidad',
-			'value' => $in_stock
-				? __( 'En stock', 'woodmart' )
-				: murguia_ajuste( 'prod_badge_agotado', 'Agotado', 'producto' ),
-		];
 		?>
 		<?php if ( ! empty( $specs_display ) ) : ?>
 		<dl class="murg-product-detail__specs">

@@ -409,7 +409,7 @@ $nl_form  = function_exists( 'murguia_newsletter_form_config' ) ? murguia_newsle
 			<h2><?php echo esc_html( $cita_title ); ?></h2>
 			<p><?php echo esc_html( $cita_text ); ?></p>
 			<div class="murg-ac-appointment__facts">
-				<span>San Isidro - Miraflores - Jockey Plaza</span>
+				<span>San Isidro - Miraflores</span>
 				<span>Lunes a Viernes 10:00 a 19:00</span>
 			</div>
 			<div class="murg-ac-actions">

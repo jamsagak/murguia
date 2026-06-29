@@ -465,24 +465,40 @@ function murg_filter_url( $params_to_set = [], $params_to_remove = [] ) {
 		<?php if ( ! empty( $products ) ) : ?>
 		<div class="murg-shop-grid">
 			<?php foreach ( $products as $product ) :
-				$img_id  = $product->get_image_id();
-				$is_sale = $product->is_on_sale();
-				$is_new  = $product->is_featured();
+				$img_id     = $product->get_image_id();
+				$gallery    = $product->get_gallery_image_ids();
+				$hover_img  = ! empty( $gallery ) ? (int) $gallery[0] : 0;
+				$has_hover  = $hover_img && $hover_img !== $img_id;
+				$is_sale    = $product->is_on_sale();
+				$is_new     = $product->is_featured();
+				$img_classes = 'murg-product__img' . ( $has_hover ? ' murg-product__img--has-hover' : '' );
 			?>
 			<article class="murg-product murg-product--grid">
 				<a class="murg-product__link" href="<?php echo esc_url( $product->get_permalink() ); ?>">
-					<div class="murg-product__img">
+					<div class="<?php echo esc_attr( $img_classes ); ?>">
 						<?php if ( $img_id ) :
 							echo wp_get_attachment_image( $img_id, 'full', false, [
 								'loading' => 'lazy',
 								'alt'     => $product->get_name(),
 								'sizes'   => '(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw',
+								'class'   => 'murg-product__img-main',
 							] );
 						else : ?>
 							<img src="<?php echo esc_url( wc_placeholder_img_src() ); ?>"
 							     alt="<?php echo esc_attr( $product->get_name() ); ?>"
-							     loading="lazy">
+							     loading="lazy"
+							     class="murg-product__img-main">
 						<?php endif; ?>
+
+						<?php if ( $has_hover ) :
+							echo wp_get_attachment_image( $hover_img, 'full', false, [
+								'loading' => 'lazy',
+								'alt'     => '',
+								'aria-hidden' => 'true',
+								'sizes'   => '(max-width: 480px) 100vw, (max-width: 1024px) 50vw, 33vw',
+								'class'   => 'murg-product__img-hover',
+							] );
+						endif; ?>
 
 						<?php if ( $is_sale ) : ?>
 						<span class="murg-product__tag">

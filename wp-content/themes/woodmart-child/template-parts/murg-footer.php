@@ -84,7 +84,6 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_foot_redes', murguia_ajust
 			<ul>
 				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">San Isidro</a></li>
 				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Miraflores</a></li>
-				<li><a href="<?php echo esc_url( home_url( '/contacto/' ) ); ?>">Surco · Jockey Plaza</a></li>
 			</ul>
 			<p class="murg-footer__legal">Novios Murguia S.A.C<br>20605052194</p>
 		</div>

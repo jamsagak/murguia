@@ -1098,6 +1098,24 @@ body:not(.murg-home) .murg-burger--right { display: flex; }
   object-fit: cover;
 }
 
+/* Hover image swap (only when card has gallery >= 2) */
+.murg-product__img-main,
+.murg-product__img-hover {
+  transition: opacity 0.45s ease;
+}
+.murg-product__img--has-hover .murg-product__img-hover {
+  opacity: 0;
+  z-index: 2;
+}
+.murg-product__link:hover .murg-product__img--has-hover .murg-product__img-main,
+.murg-product__link:focus-visible .murg-product__img--has-hover .murg-product__img-main {
+  opacity: 0;
+}
+.murg-product__link:hover .murg-product__img--has-hover .murg-product__img-hover,
+.murg-product__link:focus-visible .murg-product__img--has-hover .murg-product__img-hover {
+  opacity: 1;
+}
+
 .murg-product__placeholder {
   position: absolute; inset: 0;
   display: flex;
@@ -6923,6 +6941,57 @@ button.murg-piezas__tab:hover {
   font-weight: 400;
   color: var(--murg-ink);
 }
+
+/* Form inputs — el WC default sobre cream queda invisible */
+.murg-checkout-page .woocommerce-checkout input[type="text"],
+.murg-checkout-page .woocommerce-checkout input[type="email"],
+.murg-checkout-page .woocommerce-checkout input[type="tel"],
+.murg-checkout-page .woocommerce-checkout input[type="password"],
+.murg-checkout-page .woocommerce-checkout input[type="number"],
+.murg-checkout-page .woocommerce-checkout select,
+.murg-checkout-page .woocommerce-checkout textarea,
+.murg-checkout-page .woocommerce-checkout .select2-selection {
+  background: #ffffff !important;
+  border: 1px solid rgba(10, 10, 10, 0.18) !important;
+  border-radius: 2px !important;
+  padding: 12px 14px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14px !important;
+  color: var(--murg-black, #0A0A0A) !important;
+  line-height: 1.4 !important;
+  min-height: 44px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  transition: border-color 0.2s ease !important;
+}
+.murg-checkout-page .woocommerce-checkout textarea {
+  min-height: 88px !important;
+}
+.murg-checkout-page .woocommerce-checkout input[type="text"]:focus,
+.murg-checkout-page .woocommerce-checkout input[type="email"]:focus,
+.murg-checkout-page .woocommerce-checkout input[type="tel"]:focus,
+.murg-checkout-page .woocommerce-checkout input[type="password"]:focus,
+.murg-checkout-page .woocommerce-checkout input[type="number"]:focus,
+.murg-checkout-page .woocommerce-checkout select:focus,
+.murg-checkout-page .woocommerce-checkout textarea:focus {
+  outline: none !important;
+  border-color: var(--murg-gold, #C9A84C) !important;
+  box-shadow: 0 0 0 2px rgba(201, 168, 76, 0.15) !important;
+}
+.murg-checkout-page .woocommerce-checkout .select2-selection__rendered {
+  line-height: 1.4 !important;
+  padding: 0 !important;
+}
+.murg-checkout-page .woocommerce-checkout label {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.04em !important;
+  color: var(--murg-ink, #2a2a2a) !important;
+  margin-bottom: 6px !important;
+  display: block !important;
+}
+
 @media (max-width: 768px) {
   .murg-checkout { padding: 100px 0 60px; }
   .murg-checkout__container { padding: 0 16px; }

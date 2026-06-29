@@ -2634,16 +2634,6 @@ function murguia_seed_tiendas_y_4cs() {
 			'gallery' => murguia_store_gallery_seed( 'Miraflores', 1, 8 ),
 			'order' => 20,
 		],
-		[
-			'name' => 'Surco - Jockey Plaza',
-			'slug' => 'surco-jockey-plaza',
-			'address' => 'Av. Javier Prado Este 4200, Jockey Plaza, Surco, Lima, Peru',
-			'phone' => '+01 279-4393',
-			'hours' => 'Lunes a Domingo 11:00am a 9:15pm',
-			'maps' => 'https://www.google.com/maps/search/?api=1&query=Jockey%20Plaza%2C%20Av.%20Javier%20Prado%20Este%204200%2C%20Surco%2C%20Lima%2C%20Peru',
-			'gallery' => murguia_store_gallery_seed( 'jockey', 1, 7 ),
-			'order' => 30,
-		],
 	];
 
 	foreach ( $stores as $store ) {

@@ -626,7 +626,7 @@ if ( function_exists( 'have_rows' ) && have_rows( 'hp_brands_logos', murguia_aju
 $visita_titulo   = murg_f( 'hp_visita_titulo',   'Agenda tu visita' );
 $visita_sub      = murg_f( 'hp_visita_sub',      'Una asesoría privada con nuestros especialistas.' );
 $visita_boutique = murg_f( 'hp_visita_boutique', 'En Boutique' );
-$visita_ubicacion = murg_f( 'hp_visita_ubicacion', 'San Isidro, Miraflores, Jockey Plaza' );
+$visita_ubicacion = murg_f( 'hp_visita_ubicacion', 'San Isidro, Miraflores' );
 $visita_virtual  = murg_f( 'hp_visita_virtual',  'Por Videollamada' );
 $visita_horario  = murg_f( 'hp_visita_horario',  'Lunes a Viernes  10:00 a 19:00' );
 $visita_cita_url = murg_f( 'hp_visita_cita_url', home_url( '/contacto/' ) );
