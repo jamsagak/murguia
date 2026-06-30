@@ -150,11 +150,17 @@ $ct_bout_texto   = murguia_ajuste( 'ct_boutiques_texto',   'Visite nuestros espa
 					<input type="hidden" name="action" value="murg_solicitar_cita">
 
 					<div class="murg-contact-field">
-						<label for="murg-nombre">Nombre completo</label>
+						<label for="murg-nombre">Nombre</label>
 						<input id="murg-nombre" type="text" name="nombre"
 						       placeholder="Su nombre" required>
 					</div>
-					
+
+					<div class="murg-contact-field">
+						<label for="murg-apellido">Apellido</label>
+						<input id="murg-apellido" type="text" name="apellido"
+						       placeholder="Su apellido" required>
+					</div>
+
 					<div class="murg-contact-field">
 						<label for="murg-correo">Correo electrónico</label>
 						<input id="murg-correo" type="email" name="correo"

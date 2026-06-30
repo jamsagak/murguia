@@ -17,26 +17,29 @@ function murguia_handle_cita() {
 		wp_die( 'Solicitud no válida.', 403 );
 	}
 
-	$nombre   = sanitize_text_field( $_POST['nombre']   ?? '' );
-	$correo   = sanitize_email( $_POST['correo']        ?? '' );
-	$telefono = sanitize_text_field( $_POST['telefono'] ?? '' );
-	$interes  = sanitize_text_field( $_POST['interes']  ?? '' );
-	$mensaje  = sanitize_textarea_field( $_POST['mensaje'] ?? '' );
+	$nombre   = sanitize_text_field( wp_unslash( $_POST['nombre']   ?? '' ) );
+	$apellido = sanitize_text_field( wp_unslash( $_POST['apellido'] ?? '' ) );
+	$correo   = sanitize_email(      wp_unslash( $_POST['correo']   ?? '' ) );
+	$telefono = sanitize_text_field( wp_unslash( $_POST['telefono'] ?? '' ) );
+	$interes  = sanitize_text_field( wp_unslash( $_POST['interes']  ?? '' ) );
+	$mensaje  = sanitize_textarea_field( wp_unslash( $_POST['mensaje'] ?? '' ) );
 
-	if ( empty( $nombre ) || ! is_email( $correo ) ) {
+	if ( empty( $nombre ) || empty( $apellido ) || ! is_email( $correo ) ) {
 		wp_safe_redirect( add_query_arg( 'cita', 'error', wp_get_referer() ) );
 		exit;
 	}
 
+	$nombre_completo = trim( $nombre . ' ' . $apellido );
+
 	$to      = get_option( 'admin_email' );
-	$subject = sprintf( '[Murguía] Nueva solicitud de cita — %s', $nombre );
+	$subject = sprintf( '[Murguía] Nueva solicitud de cita — %s', $nombre_completo );
 	$body    = sprintf(
-		"Nombre: %s\nCorreo: %s\nTeléfono: %s\nInterés: %s\n\nMensaje:\n%s",
-		$nombre, $correo, $telefono, $interes, $mensaje
+		"Nombre: %s\nApellido: %s\nCorreo: %s\nTeléfono: %s\nInterés: %s\n\nMensaje:\n%s",
+		$nombre, $apellido, $correo, $telefono ?: '-', $interes ?: '-', $mensaje
 	);
 	$headers = [
 		'Content-Type: text/plain; charset=UTF-8',
-		sprintf( 'Reply-To: %s <%s>', $nombre, $correo ),
+		sprintf( 'Reply-To: %s <%s>', $nombre_completo, $correo ),
 	];
 
 	wp_mail( $to, $subject, $body, $headers );
