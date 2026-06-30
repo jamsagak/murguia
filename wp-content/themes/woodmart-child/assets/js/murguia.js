@@ -1647,6 +1647,44 @@
 	}
 
 	/* ------------------------------------------------------------------
+	   HIDE TALLA SELECTOR — el cliente vende productos en stock como
+	   pieza única; el dropdown de talla se oculta y se autoselecciona
+	   la primera variación para que add-to-cart siga funcionando.
+	   El disclaimer "Consultar cambio de talla" ya está en el template.
+	   ------------------------------------------------------------------ */
+	var tallaSelect = document.querySelector( '.murg-product-detail__atc select[name="attribute_pa_size"]' );
+	if ( tallaSelect ) {
+		// 1) Auto-seleccionar la primera opción válida (no la opción vacía).
+		var firstOpt = null;
+		for ( var i = 0; i < tallaSelect.options.length; i++ ) {
+			var opt = tallaSelect.options[ i ];
+			if ( opt.value ) { firstOpt = opt; break; }
+		}
+		if ( firstOpt && ! tallaSelect.value ) {
+			tallaSelect.value = firstOpt.value;
+			tallaSelect.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+		}
+
+		// 2) Esconder la fila completa del selector. Buscamos el <tr>
+		//    ancestro porque WC renderiza variations como tabla.
+		var row = tallaSelect.closest( 'tr' );
+		if ( row ) {
+			row.style.display = 'none';
+		} else {
+			// Fallback: layouts WC sin tabla. Escondemos el wrapper directo.
+			var wrap = tallaSelect.closest( '.value' ) || tallaSelect.parentElement;
+			if ( wrap ) wrap.style.display = 'none';
+		}
+
+		// 3) Esconder también el label si WC lo renderiza en otra celda.
+		var lbl = document.querySelector( '.murg-product-detail__atc label[for="pa_size"]' );
+		if ( lbl ) {
+			var lblRow = lbl.closest( 'tr' ) || lbl.parentElement;
+			if ( lblRow && lblRow !== row ) lblRow.style.display = 'none';
+		}
+	}
+
+	/* ------------------------------------------------------------------
 	   ADD TO CART — feedback visual en el botón
 	   ------------------------------------------------------------------ */
 	var atcWrap = document.querySelector( '.murg-product-detail__atc' );
